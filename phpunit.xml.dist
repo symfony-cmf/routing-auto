@@ -3,16 +3,12 @@
 <!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit
     colors="true"
-    bootstrap="vendor/symfony-cmf/testing/bootstrap/bootstrap.php"
+    bootstrap="vendor/autoload.php"
     >
 
     <testsuites>
         <testsuite name="RoutingAuto Component Test Suite">
             <directory>./Tests</directory>
-        </testsuite>
-
-        <testsuite name="RoutingAutoBundle Test Suite">
-            <directory>./vendor/symfony-cmf/routing-auto-bundle/Symfony/Cmf/Bundle/RoutingAutoBundle/Tests</directory>
         </testsuite>
     </testsuites>
 
