@@ -4,6 +4,8 @@ namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Adapter;
 
 use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\Adapter\PhpcrOdmAdapter;
+use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Phpcr\Route;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
 class PhpcrOdmAdapterTest extends BaseTestCase
 {
@@ -27,7 +29,7 @@ class PhpcrOdmAdapterTest extends BaseTestCase
         $this->phpcrRootNode = $this->prophet->prophesize('PHPCR\NodeInterface');
         $this->baseRoutePath = '/test';
 
-        $this->adapter = new PhpcrOdmAdapter($this->dm->reveal(), $this->baseRoutePath);
+        $this->adapter = new PhpcrOdmAdapter($this->dm->reveal(), $this->baseRoutePath, 'Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Adapter\AutoRoute');
     }
 
     public function provideGetLocales()
@@ -36,6 +38,15 @@ class PhpcrOdmAdapterTest extends BaseTestCase
             array(true, array('fr', 'de')),
             array(false),
         );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Specified PHPCR-ODM AutoRouting document of class "Not\Existing\Class" does not exist
+     */
+    public function testDocumentNotExist()
+    {
+        new PhpcrOdmAdapter($this->dm->reveal(), $this->baseRoutePath, 'Not\Existing\Class');
     }
 
     /**
@@ -109,7 +120,7 @@ class PhpcrOdmAdapterTest extends BaseTestCase
 
         $res = $this->adapter->createAutoRoute($path, $this->contentDocument, 'fr');
         $this->assertNotNull($res);
-        $this->assertInstanceOf('Symfony\Cmf\Bundle\RoutingAutoBundle\Model\AutoRoute', $res);
+        $this->assertInstanceOf('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface', $res);
         $this->assertEquals($expectedName, $res->getName());
 
         $this->assertSame($this->parentRoute, $res->getParent());
@@ -160,4 +171,25 @@ class PhpcrOdmAdapterTest extends BaseTestCase
         $res = $this->adapter->findRouteForUrl($url);
         $this->assertSame($expectedRoutes, $res);
     }
+}
+
+class AutoRoute extends Route implements AutoRouteInterface
+{
+    const DEFAULT_KEY_AUTO_ROUTE_TAG = '_auto_route_tag';
+
+    /** 
+     * {@inheritDoc}
+     */
+    public function setAutoRouteTag($autoRouteTag)
+    {   
+        $this->setDefault(self::DEFAULT_KEY_AUTO_ROUTE_TAG, $autoRouteTag);
+    }   
+
+    /** 
+     * {@inheritDoc}
+     */
+    public function getAutoRouteTag()
+    {   
+        return $this->getDefault(self::DEFAULT_KEY_AUTO_ROUTE_TAG);
+    }   
 }

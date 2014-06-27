@@ -43,6 +43,13 @@ class PhpcrOdmAdapter implements AdapterInterface
         $this->dm = $dm;
         $this->baseRoutePath = $routeBasePath;
 
+        if (!class_exists($autoRouteFqcn)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Specified PHPCR-ODM AutoRouting document of class "%s" does not exist.',
+                $autoRouteFqcn
+            ));
+        }
+
         $reflection = new \ReflectionClass($autoRouteFqcn);
         if (!$reflection->isSubclassOf('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface')) {
             throw new \InvalidArgumentException(sprintf('AutoRoute documents have to implement the AutoRouteInterface, "%s" does not.', $autoRouteFqcn));
