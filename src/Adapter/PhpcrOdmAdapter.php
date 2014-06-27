@@ -18,6 +18,7 @@ use PHPCR\InvalidItemStateException;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 use Symfony\Cmf\Component\RoutingAuto\UrlContext;
 use Symfony\Cmf\Bundle\RoutingBundle\Doctrine\Phpcr\RedirectRoute;
+use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 
 /**
  * Adapter for PHPCR-ODM
@@ -41,6 +42,13 @@ class PhpcrOdmAdapter implements AdapterInterface
     {
         $this->dm = $dm;
         $this->baseRoutePath = $routeBasePath;
+
+        if (!class_exists($autoRouteFqcn)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Specified PHPCR-ODM AutoRouting document of class "%s" does not exist.',
+                $autoRouteFqcn
+            ));
+        }
 
         $reflection = new \ReflectionClass($autoRouteFqcn);
         if (!$reflection->isSubclassOf('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface')) {

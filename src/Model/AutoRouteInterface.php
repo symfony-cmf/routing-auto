@@ -26,4 +26,11 @@ interface AutoRouteInterface extends RouteObjectInterface
      * @return string
      */
     public function getAutoRouteTag();
+
+    /**
+     * Set content to which this auto route will reference.
+     *
+     * @param object $content
+     */
+    public function setContent($content);
 }

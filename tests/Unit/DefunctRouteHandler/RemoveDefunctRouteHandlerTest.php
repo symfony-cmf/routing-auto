@@ -3,9 +3,9 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\DefunctRouteHandler;
 
 use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
-use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler\LeaveRedirectDefunctRouteHandler;
+use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler\RemoveDefunctRouteHandler;
 
-class LeaveRedirectDefunctRouteHandlerTest extends BaseTestCase
+class RemoveDefunctRouteHandlerTest extends BaseTestCase
 {
     protected $adapter;
     protected $urlContextCollection;
@@ -13,7 +13,7 @@ class LeaveRedirectDefunctRouteHandlerTest extends BaseTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Adapter\AdapterInterface');
+        $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
         $this->urlContextCollection = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UrlContextCollection');
         $this->route1 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
         $this->route2 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
@@ -22,7 +22,7 @@ class LeaveRedirectDefunctRouteHandlerTest extends BaseTestCase
 
         $this->subjectObject = new \stdClass;
 
-        $this->handler = new LeaveRedirectDefunctRouteHandler(
+        $this->handler = new RemoveDefunctRouteHandler(
             $this->adapter->reveal()
         );
     }
@@ -42,9 +42,9 @@ class LeaveRedirectDefunctRouteHandlerTest extends BaseTestCase
 
         $this->adapter->migrateAutoRouteChildren($this->route2->reveal(), $this->route4->reveal())->shouldBeCalled();
         $this->adapter->removeAutoRoute($this->route2->reveal())->shouldBeCalled();
-        $this->adapter->createRedirectRoute($this->route2->reveal(), $this->route4->reveal())->shouldBeCalled();
 
         $this->handler->handleDefunctRoutes($this->urlContextCollection->reveal());
     }
 }
+
 
