@@ -96,7 +96,7 @@ class MetadataFactory implements MetadataFactoryInterface
 
         $classFqns = class_parents($class);
 
-        $extend = $rootMetadata->getExtendedClass()
+        $extend = $rootMetadata->getExtendedClass();
         if (null !== $extend) {
             $classFqns[] = $extend;
         }
