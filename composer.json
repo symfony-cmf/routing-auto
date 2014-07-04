@@ -11,22 +11,19 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "symfony-cmf/routing-bundle": "1.2.x-dev",
         "symfony-cmf/core-bundle": "1.1.x-dev",
-        "aferrandini/urlizer": "1.0.*",
+        "symfony-cmf/routing": "1.2.x",
+        "symfony/options-resolver": "~2.2",
         "symfony/config": "~2.2",
         "jms/metadata": "1.5.*"
     },
     "require-dev": {
-        "doctrine/phpcr-odm": "1.2.x-dev",
-        "symfony-cmf/routing-auto-bundle": "1.0.*",
-        "symfony-cmf/testing": "1.1.*",
         "symfony/yaml": "~2.1.0",
         "phpspec/prophecy": "1.1.2"
     },
     "suggest": {
-        "doctrine/phpcr-bundle": "To enable support for the PHPCR ODM documents",
-        "symfony/yaml": "To be able to load Yaml configuration files"
+        "symfony/yaml": "To be able to load Yaml configuration files",
+        "symfony-cmf/routing-auto-bundle": "To integrate this lirbary with Symfony and the CMF"
     },
     "autoload": {
         "psr-4": { "Symfony\\Cmf\\Component\\RoutingAuto\\": "" }
