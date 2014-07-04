@@ -1,4 +1,4 @@
-# Symfony CMF Routing Auto
+# Symfony CMF Routing Auto Component
 
 [![Build Status](https://secure.travis-ci.org/symfony-cmf/RoutingAuto.png)](http://travis-ci.org/symfony-cmf/RoutingAuto)
 [![Latest Stable Version](https://poser.pugx.org/symfony-cmf/routing-auto/version.png)](https://packagist.org/packages/symfony-cmf/routing-auto)
@@ -8,11 +8,10 @@ This component is part of the [Symfony Content Management Framework (CMF)](http:
 and licensed under the [MIT License](LICENSE).
 
 This component automatically creates and manages routes for configured persisted
-document classes.
+document classes. This library contains all implementation agnostic code.
 
 ## Requirements 
 
-* Symfony 2.2.x
 * See also the `require` section of [composer.json](composer.json)
 
 ## Documentation
