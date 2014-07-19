@@ -40,8 +40,6 @@ class LeaveRedirectDefunctRouteHandlerTest extends BaseTestCase
         $this->route2->getAutoRouteTag()->willReturn('fr');
         $this->urlContextCollection->getAutoRouteByTag('fr')->willReturn($this->route4);
 
-        $this->adapter->migrateAutoRouteChildren($this->route2->reveal(), $this->route4->reveal())->shouldBeCalled();
-        $this->adapter->removeAutoRoute($this->route2->reveal())->shouldBeCalled();
         $this->adapter->createRedirectRoute($this->route2->reveal(), $this->route4->reveal())->shouldBeCalled();
 
         $this->handler->handleDefunctRoutes($this->urlContextCollection->reveal());

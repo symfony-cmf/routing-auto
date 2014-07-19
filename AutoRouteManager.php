@@ -12,6 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
 /**
  * This class is concerned with the automatic creation of route objects.
@@ -59,6 +60,7 @@ class AutoRouteManager
 
                 if ($isSameContent) {
                     $autoRoute = $existingRoute;
+                    $autoRoute->setType(AutoRouteInterface::TYPE_PRIMARY);
                 } else {
                     $url = $urlContext->getUrl();
                     $url = $this->urlGenerator->resolveConflict($urlContext);

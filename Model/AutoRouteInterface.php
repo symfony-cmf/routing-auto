@@ -13,6 +13,18 @@ use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 interface AutoRouteInterface extends RouteObjectInterface
 {
     /**
+     * Primary auto route represents the content directly
+     */
+    const TYPE_PRIMARY = 'cmf_routing_auto.primary';
+
+    /**
+     * Redirect auto route should be used to redirect to
+     * a different route (i.e. it should be used to represent
+     * old URIs which should redirect to new URIs)
+     */
+    const TYPE_REDIRECT = 'cmf_routing_auto.redirect';
+    
+    /**
      * Set a tag which can be used by a database implementation
      * to distinguish a route from other routes as required
      *
@@ -26,4 +38,21 @@ interface AutoRouteInterface extends RouteObjectInterface
      * @return string
      */
     public function getAutoRouteTag();
+
+    /**
+     * Set the auto route mode
+     *
+     * Should be one of AutoRouteInterface::TYPE_* constants
+     *
+     * @param string $mode
+     */
+    public function setType($mode);
+
+    /**
+     * For use in the REDIRECT mode, specifies the AutoRoute
+     * that the AutoRoute should redirect to.
+     *
+     * @param AutoRouteInterface AutoRoute to redirect to.
+     */
+    public function setRedirectTarget(AutoRouteInterface $autoTarget);
 }
