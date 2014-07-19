@@ -29,8 +29,6 @@ class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
             if (false === $urlContextCollection->containsAutoRoute($referringAutoRoute)) {
                 $newRoute = $urlContextCollection->getAutoRouteByTag($referringAutoRoute->getAutoRouteTag());
 
-                $this->adapter->migrateAutoRouteChildren($referringAutoRoute, $newRoute);
-                $this->adapter->removeAutoRoute($referringAutoRoute);
                 $this->adapter->createRedirectRoute($referringAutoRoute, $newRoute);
             }
         }
