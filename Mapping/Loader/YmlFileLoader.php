@@ -121,6 +121,9 @@ class YmlFileLoader extends FileLoader
         if (is_string($service)) {
             // provider: method
             $name = $service;
+        } elseif (1 === count($service) && isset($service[0])) {
+            // provider: [method]
+            $name = $service[0];
         } elseif (isset($service['name'])) {
             if (isset($service['options'])) {
                 // provider: { name: method, options: { slugify: true } }
