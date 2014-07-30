@@ -30,10 +30,10 @@ class MetadataDriverTest extends BaseTestCase
 
     public function testSingletonLoading()
     {
-        $metadata = $this->prophet->prophesize('Symfony\Cmf\Bundle\RoutingAutoBundle\AutoRoute\Mapping\ClassMetadata');
-        $metadata->getClassName()->willReturn('stdClass');
-
-        $this->loader->load('some_resource.yml', null)->shouldBeCalledTimes(1)->willReturn(array($metadata->reveal()));
+        $this->loader->load('some_resource.yml', null)
+            ->shouldBeCalledTimes(1)
+            ->willReturn(array($this->getMetadata()))
+        ;
 
         $this->driver->loadMetadataForClass(new \ReflectionClass('stdClass'));
         $this->driver->loadMetadataForClass(new \ReflectionClass('stdClass'));
@@ -41,12 +41,12 @@ class MetadataDriverTest extends BaseTestCase
 
     public function testClassMerging()
     {
-        $metadata = $this->prophet->prophesize('Symfony\Cmf\Bundle\RoutingAutoBundle\AutoRoute\Mapping\ClassMetadata');
-        $metadata->getClassName()->willReturn('stdClass');
-        $metadata->merge(Argument::type('Symfony\Cmf\Bundle\RoutingAutoBundle\AutoRoute\Mapping\ClassMetadata'))->shouldBeCalled();
+        $metadata = $this->getMetadata();
+        $metadata->merge(Argument::type('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata'))
+            ->shouldBeCalled()
+        ;
 
-        $metadata1 = $this->prophet->prophesize('Symfony\Cmf\Bundle\RoutingAutoBundle\AutoRoute\Mapping\ClassMetadata');
-        $metadata1->getClassName()->willReturn('stdClass');
+        $metadata1 = $this->getMetadata();
 
         $this->loader->load('some_resource.yml', null)->willReturn(array(
             $metadata->reveal(),
@@ -62,5 +62,12 @@ class MetadataDriverTest extends BaseTestCase
 
         $this->assertNull($this->driver->loadMetadataForClass(new \ReflectionClass('stdClass')));
     }
-}
 
+    protected function getMetadata($class = 'stdClass')
+    {
+        $metadata = $this->prophet->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
+        $metadata->getClassName()->willReturn($class);
+
+        return $metadata;
+    }
+}
