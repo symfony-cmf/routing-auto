@@ -75,7 +75,6 @@ class YmlFileLoaderTest extends BaseTestCase
         $files = array(
             'invalid1.yml',
             'invalid2.yml',
-            'invalid3.yml',
         );
 
         return array_map(function ($file) {
@@ -158,6 +157,15 @@ class YmlFileLoaderTest extends BaseTestCase
                 $test->assertEquals($serviceConfig('method', array('method' => 'getCategoryName')), $providers['category']);
                 $test->assertArrayHasKey('slug', $providers);
                 $test->assertEquals($serviceConfig('property', array('property' => 'title', 'slugify' => true)), $providers['slug']);
+            }),
+            array('valid6.yml', function ($metadatas) use ($test, $serviceConfig) {
+                $test->assertCount(1, $metadatas);
+                $metadata = $metadatas[0];
+                $test->assertEquals('stdClass', $metadata->getClassName());
+                $test->assertEquals('/forum/{category}/{post_title}', $metadata->getUrlSchema());
+                $providers = $metadata->getTokenProviders();
+                $test->assertArrayHasKey('category', $providers);
+                $test->assertEquals('foo', $providers['category']['name']);
             }),
         );
     }
