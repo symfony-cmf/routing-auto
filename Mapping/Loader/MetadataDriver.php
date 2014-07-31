@@ -63,7 +63,7 @@ class MetadataDriver implements AdvancedDriverInterface
         }
 
         if (!isset($this->loadedMetadata[$class->name])) {
-            return null;
+            return new ClassMetadata($class->name);
         }
 
         return $this->loadedMetadata[$class->name];
