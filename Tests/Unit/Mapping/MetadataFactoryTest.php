@@ -26,7 +26,7 @@ class MetadataFactoryTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->driver = $this->prophet->prophesize('Metadata\Driver\DriverInterface');
+        $this->driver = $this->prophet->prophesize('Metadata\Driver\AdvancedDriverInterface');
         $this->factory = new MetadataFactory($this->driver->reveal());
     }
 
@@ -144,6 +144,24 @@ class MetadataFactoryTest extends BaseTestCase
         $cache->putClassMetadataInCache($metadata)->shouldBeCalled();
 
         $factory->getMetadataForClass('stdClass');
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     */
+    public function testGetAllClassNamesFailsWhenDriverIsNotAdvanced()
+    {
+        $driver = $this->prophet->prophesize('Metadata\Driver\DriverInterface');
+        $factory = new MetadataFactory($driver->reveal());
+
+        $factory->getAllClassNames();
+    }
+
+    public function testGetAllClassNames()
+    {
+        $this->driver->getAllClassNames()->willReturn(array('stdClass', 'stdClass1', 'stdClass2'));
+
+        $this->assertEquals(array('stdClass', 'stdClass1', 'stdClass2'), $this->factory->getAllClassNames());
     }
 
     protected function createTokenProvider($name)

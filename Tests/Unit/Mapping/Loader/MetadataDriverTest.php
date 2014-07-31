@@ -63,6 +63,24 @@ class MetadataDriverTest extends BaseTestCase
         $this->assertNull($this->driver->loadMetadataForClass(new \ReflectionClass('stdClass')));
     }
 
+    public function testCanGetAllDefinedClasses()
+    {
+        $this->loader->load('class1.yml', null)->willReturn(array(
+            $this->getMetadata()->reveal(),
+        ));
+
+        $this->loader->load('class2.yml', null)->willReturn(array(
+            $this->getMetadata('DateTime')->reveal(),
+        ));
+
+        $driver = new MetadataDriver($this->loader->reveal(), array(
+            array('path' => 'class1.yml'),
+            array('path' => 'class2.yml'),
+        ));
+
+        $this->assertEquals(array('stdClass', 'DateTime'), $driver->getAllClassNames());
+    }
+
     protected function getMetadata($class = 'stdClass')
     {
         $metadata = $this->prophet->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');

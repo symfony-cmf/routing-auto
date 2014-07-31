@@ -13,12 +13,12 @@ namespace Symfony\Cmf\Component\RoutingAuto\Mapping\Loader;
 
 use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use Metadata\Driver\DriverInterface;
+use Metadata\Driver\AdvancedDriverInterface;
 
 /**
  * @author Wouter J <wouter@wouterj.nl>
  */
-class MetadataDriver implements DriverInterface
+class MetadataDriver implements AdvancedDriverInterface
 {
     /**
      * @var LoaderInterface
@@ -67,6 +67,18 @@ class MetadataDriver implements DriverInterface
         }
 
         return $this->loadedMetadata[$class->name];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAllClassNames()
+    {
+        if (null === $this->loadedMetadata) {
+            $this->loadResources();
+        }
+
+        return array_keys($this->loadedMetadata);
     }
 
     protected function loadResources()

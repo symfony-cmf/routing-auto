@@ -12,7 +12,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Mapping;
 
-use Metadata\MetadataFactoryInterface;
+use Metadata\Driver\AdvancedDriverInterface;
+use Metadata\AdvancedMetadataFactoryInterface;
 use Metadata\Cache\CacheInterface;
 use Metadata\Driver\DriverInterface;
 
@@ -22,7 +23,7 @@ use Metadata\Driver\DriverInterface;
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
-class MetadataFactory implements MetadataFactoryInterface
+class MetadataFactory implements AdvancedMetadataFactoryInterface
 {
     /** 
      * @var DriverInterface
@@ -79,6 +80,18 @@ class MetadataFactory implements MetadataFactoryInterface
         }
 
         return $resolvedMetadata;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAllClassNames()
+    {
+        if (!$this->driver instanceof AdvancedDriverInterface) {
+            throw new \RuntimeException('Driver is not capable of retrieving all available class names.');
+        }
+
+        return $this->driver->getAllClassNames();
     }
 
     /**
