@@ -13,11 +13,11 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
-use Symfony\Cmf\Component\RoutingAuto\UrlContextCollection;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
-class UrlContextCollectionTest extends BaseTestCase
+class UriContextCollectionTest extends BaseTestCase
 {
-    protected $urlContextCollection;
+    protected $uriContextCollection;
 
     public function setUp()
     {
@@ -26,22 +26,22 @@ class UrlContextCollectionTest extends BaseTestCase
 
         for ($i = 1; $i <= 3; $i++) {
             $this->{'autoRoute' . $i} = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
-            $this->{'urlContext' . $i} = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UrlContext');
-            $this->{'urlContext' . $i}->getAutoRoute()->willReturn($this->{'autoRoute' . $i});
+            $this->{'uriContext' . $i} = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
+            $this->{'uriContext' . $i}->getAutoRoute()->willReturn($this->{'autoRoute' . $i});
         }
 
-        $this->urlContextCollection = new UrlContextCollection($this->subjectObject);
+        $this->uriContextCollection = new UriContextCollection($this->subjectObject);
     }
 
     public function testGetSubjectObject()
     {
-        $this->assertEquals($this->subjectObject, $this->urlContextCollection->getSubjectObject());
+        $this->assertEquals($this->subjectObject, $this->uriContextCollection->getSubjectObject());
     }
 
-    public function testCreateUrlContext()
+    public function testCreateUriContext()
     {
-        $res = $this->urlContextCollection->createUrlContext('fr');
-        $this->assertInstanceOf('Symfony\Cmf\Component\RoutingAuto\UrlContext', $res);
+        $res = $this->uriContextCollection->createUriContext('fr');
+        $this->assertInstanceOf('Symfony\Cmf\Component\RoutingAuto\UriContext', $res);
         $this->assertEquals('fr', $res->getLocale());
     }
 
@@ -49,12 +49,12 @@ class UrlContextCollectionTest extends BaseTestCase
     {
         return array(
             array(
-                array('urlContext1', 'urlContext2', 'urlContext3'),
+                array('uriContext1', 'uriContext2', 'uriContext3'),
                 'autoRoute1',
                 true
             ),
             array(
-                array('urlContext2', 'urlContext3'),
+                array('uriContext2', 'uriContext3'),
                 'autoRoute1',
                 false
             ),
@@ -65,13 +65,13 @@ class UrlContextCollectionTest extends BaseTestCase
     /**
      * @dataProvider provideContainsAutoRoute
      */
-    public function testContainsAutoRoute($urlContextNames, $targetName, $expected)
+    public function testContainsAutoRoute($uriContextNames, $targetName, $expected)
     {
-        foreach ($urlContextNames as $urlContextName) {
-            $this->urlContextCollection->addUrlContext($this->$urlContextName->reveal());
+        foreach ($uriContextNames as $uriContextName) {
+            $this->uriContextCollection->addUriContext($this->$uriContextName->reveal());
         }
 
-        $res = $this->urlContextCollection->containsAutoRoute($this->$targetName->reveal());
+        $res = $this->uriContextCollection->containsAutoRoute($this->$targetName->reveal());
 
         $this->assertEquals($expected, $res);
     }

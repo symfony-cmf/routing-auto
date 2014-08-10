@@ -17,7 +17,7 @@ namespace Symfony\Cmf\Component\RoutingAuto;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-interface UrlGeneratorInterface
+interface UriGeneratorInterface
 {
     /**
      * Generate a URL for the given document
@@ -26,7 +26,7 @@ interface UrlGeneratorInterface
      *
      * @return string
      */
-    public function generateUrl(UrlContext $urlContext);
+    public function generateUri(UriContext $uriContext);
 
     /**
      * The given URL already exists in the database, this method
@@ -35,9 +35,9 @@ interface UrlGeneratorInterface
      * document.
      *
      * @param object $document
-     * @param string $url
+     * @param string $uri
      *
      * @return string
      */
-    public function resolveConflict(UrlContext $urlContext);
+    public function resolveConflict(UriContext $uriContext);
 }

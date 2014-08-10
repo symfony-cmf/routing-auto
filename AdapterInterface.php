@@ -14,7 +14,7 @@ namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
-use Symfony\Cmf\Component\RoutingAuto\UrlContext;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 /**
  * Adapters will (eventually) abstract all database operations
@@ -71,19 +71,19 @@ interface AdapterInterface
     /**
      * Attempt to find a route with the given URL
      *
-     * @param string $url
+     * @param string $uri
      *
      * @return null|Symfony\Cmf\Component\Routing\RouteObjectInterface
      */
-    public function findRouteForUrl($url);
+    public function findRouteForUri($uri);
 
     /**
      * Generate a tag which can be used to identify this route from
      * other routes as required.
      *
-     * @param UrlContext $urlContext
+     * @param UriContext $uriContext
      */
-    public function generateAutoRouteTag(UrlContext $urlContext);
+    public function generateAutoRouteTag(UriContext $uriContext);
 
     /**
      * Migrate the descendant path elements from one route to another.

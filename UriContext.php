@@ -17,11 +17,11 @@ namespace Symfony\Cmf\Component\RoutingAuto;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class UrlContext
+class UriContext
 {
     protected $subjectObject;
     protected $locale;
-    protected $url;
+    protected $uri;
     protected $autoRoute;
 
     public function __construct($subjectObject, $locale)
@@ -30,14 +30,14 @@ class UrlContext
         $this->locale = $locale;
     }
 
-    public function getUrl()
+    public function getUri()
     {
-        return $this->url;
+        return $this->uri;
     }
 
-    public function setUrl($url)
+    public function setUri($uri)
     {
-        $this->url = $url;
+        $this->uri = $uri;
     }
 
     public function getSubjectObject()

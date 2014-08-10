@@ -79,8 +79,8 @@ class YmlFileLoader extends FileLoader
         }
         $classMetadata = new ClassMetadata($className);
 
-        if (isset($mappingNode['url_schema'])) {
-            $classMetadata->setUrlSchema($mappingNode['url_schema']);
+        if (isset($mappingNode['uri_schema'])) {
+            $classMetadata->setUriSchema($mappingNode['uri_schema']);
         }
 
         if (isset($mappingNode['conflict_resolver'])) {

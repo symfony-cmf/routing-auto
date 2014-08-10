@@ -14,16 +14,16 @@ namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 
 use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Cmf\Component\RoutingAuto\UrlContext;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ContentLocaleProvider implements TokenProviderInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function provideValue(UrlContext $urlContext, $options)
+    public function provideValue(UriContext $uriContext, $options)
     {
-        return $urlContext->getLocale();
+        return $uriContext->getLocale();
     }
 
     /**

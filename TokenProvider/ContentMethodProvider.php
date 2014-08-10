@@ -15,7 +15,7 @@ namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Cmf\Component\RoutingAuto\UrlContext;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ContentMethodProvider implements TokenProviderInterface
 {
@@ -40,9 +40,9 @@ class ContentMethodProvider implements TokenProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function provideValue(UrlContext $urlContext, $options)
+    public function provideValue(UriContext $uriContext, $options)
     {
-        $object = $urlContext->getSubjectObject();
+        $object = $uriContext->getSubjectObject();
         $method = $options['method'];
 
         $this->checkMethodExists($object, $method);

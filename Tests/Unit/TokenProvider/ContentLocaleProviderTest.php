@@ -19,20 +19,20 @@ class ContentLocaleProviderTest extends BaseTestCase
 {
     protected $slugifier;
     protected $article;
-    protected $urlContext;
+    protected $uriContext;
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->urlContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UrlContext');
+        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
         $this->provider = new ContentLocaleProvider($this->slugifier->reveal());
     }
 
     public function testGetValue()
     {
-        $this->urlContext->getLocale()->willReturn('de');
-        $res = $this->provider->provideValue($this->urlContext->reveal(), array());
+        $this->uriContext->getLocale()->willReturn('de');
+        $res = $this->provider->provideValue($this->uriContext->reveal(), array());
         $this->assertEquals('de', $res);
     }
 }

@@ -18,6 +18,6 @@ namespace Symfony\Cmf\Component\RoutingAuto\ConflictResolver\Exception;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class ExistingUrlException extends \Exception
+class ExistingUriException extends \Exception
 {
 }

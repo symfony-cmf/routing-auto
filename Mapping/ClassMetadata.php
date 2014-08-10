@@ -25,7 +25,7 @@ class ClassMetadata extends MergeableClassMetadata
     /**
      * @var string
      */
-    protected $urlSchema;
+    protected $uriSchema;
 
     /**
      * @var array
@@ -56,9 +56,9 @@ class ClassMetadata extends MergeableClassMetadata
      *
      * @param string $schema
      */
-    public function setUrlSchema($schema)
+    public function setUriSchema($schema)
     {
-        $this->urlSchema = $schema;
+        $this->uriSchema = $schema;
     }
 
     /**
@@ -66,9 +66,9 @@ class ClassMetadata extends MergeableClassMetadata
      *
      * @return string
      */
-    public function getUrlSchema()
+    public function getUriSchema()
     {
-        return $this->urlSchema;
+        return $this->uriSchema;
     }
 
     /**
@@ -190,7 +190,7 @@ class ClassMetadata extends MergeableClassMetadata
     {
         parent::merge($metadata);
 
-        $this->urlSchema = str_replace('{parent}', $this->urlSchema, $metadata->getUrlSchema());
+        $this->uriSchema = str_replace('{parent}', $this->uriSchema, $metadata->getUriSchema());
 
         foreach ($metadata->getTokenProviders() as $tokenName => $provider) {
             $this->addTokenProvider($tokenName, $provider, true);

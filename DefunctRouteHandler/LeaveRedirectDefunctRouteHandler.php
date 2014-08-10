@@ -13,7 +13,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler;
 
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
-use Symfony\Cmf\Component\RoutingAuto\UrlContextCollection;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 
 class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
@@ -31,13 +31,13 @@ class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function handleDefunctRoutes(UrlContextCollection $urlContextCollection)
+    public function handleDefunctRoutes(UriContextCollection $uriContextCollection)
     {
-        $referringAutoRouteCollection = $this->adapter->getReferringAutoRoutes($urlContextCollection->getSubjectObject());
+        $referringAutoRouteCollection = $this->adapter->getReferringAutoRoutes($uriContextCollection->getSubjectObject());
 
         foreach ($referringAutoRouteCollection as $referringAutoRoute) {
-            if (false === $urlContextCollection->containsAutoRoute($referringAutoRoute)) {
-                $newRoute = $urlContextCollection->getAutoRouteByTag($referringAutoRoute->getAutoRouteTag());
+            if (false === $uriContextCollection->containsAutoRoute($referringAutoRoute)) {
+                $newRoute = $uriContextCollection->getAutoRouteByTag($referringAutoRoute->getAutoRouteTag());
 
                 $this->adapter->createRedirectRoute($referringAutoRoute, $newRoute);
             }

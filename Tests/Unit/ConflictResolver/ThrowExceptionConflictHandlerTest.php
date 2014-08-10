@@ -23,17 +23,17 @@ class ThrowExceptionConflictResolverTest extends BaseTestCase
     {
         parent::setUp();
         $this->conflictResolver = new ThrowExceptionConflictResolver();
-        $this->urlContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UrlContext');
+        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
     }
 
     /**
-     * @expectedException Symfony\Cmf\Component\RoutingAuto\ConflictResolver\Exception\ExistingUrlException
+     * @expectedException Symfony\Cmf\Component\RoutingAuto\ConflictResolver\Exception\ExistingUriException
      * @expectedExceptionMessage There already exists an auto route for URL "/foobar"
      */
     public function testResolveConflict()
     {
-        $this->urlContext->getUrl()->willReturn('/foobar');
-        $this->conflictResolver->resolveConflict($this->urlContext->reveal());
+        $this->uriContext->getUri()->willReturn('/foobar');
+        $this->conflictResolver->resolveConflict($this->uriContext->reveal());
     }
 }
 

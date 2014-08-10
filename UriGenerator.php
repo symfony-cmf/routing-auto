@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
-class UrlGenerator implements UrlGeneratorInterface
+class UriGenerator implements UriGeneratorInterface
 {
     protected $driver;
     protected $metadataFactory;
@@ -46,9 +46,9 @@ class UrlGenerator implements UrlGeneratorInterface
     /**
      * {@inheritDoc}
      */
-    public function generateUrl(UrlContext $urlContext)
+    public function generateUri(UriContext $uriContext)
     {
-        $realClassName = $this->driver->getRealClassName(get_class($urlContext->getSubjectObject()));
+        $realClassName = $this->driver->getRealClassName(get_class($uriContext->getSubjectObject()));
         $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
 
         $tokenProviderConfigs = $metadata->getTokenProviders();
@@ -62,21 +62,21 @@ class UrlGenerator implements UrlGeneratorInterface
             $optionsResolver = new OptionsResolver();
             $tokenProvider->configureOptions($optionsResolver);
 
-            $tokens['{' . $name . '}'] = $tokenProvider->provideValue($urlContext, $optionsResolver->resolve($options['options']));
+            $tokens['{' . $name . '}'] = $tokenProvider->provideValue($uriContext, $optionsResolver->resolve($options['options']));
         }
 
-        $urlSchema = $metadata->getUrlSchema();
-        $url = strtr($urlSchema, $tokens);
+        $uriSchema = $metadata->getUriSchema();
+        $uri = strtr($uriSchema, $tokens);
 
-        return $url;
+        return $uri;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function resolveConflict(UrlContext $urlContext)
+    public function resolveConflict(UriContext $uriContext)
     {
-        $realClassName = $this->driver->getRealClassName(get_class($urlContext->getSubjectObject()));
+        $realClassName = $this->driver->getRealClassName(get_class($uriContext->getSubjectObject()));
         $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
 
         $conflictResolverConfig = $metadata->getConflictResolver();
@@ -84,8 +84,8 @@ class UrlGenerator implements UrlGeneratorInterface
             $conflictResolverConfig['name'], 
             $conflictResolverConfig['options']
         );
-        $url = $conflictResolver->resolveConflict($urlContext);
+        $uri = $conflictResolver->resolveConflict($uriContext);
 
-        return $url;
+        return $uri;
     }
 }

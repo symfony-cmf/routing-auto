@@ -23,93 +23,93 @@ use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 class AutoRouteManager
 {
     protected $adapter;
-    protected $urlGenerator;
+    protected $uriGenerator;
     protected $defunctRouteHandler;
 
-    private $pendingUrlContextCollections = array();
+    private $pendingUriContextCollections = array();
 
     /**
      * @param AdapterInterface             $adapter             Database adapter
-     * @param UrlGeneratorInterface        $urlGenerator        Routing auto URL generator
+     * @param UriGeneratorInterface        $uriGenerator        Routing auto URL generator
      * @param DefunctRouteHandlerInterface $defunctRouteHandler Handler for defunct routes
      */
     public function __construct(
         AdapterInterface $adapter,
-        UrlGeneratorInterface $urlGenerator,
+        UriGeneratorInterface $uriGenerator,
         DefunctRouteHandlerInterface $defunctRouteHandler
     )
     {
         $this->adapter = $adapter;
-        $this->urlGenerator = $urlGenerator;
+        $this->uriGenerator = $uriGenerator;
         $this->defunctRouteHandler = $defunctRouteHandler;
     }
 
     /**
      * @param object $document
      */
-    public function buildUrlContextCollection(UrlContextCollection $urlContextCollection)
+    public function buildUriContextCollection(UriContextCollection $uriContextCollection)
     {
-        $this->getUrlContextsForDocument($urlContextCollection);
+        $this->getUriContextsForDocument($uriContextCollection);
 
-        foreach ($urlContextCollection->getUrlContexts() as $urlContext) {
-            $existingRoute = $this->adapter->findRouteForUrl($urlContext->getUrl());
+        foreach ($uriContextCollection->getUriContexts() as $uriContext) {
+            $existingRoute = $this->adapter->findRouteForUri($uriContext->getUri());
 
             $autoRoute = null;
 
             if ($existingRoute) {
-                $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $urlContext->getSubjectObject());
+                $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $uriContext->getSubjectObject());
 
                 if ($isSameContent) {
                     $autoRoute = $existingRoute;
                     $autoRoute->setType(AutoRouteInterface::TYPE_PRIMARY);
                 } else {
-                    $url = $urlContext->getUrl();
-                    $url = $this->urlGenerator->resolveConflict($urlContext);
-                    $urlContext->setUrl($url);
+                    $uri = $uriContext->getUri();
+                    $uri = $this->uriGenerator->resolveConflict($uriContext);
+                    $uriContext->setUri($uri);
                 }
             }
 
             if (!$autoRoute) {
-                $autoRouteTag = $this->adapter->generateAutoRouteTag($urlContext);
-                $autoRoute = $this->adapter->createAutoRoute($urlContext->getUrl(), $urlContext->getSubjectObject(), $autoRouteTag);
+                $autoRouteTag = $this->adapter->generateAutoRouteTag($uriContext);
+                $autoRoute = $this->adapter->createAutoRoute($uriContext->getUri(), $uriContext->getSubjectObject(), $autoRouteTag);
             }
 
-            $urlContext->setAutoRoute($autoRoute);
+            $uriContext->setAutoRoute($autoRoute);
         }
 
-        $this->pendingUrlContextCollections[] = $urlContextCollection;
+        $this->pendingUriContextCollections[] = $uriContextCollection;
     }
 
     public function handleDefunctRoutes()
     {
-        while ($urlContextCollection = array_pop($this->pendingUrlContextCollections)) {
-            $this->defunctRouteHandler->handleDefunctRoutes($urlContextCollection);
+        while ($uriContextCollection = array_pop($this->pendingUriContextCollections)) {
+            $this->defunctRouteHandler->handleDefunctRoutes($uriContextCollection);
         }
     }
 
     /**
-     * Populates an empty UrlContextCollection with UrlContexts
+     * Populates an empty UriContextCollection with UriContexts
      *
-     * @param $urlContextCollection UrlContextCollection
+     * @param $uriContextCollection UriContextCollection
      */
-    private function getUrlContextsForDocument(UrlContextCollection $urlContextCollection)
+    private function getUriContextsForDocument(UriContextCollection $uriContextCollection)
     {
-        $locales = $this->adapter->getLocales($urlContextCollection->getSubjectObject()) ? : array(null);
+        $locales = $this->adapter->getLocales($uriContextCollection->getSubjectObject()) ? : array(null);
 
         foreach ($locales as $locale) {
             if (null !== $locale) {
-                $this->adapter->translateObject($urlContextCollection->getSubjectObject(), $locale);
+                $this->adapter->translateObject($uriContextCollection->getSubjectObject(), $locale);
             }
 
-            // create and add url context to stack
-            $urlContext = $urlContextCollection->createUrlContext($locale);
-            $urlContextCollection->addUrlContext($urlContext);
+            // create and add uri context to stack
+            $uriContext = $uriContextCollection->createUriContext($locale);
+            $uriContextCollection->addUriContext($uriContext);
 
             // generate the URL
-            $url = $this->urlGenerator->generateUrl($urlContext);
+            $uri = $this->uriGenerator->generateUri($uriContext);
 
             // update the context with the URL
-            $urlContext->setUrl($url);
+            $uriContext->setUri($uri);
         }
     }
 }

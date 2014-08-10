@@ -19,7 +19,7 @@ class ContentDateTimeProviderTest extends BaseTestCase
 {
     protected $slugifier;
     protected $article;
-    protected $urlContext;
+    protected $uriContext;
 
     public function setUp()
     {
@@ -27,7 +27,7 @@ class ContentDateTimeProviderTest extends BaseTestCase
 
         $this->slugifier = $this->prophesize('Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface');
         $this->article = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Article');
-        $this->urlContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UrlContext');
+        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
         $this->provider = new ContentDateTimeProvider($this->slugifier->reveal());
     }
 
@@ -59,10 +59,10 @@ class ContentDateTimeProviderTest extends BaseTestCase
             'slugify' => true,
         ), $options);
 
-        $this->urlContext->getSubjectObject()->willReturn($this->article);
+        $this->uriContext->getSubjectObject()->willReturn($this->article);
         $this->article->getDate()->willReturn(new \DateTime('2014-10-09'));
 
-        $res = $this->provider->provideValue($this->urlContext->reveal(), $options);
+        $res = $this->provider->provideValue($this->uriContext->reveal(), $options);
 
         $this->assertEquals($expectedResult, $res);
     }

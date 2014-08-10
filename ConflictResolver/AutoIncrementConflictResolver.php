@@ -13,7 +13,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\ConflictResolver;
 
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface;
-use Symfony\Cmf\Component\RoutingAuto\UrlContext;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 
 /**
@@ -39,22 +39,22 @@ class AutoIncrementConflictResolver implements ConflictResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolveConflict(UrlContext $urlContext)
+    public function resolveConflict(UriContext $uriContext)
     {
         $this->inc = 0;
 
-        $url = $urlContext->getUrl();
-        $candidateUrl = $this->incrementUrl($url);
+        $uri = $uriContext->getUri();
+        $candidateUri = $this->incrementUri($uri);
 
-        while ($route = $this->adapter->findRouteForUrl($candidateUrl)) {
-            $candidateUrl = $this->incrementUrl($url);
+        while ($route = $this->adapter->findRouteForUri($candidateUri)) {
+            $candidateUri = $this->incrementUri($uri);
         }
 
-        return $candidateUrl;
+        return $candidateUri;
     }
 
-    protected function incrementUrl($url)
+    protected function incrementUri($uri)
     {
-        return sprintf('%s-%s', $url, ++$this->inc);
+        return sprintf('%s-%s', $uri, ++$this->inc);
     }
 }
