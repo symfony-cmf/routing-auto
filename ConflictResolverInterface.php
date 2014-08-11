@@ -18,10 +18,10 @@ interface ConflictResolverInterface
      * If this method is called then the given URL is in
      * conflict with an existing URL and needs to be unconflicted.
      *
-     * @param string $url
+     * @param string $uri
      *
      * @return string unconflicted URL
      */
-    public function resolveConflict(UrlContext $urlContext);
+    public function resolveConflict(UriContext $uriContext);
 
 }

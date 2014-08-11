@@ -20,7 +20,7 @@ class DelegatingDefunctRouteHandlerTest extends BaseTestCase
     protected $metadataFactory;
     protected $adapter;
     protected $serviceRegistry;
-    protected $urlContextCollection;
+    protected $uriContextCollection;
     protected $metadata;
 
     public function setUp()
@@ -29,7 +29,7 @@ class DelegatingDefunctRouteHandlerTest extends BaseTestCase
         $this->metadataFactory = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\MetadataFactory');
         $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
         $this->serviceRegistry = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\ServiceRegistry');
-        $this->urlContextCollection = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UrlContextCollection');
+        $this->uriContextCollection = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContextCollection');
         $this->metadata = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
         $this->delegatedHandler = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface');
 
@@ -39,20 +39,20 @@ class DelegatingDefunctRouteHandlerTest extends BaseTestCase
             $this->metadataFactory->reveal(),
             $this->adapter->reveal(),
             $this->serviceRegistry->reveal(),
-            $this->urlContextCollection->reveal()
+            $this->uriContextCollection->reveal()
         );
     }
 
     public function testHandleDefunctRoutes()
     {
-        $this->urlContextCollection->getSubjectObject()->willReturn($this->subjectObject);
+        $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
         $this->adapter->getRealClassName('stdClass')->willReturn('stdClass');
         $this->metadataFactory->getMetadataForClass('stdClass')->willReturn($this->metadata);
         $this->metadata->getDefunctRouteHandler()->willReturn(array(
             'name' => 'foobar'
         ));
         $this->serviceRegistry->getDefunctRouteHandler('foobar')->willReturn($this->delegatedHandler);
-        $this->delegatedHandler->handleDefunctRoutes($this->urlContextCollection->reveal())->shouldBeCalled();
-        $this->delegatingDefunctRouteHandler->handleDefunctRoutes($this->urlContextCollection->reveal());
+        $this->delegatedHandler->handleDefunctRoutes($this->uriContextCollection->reveal())->shouldBeCalled();
+        $this->delegatingDefunctRouteHandler->handleDefunctRoutes($this->uriContextCollection->reveal());
     }
 }

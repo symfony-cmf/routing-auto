@@ -14,10 +14,10 @@ namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
-class UrlContextCollection
+class UriContextCollection
 {
     protected $subjectObject;
-    protected $urlContexts = array();
+    protected $uriContexts = array();
 
     /**
      * @param mixed $subjectObject Subject for URL generation
@@ -41,46 +41,46 @@ class UrlContextCollection
     /**
      * Create and a URL context
      *
-     * @param string $url    URL
+     * @param string $uri    URL
      * @param string $locale Locale for given URL
      *
-     * @return UrlContext
+     * @return UriContext
      */
-    public function createUrlContext($locale)
+    public function createUriContext($locale)
     {
-        $urlContext = new UrlContext(
+        $uriContext = new UriContext(
             $this->getSubjectObject(),
             $locale
         );
 
-        return $urlContext;
+        return $uriContext;
     }
 
     /**
      * Push a URL context onto the stack
      *
-     * @param UrlContext $urlContext
+     * @param UriContext $uriContext
      */
-    public function addUrlContext(UrlContext $urlContext)
+    public function addUriContext(UriContext $uriContext)
     {
-        $this->urlContexts[] = $urlContext;
+        $this->uriContexts[] = $uriContext;
     }
 
-    public function getUrlContexts()
+    public function getUriContexts()
     {
-        return $this->urlContexts;
+        return $this->uriContexts;
     }
 
     /**
-     * Return true if any one of the UrlContexts in the stacj
+     * Return true if any one of the UriContexts in the stacj
      * contain the given auto route
      *
      * @param AutoRouteInterface $autoRoute
      */
     public function containsAutoRoute(AutoRouteInterface $autoRoute)
     {
-        foreach ($this->urlContexts as $urlContext) {
-            if ($autoRoute === $urlContext->getAutoRoute()) {
+        foreach ($this->uriContexts as $uriContext) {
+            if ($autoRoute === $uriContext->getAutoRoute()) {
                 return true;
             }
         }
@@ -90,8 +90,8 @@ class UrlContextCollection
 
     public function getAutoRouteByTag($tag)
     {
-        foreach ($this->urlContexts as $urlContext) {
-            $autoRoute = $urlContext->getAutoRoute();
+        foreach ($this->uriContexts as $uriContext) {
+            $autoRoute = $uriContext->getAutoRoute();
             if ($tag === $autoRoute->getAutoRouteTag()) {
                 return $autoRoute;
             }

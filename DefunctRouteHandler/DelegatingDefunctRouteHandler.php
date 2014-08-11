@@ -16,7 +16,7 @@ use Symfony\Cmf\Component\RoutingAuto\Mapping\MetadataFactory;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\ServiceRegistry;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
-use Symfony\Cmf\Component\RoutingAuto\UrlContextCollection;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
 /**
  * Defunct route handler which delegates the handling of
@@ -48,15 +48,15 @@ class DelegatingDefunctRouteHandler implements DefunctRouteHandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function handleDefunctRoutes(UrlContextCollection $urlContextCollection)
+    public function handleDefunctRoutes(UriContextCollection $uriContextCollection)
     {
-        $subject = $urlContextCollection->getSubjectObject();
-        $realClassName = $this->adapter->getRealClassName(get_class($urlContextCollection->getSubjectObject()));
+        $subject = $uriContextCollection->getSubjectObject();
+        $realClassName = $this->adapter->getRealClassName(get_class($uriContextCollection->getSubjectObject()));
         $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
 
         $defunctRouteHandlerConfig = $metadata->getDefunctRouteHandler();
 
         $defunctHandler = $this->serviceRegistry->getDefunctRouteHandler($defunctRouteHandlerConfig['name']);
-        $defunctHandler->handleDefunctRoutes($urlContextCollection);
+        $defunctHandler->handleDefunctRoutes($uriContextCollection);
     }
 }

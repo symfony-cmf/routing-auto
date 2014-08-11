@@ -12,12 +12,12 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
-use Symfony\Cmf\Component\RoutingAuto\UrlContext;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 
-class UrlContextTest extends BaseTestCase
+class UriContextTest extends BaseTestCase
 {
-    protected $urlContext;
+    protected $uriContext;
 
     public function setUp()
     {
@@ -28,22 +28,22 @@ class UrlContextTest extends BaseTestCase
 
     public function testGetSet()
     {
-        $urlContext = new UrlContext($this->subjectObject, 'fr');
+        $uriContext = new UriContext($this->subjectObject, 'fr');
 
         // locales
-        $this->assertEquals('fr', $urlContext->getLocale());
+        $this->assertEquals('fr', $uriContext->getLocale());
 
-        /// url
-        $this->assertEquals(null, $urlContext->getUrl());
-        $urlContext->setUrl('/foo/bar');
-        $this->assertEquals('/foo/bar', $urlContext->getUrl());
+        /// uri
+        $this->assertEquals(null, $uriContext->getUri());
+        $uriContext->setUri('/foo/bar');
+        $this->assertEquals('/foo/bar', $uriContext->getUri());
 
         // subject object
-        $this->assertEquals($this->subjectObject, $urlContext->getSubjectObject());
+        $this->assertEquals($this->subjectObject, $uriContext->getSubjectObject());
 
         // auto route
-        $urlContext->setAutoRoute($this->autoRoute);
-        $this->assertEquals($this->autoRoute, $urlContext->getAutoRoute());
+        $uriContext->setAutoRoute($this->autoRoute);
+        $this->assertEquals($this->autoRoute, $uriContext->getAutoRoute());
     }
 }
 

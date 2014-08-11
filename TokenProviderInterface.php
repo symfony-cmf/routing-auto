@@ -25,7 +25,7 @@ interface TokenProviderInterface
      *
      * @return string
      */
-    public function provideValue(UrlContext $urlContext, $options);
+    public function provideValue(UriContext $uriContext, $options);
 
     /**
      * Configure the options for this token provider

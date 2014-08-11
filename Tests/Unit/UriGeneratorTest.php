@@ -12,16 +12,16 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
-use Symfony\Cmf\Component\RoutingAuto\UrlGenerator;
+use Symfony\Cmf\Component\RoutingAuto\UriGenerator;
 use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Prophecy\Argument;
 
-class UrlGeneratorTest extends BaseTestCase
+class UriGeneratorTest extends BaseTestCase
 {
     protected $driver;
     protected $serviceRegistry;
     protected $tokenProviders = array();
-    protected $urlContext;
+    protected $uriContext;
 
     public function setUp()
     {
@@ -32,21 +32,21 @@ class UrlGeneratorTest extends BaseTestCase
         $this->driver = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
         $this->serviceRegistry = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\ServiceRegistry');
         $this->tokenProvider = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface');
-        $this->urlContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UrlContext');
+        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
 
-        $this->urlGenerator = new UrlGenerator(
+        $this->uriGenerator = new UriGenerator(
             $this->metadataFactory->reveal(),
             $this->driver->reveal(),
             $this->serviceRegistry->reveal()
         );
     }
 
-    public function provideGenerateUrl()
+    public function provideGenerateUri()
     {
         return array(
             array(
-                '/this/is/{token_the_first}/a/url',
-                '/this/is/foobar_value/a/url',
+                '/this/is/{token_the_first}/a/uri',
+                '/this/is/foobar_value/a/uri',
                 array(
                     'token_the_first' => array(
                         'name' => 'foobar_provider',
@@ -56,8 +56,8 @@ class UrlGeneratorTest extends BaseTestCase
                 ),
             ),
             array(
-                '/{this}/{is}/{token_the_first}/a/url',
-                '/that/was/foobar_value/a/url',
+                '/{this}/{is}/{token_the_first}/a/uri',
+                '/that/was/foobar_value/a/uri',
                 array(
                     'token_the_first' => array(
                         'name' => 'foobar_provider',
@@ -80,12 +80,12 @@ class UrlGeneratorTest extends BaseTestCase
     }
 
     /**
-     * @dataProvider provideGenerateUrl
+     * @dataProvider provideGenerateUri
      */
-    public function testGenerateUrl($urlSchema, $expectedUrl, $tokenProviderConfigs)
+    public function testGenerateUri($uriSchema, $expectedUri, $tokenProviderConfigs)
     {
         $document = new \stdClass;
-        $this->urlContext->getSubjectObject()->willReturn($document);
+        $this->uriContext->getSubjectObject()->willReturn($document);
         $this->driver->getRealClassName('stdClass')
             ->willReturn('ThisIsMyStandardClass');
 
@@ -95,8 +95,8 @@ class UrlGeneratorTest extends BaseTestCase
         $this->metadata->getTokenProviders()
             ->willReturn($tokenProviderConfigs);
 
-        $this->metadata->getUrlSchema()
-            ->willReturn($urlSchema);
+        $this->metadata->getUriSchema()
+            ->willReturn($uriSchema);
 
         foreach ($tokenProviderConfigs as $tokenName => $tokenProviderConfig) {
             $providerName = $tokenProviderConfig['name'];
@@ -108,13 +108,13 @@ class UrlGeneratorTest extends BaseTestCase
             $this->serviceRegistry->getTokenProvider($tokenProviderConfig['name'])
                 ->willReturn($this->tokenProviders[$providerName]);
 
-            $this->tokenProviders[$providerName]->provideValue($this->urlContext, $tokenProviderConfig['options'])
+            $this->tokenProviders[$providerName]->provideValue($this->uriContext, $tokenProviderConfig['options'])
                 ->willReturn($tokenProviderConfig['value']);
             $this->tokenProviders[$providerName]->configureOptions(Argument::type('Symfony\Component\OptionsResolver\OptionsResolverInterface'))->shouldBeCalled();
         }
 
-        $res = $this->urlGenerator->generateUrl($this->urlContext->reveal());
+        $res = $this->uriGenerator->generateUri($this->uriContext->reveal());
 
-        $this->assertEquals($expectedUrl, $res);
+        $this->assertEquals($expectedUri, $res);
     }
 }

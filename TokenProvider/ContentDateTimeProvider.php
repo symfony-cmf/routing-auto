@@ -13,16 +13,16 @@
 namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Cmf\Component\RoutingAuto\UrlContext;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ContentDateTimeProvider extends ContentMethodProvider
 {
     /**
      * {@inheritDoc}
      */
-    public function provideValue(UrlContext $urlContext, $options)
+    public function provideValue(UriContext $uriContext, $options)
     {
-        $object = $urlContext->getSubjectObject();
+        $object = $uriContext->getSubjectObject();
         $method = $options['method'];
         $this->checkMethodExists($object, $method);
 

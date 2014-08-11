@@ -13,7 +13,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\ConflictResolver;
 
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface;
-use Symfony\Cmf\Component\RoutingAuto\UrlContext;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 
 /**
@@ -26,16 +26,16 @@ class ThrowExceptionConflictResolver implements ConflictResolverInterface
     /**
      * {@inheritDoc}
      */
-    public function resolveConflict(UrlContext $urlContext)
+    public function resolveConflict(UriContext $uriContext)
     {
-        $url = $urlContext->getUrl();
+        $uri = $uriContext->getUri();
 
-        throw new Exception\ExistingUrlException(sprintf(
+        throw new Exception\ExistingUriException(sprintf(
             'There already exists an auto route for URL "%s" and the system is configured ' . 
             'to throw this exception in this case. Alternatively you can choose to use a ' .
             'different strategy, for example, auto incrementation. Please refer to the ' .
             'documentation for more information.',
-            $url
+            $uri
         ));
     }
 }

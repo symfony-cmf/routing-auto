@@ -19,7 +19,7 @@ class ContentMethodProviderTest extends BaseTestCase
 {
     protected $slugifier;
     protected $article;
-    protected $urlContext;
+    protected $uriContext;
 
     public function setUp()
     {
@@ -27,7 +27,7 @@ class ContentMethodProviderTest extends BaseTestCase
 
         $this->slugifier = $this->prophesize('Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface');
         $this->article = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Article');
-        $this->urlContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UrlContext');
+        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
         $this->provider = new ContentMethodProvider($this->slugifier->reveal());
     }
 
@@ -64,7 +64,7 @@ class ContentMethodProviderTest extends BaseTestCase
     public function testGetValue($options, $methodExists = false)
     {
         $method = $options['method'];
-        $this->urlContext->getSubjectObject()->willReturn($this->article);
+        $this->uriContext->getSubjectObject()->willReturn($this->article);
 
         if (!$methodExists) {
             $this->setExpectedException(
@@ -80,7 +80,7 @@ class ContentMethodProviderTest extends BaseTestCase
             $this->slugifier->slugify('This is value')->willReturn($expectedResult);
         }
 
-        $res = $this->provider->provideValue($this->urlContext->reveal(), $options);
+        $res = $this->provider->provideValue($this->uriContext->reveal(), $options);
 
         $this->assertEquals($expectedResult, $res);
     }

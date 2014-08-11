@@ -13,29 +13,29 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
-use Symfony\Cmf\Component\RoutingAuto\UrlContextCollection;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
 class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
         $this->driver = $this->getMock('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
-        $this->urlGenerator = $this->getMock('Symfony\Cmf\Component\RoutingAuto\UrlGeneratorInterface');
+        $this->uriGenerator = $this->getMock('Symfony\Cmf\Component\RoutingAuto\UriGeneratorInterface');
         $this->defunctRouteHandler = $this->getMock('Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface');
         $this->autoRouteManager = new AutoRouteManager(
             $this->driver,
-            $this->urlGenerator,
+            $this->uriGenerator,
             $this->defunctRouteHandler
         );
     }
 
-    public function provideBuildUrlContextCollection()
+    public function provideBuildUriContextCollection()
     {
         return array(
             array(
                 array(
                     'locales' => array('en', 'fr', 'de', 'be'),
-                    'urls' => array(
+                    'uris' => array(
                         '/en/this-is-an-route' => array('conflict' => false),
                         '/fr/this-is-an-route' => array('conflict' => false),
                         '/de/this-is-an-route' => array('conflict' => false),
@@ -48,13 +48,13 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideBuildUrlContextCollection
+     * @dataProvider provideBuildUriContextCollection
      */
-    public function testBuildUrlContextCollection($params)
+    public function testBuildUriContextCollection($params)
     {
         $params = array_merge(array(
             'locales' => array(),
-            'urls' => array(),
+            'uris' => array(),
         ), $params);
 
         $this->driver->expects($this->once())
@@ -62,33 +62,33 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($params['locales']));
 
         $localesCount = count($params['locales']);
-        $urls = $params['urls'];
-        $indexedUrls = array_keys($urls);
+        $uris = $params['uris'];
+        $indexedUris = array_keys($uris);
         $expectedRoutes = array();
         $document = new \stdClass;
 
         for ($i = 0; $i < $localesCount; $i++) {
             $expectedRoutes[] = $this->getMock('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
 
-            $this->urlGenerator->expects($this->exactly($localesCount))
-                ->method('generateUrl')
-                ->will($this->returnCallback(function () use ($i, $indexedUrls) {
-                    return $indexedUrls[$i];
+            $this->uriGenerator->expects($this->exactly($localesCount))
+                ->method('generateUri')
+                ->will($this->returnCallback(function () use ($i, $indexedUris) {
+                    return $indexedUris[$i];
                 }));
         }
 
         $this->driver->expects($this->exactly($localesCount))
             ->method('createAutoRoute')
-            ->will($this->returnCallback(function ($url, $document) use ($expectedRoutes) {
+            ->will($this->returnCallback(function ($uri, $document) use ($expectedRoutes) {
                 static $i = 0;
                 return $expectedRoutes[$i++];
             }));
 
-        $urlContextCollection = new UrlContextCollection($document);
-        $this->autoRouteManager->buildUrlContextCollection($urlContextCollection);
+        $uriContextCollection = new UriContextCollection($document);
+        $this->autoRouteManager->buildUriContextCollection($uriContextCollection);
 
         foreach ($expectedRoutes as $expectedRoute) {
-            $this->assertTrue($urlContextCollection->containsAutoRoute($expectedRoute), 'URL context collection contains route: ' . spl_object_hash($expectedRoute));
+            $this->assertTrue($uriContextCollection->containsAutoRoute($expectedRoute), 'URL context collection contains route: ' . spl_object_hash($expectedRoute));
         }
     }
 }

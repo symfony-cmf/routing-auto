@@ -108,14 +108,14 @@ class YmlFileLoaderTest extends BaseTestCase
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
-                $test->assertEquals('/cmf/blog', $metadata->getUrlSchema());
+                $test->assertEquals('/cmf/blog', $metadata->getUriSchema());
                 $test->assertCount(0, $metadata->getTokenProviders());
             }),
             array('valid2.yml', function ($metadatas) use ($test, $serviceConfig) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
-                $test->assertEquals('/forum/{category}/{post_name}', $metadata->getUrlSchema());
+                $test->assertEquals('/forum/{category}/{post_name}', $metadata->getUriSchema());
 
                 $test->assertCount(2, $metadata->getTokenProviders());
                 $units = $metadata->getTokenProviders();
@@ -129,10 +129,10 @@ class YmlFileLoaderTest extends BaseTestCase
             array('valid3.yml', function ($metadatas) use ($test) {
                 $test->assertCount(2, $metadatas);
                 $test->assertEquals('stdClass', $metadatas[0]->getClassName());
-                $test->assertEquals('/forum/{category}/{post_name}', $metadatas[0]->getUrlSchema());
+                $test->assertEquals('/forum/{category}/{post_name}', $metadatas[0]->getUriSchema());
 
                 $test->assertEquals('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass', $metadatas[1]->getClassName());
-                $test->assertEquals('/forum/{category}', $metadatas[1]->getUrlSchema());
+                $test->assertEquals('/forum/{category}', $metadatas[1]->getUriSchema());
                 $test->assertEquals('stdClass', $metadatas[1]->getExtendedClass());
             }),
             array('valid4.yml', function ($metadatas) use ($test, $serviceConfig) {
@@ -140,7 +140,7 @@ class YmlFileLoaderTest extends BaseTestCase
                 $metadata = $metadatas[0];
 
                 $test->assertEquals('stdClass', $metadata->getClassName());
-                $test->assertEquals('/cmf/blog', $metadata->getUrlSchema());
+                $test->assertEquals('/cmf/blog', $metadata->getUriSchema());
                 $test->assertEquals($serviceConfig('auto_increment'), $metadata->getConflictResolver());
                 $test->assertEquals($serviceConfig('leave_redirect'), $metadata->getDefunctRouteHandler());
             }),
@@ -149,7 +149,7 @@ class YmlFileLoaderTest extends BaseTestCase
                 $metadata = $metadatas[0];
 
                 $test->assertEquals('stdClass', $metadata->getClassName());
-                $test->assertEquals('/blog/{category}/{slug}', $metadata->getUrlSchema());
+                $test->assertEquals('/blog/{category}/{slug}', $metadata->getUriSchema());
                 $test->assertEquals($serviceConfig('auto_increment', array('token' => 'category')), $metadata->getConflictResolver());
 
                 $test->assertCount(2, $metadata->getTokenProviders());
@@ -163,7 +163,7 @@ class YmlFileLoaderTest extends BaseTestCase
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
-                $test->assertEquals('/forum/{category}/{post_title}', $metadata->getUrlSchema());
+                $test->assertEquals('/forum/{category}/{post_title}', $metadata->getUriSchema());
                 $providers = $metadata->getTokenProviders();
                 $test->assertArrayHasKey('category', $providers);
                 $test->assertEquals('foo', $providers['category']['name']);

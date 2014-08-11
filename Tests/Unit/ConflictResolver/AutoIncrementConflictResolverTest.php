@@ -26,7 +26,7 @@ class AutoIncrementConflictResolverTest extends BaseTestCase
         $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
 
         $this->conflictResolver = new AutoIncrementConflictResolver($this->adapter->reveal());
-        $this->urlContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UrlContext');
+        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
     }
 
     public function provideResolveConflict()
@@ -54,16 +54,16 @@ class AutoIncrementConflictResolverTest extends BaseTestCase
     /**
      * @dataProvider provideResolveConflict
      */
-    public function testResolveConflict($url, $existingRoutes, $expectedResult)
+    public function testResolveConflict($uri, $existingRoutes, $expectedResult)
     {
-        $this->urlContext->getUrl()->willReturn($url);
+        $this->uriContext->getUri()->willReturn($uri);
 
         foreach ($existingRoutes as $existingRoute) {
-            $this->adapter->findRouteForUrl($existingRoute)->willReturn(new \stdClass);
+            $this->adapter->findRouteForUri($existingRoute)->willReturn(new \stdClass);
         }
-        $this->adapter->findRouteForUrl($expectedResult)->willReturn(null);
+        $this->adapter->findRouteForUri($expectedResult)->willReturn(null);
 
-        $url = $this->conflictResolver->resolveConflict($this->urlContext->reveal());
-        $this->assertEquals($expectedResult, $url);
+        $uri = $this->conflictResolver->resolveConflict($this->uriContext->reveal());
+        $this->assertEquals($expectedResult, $uri);
     }
 }
