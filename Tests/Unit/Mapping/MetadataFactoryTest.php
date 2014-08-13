@@ -172,7 +172,24 @@ class MetadataFactoryTest extends BaseTestCase
 
         $this->factory->addMetadatas(array($parentMetadata, $parent1Metadata));
 
-        $resolvedMetadata = $this->factory->getMetadataForClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass');
+        $this->factory->getMetadataForClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass');
+    }
+
+    /**
+     * @expectedException \LogicException
+     */
+    public function testsFailsWithPhpCircularReference()
+    {
+        $childMetadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass');
+        $childMetadata->setUrlSchema('{title}');
+
+        $parentMetadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass');
+        $parentMetadata->setExtendedClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass');
+        $parentMetadata->addTokenProvider('title', $this->createTokenProvider('provider1'));
+
+        $this->factory->addMetadatas(array($childMetadata, $parentMetadata));
+
+        $this->factory->getMetadataForClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass');
     }
 
     protected function createTokenProvider($name)
