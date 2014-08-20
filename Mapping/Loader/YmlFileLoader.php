@@ -15,6 +15,7 @@ namespace Symfony\Cmf\Component\RoutingAuto\Mapping\Loader;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Config\Loader\FileLoader;
+use Symfony\Component\Config\Resource\FileResource;
 
 /**
  * @author Wouter J <wouter@wouterj.nl>
@@ -61,7 +62,8 @@ class YmlFileLoader extends FileLoader
 
         $metadatas = array();
         foreach ($config as $className => $mappingNode) {
-            $metadatas[] = $this->parseMappingNode($className, $mappingNode, $path);
+            $metadatas[] = $metadata = $this->parseMappingNode($className, $mappingNode, $path);
+            $metadata->fileResources[] = new FileResource($path);
         }
 
         return $metadatas;
