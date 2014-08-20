@@ -79,27 +79,39 @@ class YmlFileLoader extends FileLoader
         }
         $classMetadata = new ClassMetadata($className);
 
-        if (isset($mappingNode['uri_schema'])) {
-            $classMetadata->setUriSchema($mappingNode['uri_schema']);
-        }
+        $validKeys = array(
+            'uri_schema',
+            'conflict_resolver',
+            'defunct_route_handler',
+            'extend',
+            'token_providers',
+        );
 
-        if (isset($mappingNode['conflict_resolver'])) {
-            $classMetadata->setConflictResolver($this->parseServiceConfig($mappingNode['conflict_resolver'], $className, $path));
-        }
+        foreach ($mappingNode as $key => $value) {
+            if (!in_array($key, $validKeys)) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Invalid configuration key "%s". Valid keys are "%s"',
+                    $key, implode(',', $validKeys)
+                ));
+            }
 
-        if (isset($mappingNode['defunct_route_handler'])) {
-            $classMetadata->setDefunctRouteHandler($this->parseServiceConfig($mappingNode['defunct_route_handler'], $className, $path));
-        }
-
-        if (isset($mappingNode['extend'])) {
-            $classMetadata->setExtendedClass($mappingNode['extend']);
-        }
-
-        // token providers can be omitted if the schema is constructed of
-        // inherited token providers only
-        if (isset($mappingNode['token_providers'])) {
-            foreach ($mappingNode['token_providers'] as $tokenName => $provider) {
-                $classMetadata->addTokenProvider($tokenName, $this->parseServiceConfig($provider, $className, $path));
+            switch ($key) {
+                case 'uri_schema':
+                    $classMetadata->setUriSchema($value);
+                    break;
+                case 'conflict_resolver':
+                    $classMetadata->setConflictResolver($this->parseServiceConfig($mappingNode['conflict_resolver'], $className, $path));
+                    break;
+                case 'defunct_route_handler':
+                    $classMetadata->setDefunctRouteHandler($this->parseServiceConfig($mappingNode['defunct_route_handler'], $className, $path));
+                    break;
+                case 'extend':
+                    $classMetadata->setExtendedClass($mappingNode['extend']);
+                    break;
+                case 'token_providers':
+                    foreach ($mappingNode['token_providers'] as $tokenName => $provider) {
+                        $classMetadata->addTokenProvider($tokenName, $this->parseServiceConfig($provider, $className, $path));
+                    }
             }
         }
 
