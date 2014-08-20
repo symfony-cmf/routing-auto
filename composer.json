@@ -11,15 +11,15 @@
     ],
     "minimum-stability": "dev",
     "require": {
-        "symfony-cmf/core-bundle": "1.1.x-dev",
-        "symfony-cmf/routing": "1.2.x",
+        "symfony-cmf/core-bundle": "~1.1",
+        "symfony-cmf/routing": "~1.2",
         "symfony/options-resolver": "~2.2",
         "symfony/config": "~2.2",
         "jms/metadata": "1.5.*"
     },
     "require-dev": {
-        "symfony/yaml": "~2.1.0",
-        "phpspec/prophecy": "1.1.2"
+        "symfony/yaml": "~2.1",
+        "phpspec/prophecy": "~1.1.2"
     },
     "suggest": {
         "symfony/yaml": "To be able to load Yaml configuration files",
