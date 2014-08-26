@@ -93,7 +93,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
      */
     protected function resolveMetadata($class)
     {
-        $classFqns = class_parents($class);
+        $classFqns = array_reverse(class_parents($class));
         $classFqns[] = $class;
         $metadatas = array();
         $addedClasses = array();

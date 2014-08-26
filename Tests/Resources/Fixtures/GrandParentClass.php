@@ -12,6 +12,6 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures;
 
-class ParentClass extends GrandParentClass
+class GrandParentClass
 {
 }

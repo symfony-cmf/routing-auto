@@ -120,13 +120,16 @@ class MetadataFactoryTest extends BaseTestCase
         $childMetadata->addTokenProvider('title', $childTokenProviderTitle);
 
         $parentMetadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass');
-        $parentMetadata->setUriSchema('/{category}/{publish_date}');
+        $parentMetadata->setUriSchema('{parent}/{publish_date}');
         $parentTokenProvider = $this->createTokenProvider('provider3');
         $parentTokenProviderDate = $this->createTokenProvider('provider4');
         $parentMetadata->addTokenProvider('category', $parentTokenProvider);
         $parentMetadata->addTokenProvider('publish_date', $parentTokenProviderDate);
 
-        $this->factory->addMetadatas(array($childMetadata, $parentMetadata));
+        $grandParentMetadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\GrandParentClass');
+        $grandParentMetadata->setUriSchema('/{category}');
+
+        $this->factory->addMetadatas(array($childMetadata, $parentMetadata, $grandParentMetadata));
 
         $resolvedMetadata = $this->factory->getMetadataForClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass');
         $resolvedProviders = $resolvedMetadata->getTokenProviders();
