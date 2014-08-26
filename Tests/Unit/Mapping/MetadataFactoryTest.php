@@ -184,7 +184,7 @@ class MetadataFactoryTest extends BaseTestCase
     public function testsFailsWithPhpCircularReference()
     {
         $childMetadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass');
-        $childMetadata->setUrlSchema('{title}');
+        $childMetadata->setUriSchema('{title}');
 
         $parentMetadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass');
         $parentMetadata->setExtendedClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass');
