@@ -120,13 +120,16 @@ class MetadataFactoryTest extends BaseTestCase
         $childMetadata->addTokenProvider('title', $childTokenProviderTitle);
 
         $parentMetadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass');
-        $parentMetadata->setUriSchema('/{category}/{publish_date}');
+        $parentMetadata->setUriSchema('{parent}/{publish_date}');
         $parentTokenProvider = $this->createTokenProvider('provider3');
         $parentTokenProviderDate = $this->createTokenProvider('provider4');
         $parentMetadata->addTokenProvider('category', $parentTokenProvider);
         $parentMetadata->addTokenProvider('publish_date', $parentTokenProviderDate);
 
-        $this->factory->addMetadatas(array($childMetadata, $parentMetadata));
+        $grandParentMetadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\GrandParentClass');
+        $grandParentMetadata->setUriSchema('/{category}');
+
+        $this->factory->addMetadatas(array($childMetadata, $parentMetadata, $grandParentMetadata));
 
         $resolvedMetadata = $this->factory->getMetadataForClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass');
         $resolvedProviders = $resolvedMetadata->getTokenProviders();
@@ -157,7 +160,8 @@ class MetadataFactoryTest extends BaseTestCase
     }
 
     /**
-     * @expectedException \LogicException
+     * @expectedException \Symfony\Cmf\Component\RoutingAuto\Mapping\Exception\CircularReferenceException
+     * @expectedExceptionMessage "Symfony\\Cmf\\Component\\RoutingAuto\\Tests\\Resources\\Fixtures\\ParentClass"
      */
     public function testFailsWithCircularReference()
     {
@@ -172,7 +176,25 @@ class MetadataFactoryTest extends BaseTestCase
 
         $this->factory->addMetadatas(array($parentMetadata, $parent1Metadata));
 
-        $resolvedMetadata = $this->factory->getMetadataForClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass');
+        $this->factory->getMetadataForClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass');
+    }
+
+    /**
+     * @expectedException \Symfony\Cmf\Component\RoutingAuto\Mapping\Exception\CircularReferenceException
+     * @expectedExceptionMessage "Symfony\\Cmf\\Component\\RoutingAuto\\Tests\\Resources\\Fixtures\\ChildClass"
+     */
+    public function testsFailsWithPhpCircularReference()
+    {
+        $childMetadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass');
+        $childMetadata->setUriSchema('{title}');
+
+        $parentMetadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass');
+        $parentMetadata->setExtendedClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass');
+        $parentMetadata->addTokenProvider('title', $this->createTokenProvider('provider1'));
+
+        $this->factory->addMetadatas(array($childMetadata, $parentMetadata));
+
+        $this->factory->getMetadataForClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass');
     }
 
     protected function createTokenProvider($name)

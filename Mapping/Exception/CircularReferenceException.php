@@ -10,8 +10,8 @@
  */
 
 
-namespace Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures;
+namespace Symfony\Cmf\Component\RoutingAuto\Mapping\Exception;
 
-class ParentClass extends GrandParentClass
+class CircularReferenceException extends \LogicException
 {
 }
