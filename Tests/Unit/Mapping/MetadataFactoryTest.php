@@ -161,6 +161,7 @@ class MetadataFactoryTest extends BaseTestCase
 
     /**
      * @expectedException \Symfony\Cmf\Component\RoutingAuto\Mapping\Exception\CircularReferenceException
+     * @expectedExceptionMessage "Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass"
      */
     public function testFailsWithCircularReference()
     {
@@ -180,6 +181,7 @@ class MetadataFactoryTest extends BaseTestCase
 
     /**
      * @expectedException \Symfony\Cmf\Component\RoutingAuto\Mapping\Exception\CircularReferenceException
+     * @expectedExceptionMessage "Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass"
      */
     public function testsFailsWithPhpCircularReference()
     {
