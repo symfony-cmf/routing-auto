@@ -38,4 +38,3 @@ for a guide to running the tests.
 
 Thanks to
 [everyone who has contributed](https://github.com/symfony-cmf/RoutingAuto/contributors) already.
-## Running the tests
