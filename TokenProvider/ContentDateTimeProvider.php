@@ -18,6 +18,13 @@ use Symfony\Cmf\Component\RoutingAuto\UriContext;
 class ContentDateTimeProvider extends ContentMethodProvider
 {
     /**
+     * The constructor is overriden, since the DateTimeProvider doesn't require a slugifier.
+     */
+    public function __construct()
+    {
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function provideValue(UriContext $uriContext, $options)
@@ -46,6 +53,8 @@ class ContentDateTimeProvider extends ContentMethodProvider
     public function configureOptions(OptionsResolverInterface $optionsResolver)
     {
         parent::configureOptions($optionsResolver);
+
+        $optionsResolver->remove('slugify');
 
         $optionsResolver->setRequired(array(
             'date_format',
