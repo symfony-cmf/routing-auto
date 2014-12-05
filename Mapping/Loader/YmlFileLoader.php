@@ -80,6 +80,7 @@ class YmlFileLoader extends FileLoader
         $classMetadata = new ClassMetadata($className);
 
         $validKeys = array(
+            'attributes',
             'uri_schema',
             'conflict_resolver',
             'defunct_route_handler',
@@ -96,6 +97,9 @@ class YmlFileLoader extends FileLoader
             }
 
             switch ($key) {
+                case 'attributes':
+                    $classMetadata->setAttributes($value);
+                    break;
                 case 'uri_schema':
                     $classMetadata->setUriSchema($value);
                     break;

@@ -50,6 +50,11 @@ class ClassMetadata extends MergeableClassMetadata
     protected $extendedClass;
 
     /**
+     * @var array
+     */
+    protected $attributes;
+
+    /**
      * Set the URL schema to use for the subject class.
      *
      * e.g. {foobar}/articles/{date}
@@ -163,6 +168,29 @@ class ClassMetadata extends MergeableClassMetadata
     public function getExtendedClass()
     {
         return $this->extendedClass;
+    }
+
+    /**
+     * Set attributes
+     *
+     * @param array $attributes
+     * @return ClassMetadata
+     */
+    public function setAttributes(array $attributes)
+    {
+        $this->attributes = $attributes;
+
+        return $this;
+    }
+
+    /**
+     * Get attributes
+     *
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
     }
 
     /**
