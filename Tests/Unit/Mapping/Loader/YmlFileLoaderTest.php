@@ -169,6 +169,15 @@ class YmlFileLoaderTest extends BaseTestCase
                 $test->assertArrayHasKey('category', $providers);
                 $test->assertEquals('foo', $providers['category']['name']);
             }),
+            array('valid7.yml', function ($metadatas) use ($test, $serviceConfig) {
+                $test->assertCount(1, $metadatas);
+                $metadata = $metadatas[0];
+                $test->assertEquals('stdClass', $metadata->getClassName());
+                $test->assertEquals('/blog/{category}/{slug}', $metadata->getUriSchema());
+                $test->assertEquals('foobar.dom', $metadata->getHostSchema());
+                $test->assertEquals(array('http', 'https'), $metadata->getAllowedSchemes());
+                $this->assertEquals(array('bar' => 'foo', 'foo' => 'bar'), $metadata->getRouteOptions());
+            }),
         );
     }
 

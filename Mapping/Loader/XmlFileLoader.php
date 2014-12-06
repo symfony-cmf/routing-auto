@@ -89,6 +89,14 @@ class XmlFileLoader extends FileLoader
             // the extend and uri-schema attributes may be omitted
         }
 
+        try {
+            $classMetadata->setHostSchema(
+                $this->readAttribute($mappingNode, 'host-schema', sprintf('for "%s" in "%s"', $className, $path))
+            );
+        } catch (\InvalidArgumentException $e) {
+            // host schema is optional
+        }
+
         $conflictResolverNodes = $mappingNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'conflict-resolver');
         $resolversLength = $conflictResolverNodes->length;
         if (1 < $resolversLength) {
@@ -115,6 +123,16 @@ class XmlFileLoader extends FileLoader
             }
         }
 
+        $schemeNodes = $mappingNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'scheme');
+        foreach ($schemeNodes as $schemeNode) {
+            $classMetadata->addAllowedScheme($schemeNode->nodeValue);
+        }
+
+        $routeOptionNodes = $mappingNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'route-option');
+        $routeOptions = $this->parseOptionNodes($routeOptionNodes, $path);
+        $classMetadata->setRouteOptions($routeOptions);
+
+
         return $classMetadata;
     }
 
@@ -127,7 +145,7 @@ class XmlFileLoader extends FileLoader
     {
         $tokenName = $this->readAttribute($tokenNode, 'token', sprintf('in "%s" for "%s"', $path, $classMetadata->name));
         $providerName = $this->readAttribute($tokenNode, 'name', sprintf('in "%s" for "%s"', $path, $classMetadata->name));
-        $providerOptions = $this->parseOptionNode($tokenNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'option'), $path);
+        $providerOptions = $this->parseOptionNodes($tokenNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'option'), $path);
 
         $classMetadata->addTokenProvider($tokenName, array('name' => $providerName, 'options' => $providerOptions));
     }
@@ -140,7 +158,7 @@ class XmlFileLoader extends FileLoader
     protected function parseConflictResolverNode(\DOMElement $node, ClassMetadata $classMetadata, $path)
     {
         $name = $this->readAttribute($node, 'name', sprintf('in "%s" for "%s"', $path, $classMetadata->name));
-        $options = $this->parseOptionNode($node->getElementsByTagNameNS(self::NAMESPACE_URI, 'option'), $path);
+        $options = $this->parseOptionNodes($node->getElementsByTagNameNS(self::NAMESPACE_URI, 'option'), $path);
 
         $classMetadata->setConflictResolver(array('name' => $name, 'options' => $options));
     }
@@ -153,13 +171,13 @@ class XmlFileLoader extends FileLoader
     protected function parseDefunctRouteHandlerNode(\DOMElement $node, ClassMetadata $classMetadata, $path)
     {
         $name = $this->readAttribute($node, 'name', sprintf('in "%s" for "%s"', $path, $classMetadata->name));
-        $options = $this->parseOptionNode($node->getElementsByTagNameNS(self::NAMESPACE_URI, 'option'), $path);
+        $options = $this->parseOptionNodes($node->getElementsByTagNameNS(self::NAMESPACE_URI, 'option'), $path);
 
         $classMetadata->setDefunctRouteHandler(array('name' => $name, 'options' => $options));
     }
 
 
-    protected function parseOptionNode(\DOMNodeList $nodes, $path)
+    protected function parseOptionNodes(\DOMNodeList $nodes, $path)
     {
         $options = array();
         foreach ($nodes as $node) {

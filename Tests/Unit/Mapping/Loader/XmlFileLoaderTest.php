@@ -158,6 +158,18 @@ class XmlFileLoaderTest extends BaseTestCase
                 $test->assertArrayHasKey('slug', $providers);
                 $test->assertEquals($serviceConfig('property', array('property' => 'title', 'slugify' => true)), $providers['slug']);
             }),
+
+            // host schema, route options and allowedSchemes
+            array('valid7.xml', function ($metadatas) use ($test) {
+                $test->assertCount(1, $metadatas);
+                $metadata = $metadatas[0];
+
+                $test->assertEquals('stdClass', $metadata->getClassName());
+                $test->assertEquals('/blog/{category}/{slug}', $metadata->getUriSchema());
+                $test->assertEquals('foobar.dom', $metadata->getHostSchema());
+                $test->assertEquals(array('http', 'https'), $metadata->getAllowedSchemes());
+                $this->assertEquals(array('bar' => 'foo', 'foo' => 'bar'), $metadata->getRouteOptions());
+            }),
         );
     }
 

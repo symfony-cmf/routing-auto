@@ -28,6 +28,21 @@ class ClassMetadata extends MergeableClassMetadata
     protected $uriSchema;
 
     /**
+     * @var string
+     */
+    protected $hostSchema;
+
+    /**
+     * @var array
+     */
+    protected $routeOptions = array();
+
+    /**
+     * @var array
+     */
+    protected $allowedSchemes = array();
+
+    /**
      * @var array
      */
     protected $tokenProviders = array();
@@ -69,6 +84,67 @@ class ClassMetadata extends MergeableClassMetadata
     public function getUriSchema()
     {
         return $this->uriSchema;
+    }
+
+    /**
+     * Return the host schema
+     *
+     * @return string
+     */
+    public function getHostSchema() 
+    {
+        return $this->hostSchema;
+    }
+
+    /**
+     * Set the host schema
+     *
+     * @param string $hostSchema
+     */
+    public function setHostSchema($hostSchema)
+    {
+        $this->hostSchema = $hostSchema;
+    }
+
+    /**
+     * Return the route options
+     *
+     * @return array
+     */
+    public function getRouteOptions() 
+    {
+        return $this->routeOptions;
+    }
+
+    /**
+     * Set the route options
+     *
+     * @param array $routeOptions
+     */
+    public function setRouteOptions($routeOptions)
+    {
+        $this->routeOptions = $routeOptions;
+    }
+
+    /**
+     * Set allowed allowedSchemes
+     * e.g. array('http') or array('http', 'https'), etc.
+     *
+     * @return array
+     */
+    public function getAllowedSchemes() 
+    {
+        return $this->allowedSchemes;
+    }
+
+    /**
+     * Add an allowed scheme
+     *
+     * @param string $scheme
+     */
+    public function addAllowedScheme($scheme)
+    {
+        $this->allowedSchemes[] = $scheme;
     }
 
     /**

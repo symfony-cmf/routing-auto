@@ -81,6 +81,9 @@ class YmlFileLoader extends FileLoader
 
         $validKeys = array(
             'uri_schema',
+            'host_scheme',
+            'route_options',
+            'allowed_schemes',
             'conflict_resolver',
             'defunct_route_handler',
             'extend',
@@ -98,6 +101,17 @@ class YmlFileLoader extends FileLoader
             switch ($key) {
                 case 'uri_schema':
                     $classMetadata->setUriSchema($value);
+                    break;
+                case 'host_scheme':
+                    $classMetadata->setHostSchema($value);
+                    break;
+                case 'route_options':
+                    $classMetadata->setRouteOptions($mappingNode['route_options']);
+                    break;
+                case 'allowed_schemes':
+                    foreach ($mappingNode['allowed_schemes'] as $scheme) {
+                        $classMetadata->addAllowedScheme($scheme);
+                    }
                     break;
                 case 'conflict_resolver':
                     $classMetadata->setConflictResolver($this->parseServiceConfig($mappingNode['conflict_resolver'], $className, $path));
