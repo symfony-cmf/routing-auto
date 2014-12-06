@@ -23,6 +23,7 @@ class UriContext
     protected $locale;
     protected $uri;
     protected $autoRoute;
+    protected $host;
 
     public function __construct($subjectObject, $locale)
     {
@@ -38,6 +39,16 @@ class UriContext
     public function setUri($uri)
     {
         $this->uri = $uri;
+    }
+
+    public function setHost($host)
+    {
+        $this->host = $host;
+    }
+
+    public function getHost()
+    {
+        return $this->host;
     }
 
     public function getSubjectObject()

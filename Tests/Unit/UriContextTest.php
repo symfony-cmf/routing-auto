@@ -44,6 +44,11 @@ class UriContextTest extends BaseTestCase
         // auto route
         $uriContext->setAutoRoute($this->autoRoute);
         $this->assertEquals($this->autoRoute, $uriContext->getAutoRoute());
+
+        // host
+        $this->assertEquals(null, $uriContext->getHost());
+        $uriContext->setHost('host');
+        $this->assertEquals('host', $uriContext->getHost());
     }
 }
 

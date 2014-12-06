@@ -23,8 +23,6 @@ interface UriGeneratorInterface
      * Generate a URL for the given document
      *
      * @param object $document
-     *
-     * @return string
      */
     public function generateUri(UriContext $uriContext);
 

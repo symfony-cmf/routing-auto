@@ -66,7 +66,26 @@ class UriGenerator implements UriGeneratorInterface
         }
 
         $uriSchema = $metadata->getUriSchema();
+        $hostSchema = $metadata->getHostSchema();
+        $allowedSchemes = $metadata->getAllowedSchemes();
+        $routeOptions = $metadata->getRouteOptions();
+
         $uri = strtr($uriSchema, $tokens);
+
+        if ($hostSchema) {
+            $host = strtr($hostSchema, $tokens);
+        }
+
+        $uriContext->setUri($uri);
+        $uriContext->setHost($host);
+
+        if ($allowedSchemes) {
+            $uriContext->setAllowedSchemes($allowedSchemes);
+        }
+
+        if ($routeOptions) {
+            $uriContext->setRouteOptions($routeOptions);
+        }
 
         return $uri;
     }

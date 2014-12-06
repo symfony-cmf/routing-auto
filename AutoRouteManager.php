@@ -71,7 +71,10 @@ class AutoRouteManager
 
             if (!$autoRoute) {
                 $autoRouteTag = $this->adapter->generateAutoRouteTag($uriContext);
-                $autoRoute = $this->adapter->createAutoRoute($uriContext->getUri(), $uriContext->getSubjectObject(), $autoRouteTag);
+                $autoRoute = $this->adapter->createAutoRoute(
+                    $uriContext,
+                    $autoRouteTag
+                );
             }
 
             $uriContext->setAutoRoute($autoRoute);
@@ -106,10 +109,7 @@ class AutoRouteManager
             $uriContextCollection->addUriContext($uriContext);
 
             // generate the URL
-            $uri = $this->uriGenerator->generateUri($uriContext);
-
-            // update the context with the URL
-            $uriContext->setUri($uri);
+            $this->uriGenerator->generateUri($uriContext);
         }
     }
 }
