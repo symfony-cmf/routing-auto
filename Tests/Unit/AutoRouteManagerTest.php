@@ -14,6 +14,9 @@ namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Cmf\Component\RoutingAuto\Event\UriContextEvent;
+use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
 
 class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,10 +25,13 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $this->driver = $this->getMock('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
         $this->uriGenerator = $this->getMock('Symfony\Cmf\Component\RoutingAuto\UriGeneratorInterface');
         $this->defunctRouteHandler = $this->getMock('Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface');
+        $this->eventDispatcher = new EventDispatcher();
+        $this->eventDispatcher->addListener(RoutingAutoEvents::URI_CONTEXT_BUILT, array($this, 'onUriContextBuilt'));
         $this->autoRouteManager = new AutoRouteManager(
             $this->driver,
             $this->uriGenerator,
-            $this->defunctRouteHandler
+            $this->defunctRouteHandler,
+            $this->eventDispatcher
         );
     }
 
@@ -90,5 +96,14 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         foreach ($expectedRoutes as $expectedRoute) {
             $this->assertTrue($uriContextCollection->containsAutoRoute($expectedRoute), 'URL context collection contains route: ' . spl_object_hash($expectedRoute));
         }
+    }
+
+    /**
+     * For testing the event listener
+     */
+    public function onUriContextBuilt(UriContextEvent $event)
+    {
+        $uriContext = $event->getUriContext();
+        $this->assertInstanceOf('Symfony\Cmf\Component\RoutingAuto\UriContext', $uriContext);
     }
 }
