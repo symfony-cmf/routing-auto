@@ -15,36 +15,21 @@ namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
-class ContentDateTimeProvider extends ContentMethodProvider
+class ContentDateTimeProvider extends BaseContentMethodProvider
 {
-    /**
-     * The constructor is overriden, since the DateTimeProvider doesn't require a slugifier.
-     */
-    public function __construct()
-    {
-    }
-
     /**
      * {@inheritDoc}
      */
-    public function provideValue(UriContext $uriContext, $options)
+    protected function normalizeValue($date, UriContext $uriContext, $options)
     {
-        $object = $uriContext->getSubjectObject();
-        $method = $options['method'];
-        $this->checkMethodExists($object, $method);
-
-        $date = $object->$method();
-
         if (!$date instanceof \DateTime) {
             throw new \RuntimeException(sprintf('Method %s:%s must return an instance of DateTime.',
-                get_class($object),
-                $method
+                get_class($uriContext->getSubjectObject()),
+                $options['method']
             ));
         }
 
-        $string = $date->format($options['date_format']);
-
-        return $string;
+        return $date->format($options['date_format']);
     }
 
     /**
@@ -53,8 +38,6 @@ class ContentDateTimeProvider extends ContentMethodProvider
     public function configureOptions(OptionsResolverInterface $optionsResolver)
     {
         parent::configureOptions($optionsResolver);
-
-        $optionsResolver->remove('slugify');
 
         $optionsResolver->setRequired(array(
             'date_format',
