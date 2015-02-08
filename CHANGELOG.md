@@ -1,6 +1,12 @@
 Changelog
 =========
 
+dev-master
+----------
+
+**2014-01-29**: Added SymfonyContainerParameterTokenProvider for retrieving
+                path elements from the DI container
+
 1.0
 ---
 
