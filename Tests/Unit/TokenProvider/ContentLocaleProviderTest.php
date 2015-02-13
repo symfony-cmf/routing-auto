@@ -17,6 +17,8 @@ use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentLocaleProvider;
 
 class ContentLocaleProviderTest extends BaseTestCase
 {
+    protected $slugifier;
+    protected $article;
     protected $uriContext;
 
     public function setUp()
@@ -24,7 +26,7 @@ class ContentLocaleProviderTest extends BaseTestCase
         parent::setUp();
 
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
-        $this->provider = new ContentLocaleProvider();
+        $this->provider = new ContentLocaleProvider($this->slugifier->reveal());
     }
 
     public function testGetValue()

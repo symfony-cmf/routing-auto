@@ -59,9 +59,9 @@ class AutoIncrementConflictResolverTest extends BaseTestCase
         $this->uriContext->getUri()->willReturn($uri);
 
         foreach ($existingRoutes as $existingRoute) {
-            $this->adapter->findRouteForUri($existingRoute)->willReturn(new \stdClass);
+            $this->adapter->findRouteForUri($existingRoute, $this->uriContext->reveal())->willReturn(new \stdClass);
         }
-        $this->adapter->findRouteForUri($expectedResult)->willReturn(null);
+        $this->adapter->findRouteForUri($expectedResult, $this->uriContext->reveal())->willReturn(null);
 
         $uri = $this->conflictResolver->resolveConflict($this->uriContext->reveal());
         $this->assertEquals($expectedResult, $uri);
