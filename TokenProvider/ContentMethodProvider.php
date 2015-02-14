@@ -14,6 +14,7 @@ namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 
 use Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ContentMethodProvider extends BaseContentMethodProvider
 {
