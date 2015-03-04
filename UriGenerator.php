@@ -54,7 +54,18 @@ class UriGenerator implements UriGeneratorInterface
         $tokenProviderConfigs = $metadata->getTokenProviders();
 
         $tokens = array();
-        foreach ($tokenProviderConfigs as $name => $options) {
+        preg_match_all('/{(.*?)}/', $metadata->getUriSchema(), $matches);
+        $tokens = $matches[1];
+
+        foreach ($tokens as $name) {
+            if (!isset($tokenProviderConfigs[$name])) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Unknown token "%s" in URI schema "%s"',
+                    $name, $metadata->getUriSchema()
+                ));
+            }
+            $options = $tokenProviderConfigs[$name];
+
             $tokenProvider = $this->serviceRegistry->getTokenProvider($options['name']);
 
             // I can see the utility of making this a singleton, but it is a massive
@@ -67,6 +78,13 @@ class UriGenerator implements UriGeneratorInterface
 
         $uriSchema = $metadata->getUriSchema();
         $uri = strtr($uriSchema, $tokens);
+
+        if (substr($uri, 0, 1) !== '/') {
+            throw new \InvalidArgumentException(sprintf(
+                'Generated non-absolute URI "%s" for object "%s"',
+                $uri, $metadata->name
+            ));
+        }
 
         return $uri;
     }
