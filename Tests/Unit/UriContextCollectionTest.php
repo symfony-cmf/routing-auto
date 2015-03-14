@@ -20,7 +20,6 @@ class UriContextCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
         $this->subjectObject = new \stdClass;
 
         for ($i = 1; $i <= 3; $i++) {

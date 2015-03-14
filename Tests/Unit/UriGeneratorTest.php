@@ -24,8 +24,6 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->metadataFactory = $this->prophesize('Metadata\MetadataFactoryInterface');
         $this->metadata = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
         $this->driver = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');

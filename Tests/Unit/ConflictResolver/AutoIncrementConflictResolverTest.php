@@ -20,8 +20,6 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
 
         $this->conflictResolver = new AutoIncrementConflictResolver($this->adapter->reveal());

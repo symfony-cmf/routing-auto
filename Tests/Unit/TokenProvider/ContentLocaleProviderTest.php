@@ -16,17 +16,12 @@ use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentLocaleProvider;
 
 class ContentLocaleProviderTest extends \PHPUnit_Framework_TestCase
 {
-    protected $slugifier;
-    protected $article;
     protected $uriContext;
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
-        $this->slugifier = $this->prophesize('Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface');
-        $this->provider = new ContentLocaleProvider($this->slugifier->reveal());
+        $this->provider = new ContentLocaleProvider();
     }
 
     public function testGetValue()

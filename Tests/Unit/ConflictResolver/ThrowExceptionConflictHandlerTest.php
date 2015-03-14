@@ -20,7 +20,6 @@ class ThrowExceptionConflictResolverTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
         $this->conflictResolver = new ThrowExceptionConflictResolver();
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
     }

@@ -21,8 +21,6 @@ class SymfonyContainerParameterProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
         $this->container = $this->prophesize('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->provider = new SymfonyContainerParameterProvider($this->container->reveal());
