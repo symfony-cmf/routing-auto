@@ -4,8 +4,10 @@ Changelog
 dev-master
 ----------
 
-**2014-01-29**: Added SymfonyContainerParameterTokenProvider for retrieving
-                path elements from the DI container
+* **2015-01-29**: Added SymfonyContainerParameterTokenProvider for retrieving
+                  path elements from the DI container
+* **2015-04-14**: Changed adapter interface to accept UriContext objects
+                  instead of or in addition to URI strings.
 
 1.0
 ---
