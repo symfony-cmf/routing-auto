@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<auto-mapping xmlns="http://cmf.symfony.com/schema/routing_auto">
+    <mapping class="stdClass" uri-schema="/blog/{category}/{slug}" host-schema="foobar.dom">
+        <route-option name="bar">foo</route-option>
+        <route-option name="foo">bar</route-option>
+        <scheme>http</scheme>
+        <scheme>https</scheme>
+    </mapping>
+</auto-mapping>

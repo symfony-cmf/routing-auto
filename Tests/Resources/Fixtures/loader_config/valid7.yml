@@ -1,0 +1,8 @@
+stdClass:
+    uri_schema: /blog/{category}/{slug}
+    host_scheme: foobar.dom
+    route_options:
+        foo: bar
+        bar: foo
+    allowed_schemes: [ http, https ]
+

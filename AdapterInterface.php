@@ -49,7 +49,7 @@ interface AdapterInterface
      *
      * @return AutoRouteInterface new route document
      */
-    public function createAutoRoute($path, $document, $tag);
+    public function createAutoRoute(UriContext $uriContext, $tag);
 
     /**
      * Return the canonical name for the given class, this is
