@@ -76,16 +76,39 @@ class UriGeneratorTest extends BaseTestCase
                     ),
                 ),
             ),
+            array(
+                '/this/is/{unknown_token}/life',
+                null,
+                array(),
+                array('InvalidArgumentException', 'Unknown token "unknown_token"'),
+            ),
+            array(
+                'this/is/not/absolute',
+                null,
+                array(),
+                array('InvalidArgumentException', 'Generated non-absolute URI'),
+            ),
+            array(
+                '/this/is/has/no/tokens',
+                '/this/is/has/no/tokens',
+                array(),
+            ),
         );
     }
 
     /**
      * @dataProvider provideGenerateUri
      */
-    public function testGenerateUri($uriSchema, $expectedUri, $tokenProviderConfigs)
+    public function testGenerateUri($uriSchema, $expectedUri, $tokenProviderConfigs, $expectedException = null)
     {
+        if ($expectedException) {
+            list($exceptionType, $exceptionMessage) = $expectedException;
+            $this->setExpectedException($exceptionType, $exceptionMessage);
+        }
+
         $document = new \stdClass;
         $this->uriContext->getSubjectObject()->willReturn($document);
+        $this->uriContext->getUri()->willReturn($uriSchema);
         $this->driver->getRealClassName('stdClass')
             ->willReturn('ThisIsMyStandardClass');
 
