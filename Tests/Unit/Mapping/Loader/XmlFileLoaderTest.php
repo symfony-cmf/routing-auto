@@ -13,9 +13,8 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Mapping\Loader;
 
 use Symfony\Cmf\Component\RoutingAuto\Mapping\Loader\XmlFileLoader;
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 
-class XmlFileLoaderTest extends BaseTestCase
+class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
     protected $locator;
     protected $loader;
@@ -24,7 +23,7 @@ class XmlFileLoaderTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->locator = $this->prophet->prophesize('Symfony\Component\Config\FileLocatorInterface');
+        $this->locator = $this->prophesize('Symfony\Component\Config\FileLocatorInterface');
         $this->loader  = new XmlFileLoader($this->locator->reveal());
     }
 

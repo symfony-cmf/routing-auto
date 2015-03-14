@@ -13,9 +13,8 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 
-class UriContextTest extends BaseTestCase
+class UriContextTest extends \PHPUnit_Framework_TestCase
 {
     protected $uriContext;
 

@@ -12,10 +12,9 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\ConflictResolver;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolver\AutoIncrementConflictResolver;
 
-class AutoIncrementConflictResolverTest extends BaseTestCase
+class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
 {
     protected $adapter;
 

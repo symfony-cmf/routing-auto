@@ -12,10 +12,9 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentDateTimeProvider;
 
-class ContentDateTimeProviderTest extends BaseTestCase
+class ContentDateTimeProviderTest extends \PHPUnit_Framework_TestCase
 {
     protected $article;
     protected $uriContext;

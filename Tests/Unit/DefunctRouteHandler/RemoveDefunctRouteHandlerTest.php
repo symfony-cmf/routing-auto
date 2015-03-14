@@ -12,10 +12,9 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\DefunctRouteHandler;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler\RemoveDefunctRouteHandler;
 
-class RemoveDefunctRouteHandlerTest extends BaseTestCase
+class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 {
     protected $adapter;
     protected $uriContextCollection;

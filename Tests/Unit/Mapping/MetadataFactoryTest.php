@@ -14,9 +14,8 @@ namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Mapping;
 
 use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\MetadataFactory;
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 
-class MetadataFactoryTest extends BaseTestCase
+class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 {
     protected $factory;
 
@@ -29,7 +28,7 @@ class MetadataFactoryTest extends BaseTestCase
 
     public function testStoreAndGetClassMetadata()
     {
-        $stdClassMetadata = $this->prophet->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
+        $stdClassMetadata = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
         $stdClassMetadata->getClassName()->willReturn('stdClass');
         $stdClassMetadata->getExtendedClass()->willReturn(null);
         $classMetadata = $stdClassMetadata->reveal();

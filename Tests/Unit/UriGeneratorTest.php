@@ -13,10 +13,9 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Symfony\Cmf\Component\RoutingAuto\UriGenerator;
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Prophecy\Argument;
 
-class UriGeneratorTest extends BaseTestCase
+class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     protected $driver;
     protected $serviceRegistry;

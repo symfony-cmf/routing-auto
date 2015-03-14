@@ -12,10 +12,9 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentLocaleProvider;
 
-class ContentLocaleProviderTest extends BaseTestCase
+class ContentLocaleProviderTest extends \PHPUnit_Framework_TestCase
 {
     protected $slugifier;
     protected $article;
@@ -26,6 +25,7 @@ class ContentLocaleProviderTest extends BaseTestCase
         parent::setUp();
 
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
+        $this->slugifier = $this->prophesize('Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface');
         $this->provider = new ContentLocaleProvider($this->slugifier->reveal());
     }
 

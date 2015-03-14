@@ -12,10 +12,9 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentMethodProvider;
 
-class ContentMethodProviderTest extends BaseTestCase
+class ContentMethodProviderTest extends \PHPUnit_Framework_TestCase
 {
     protected $slugifier;
     protected $article;
