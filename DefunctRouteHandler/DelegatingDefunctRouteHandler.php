@@ -17,6 +17,8 @@ use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\ServiceRegistry;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Cmf\Component\RoutingAuto\ConfigurableInterface;
 
 /**
  * Defunct route handler which delegates the handling of
@@ -48,7 +50,7 @@ class DelegatingDefunctRouteHandler implements DefunctRouteHandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function handleDefunctRoutes(UriContextCollection $uriContextCollection)
+    public function handleDefunctRoutes(UriContextCollection $uriContextCollection, array $options = array())
     {
         $subject = $uriContextCollection->getSubjectObject();
         $realClassName = $this->adapter->getRealClassName(get_class($uriContextCollection->getSubjectObject()));
@@ -57,6 +59,15 @@ class DelegatingDefunctRouteHandler implements DefunctRouteHandlerInterface
         $defunctRouteHandlerConfig = $metadata->getDefunctRouteHandler();
 
         $defunctHandler = $this->serviceRegistry->getDefunctRouteHandler($defunctRouteHandlerConfig['name']);
-        $defunctHandler->handleDefunctRoutes($uriContextCollection);
+
+        $options = array();
+
+        if ($defunctHandler instanceof ConfigurableInterface) {
+            $optionsResolver = new OptionsResolver();
+            $defunctHandler->configureOptions($optionsResolver);
+            $options = $optionsResolver->resolve($defunctRouteHandlerConfig['options']);
+        }
+
+        $defunctHandler->handleDefunctRoutes($uriContextCollection, $options);
     }
 }

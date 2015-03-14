@@ -9,20 +9,22 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler;
 
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 
-class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
+class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface, ConfigurableInterface
 {
     /**
      * @var AdapterInterface
      */
     protected $adapter;
 
+    /**
+     * @param AdapterInterface $adapter
+     */
     public function __construct(AdapterInterface $adapter)
     {
         $this->adapter = $adapter;
@@ -31,7 +33,15 @@ class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function handleDefunctRoutes(UriContextCollection $uriContextCollection)
+    public function configureOptions(OptionsResolverInterface $optionsResolver)
+    {
+        $optionsResolver->setDefault('http_code', 301);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handleDefunctRoutes(UriContextCollection $uriContextCollection, array $options = array())
     {
         $referringAutoRouteCollection = $this->adapter->getReferringAutoRoutes($uriContextCollection->getSubjectObject());
 
