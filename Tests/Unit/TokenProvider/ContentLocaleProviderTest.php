@@ -12,17 +12,14 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentLocaleProvider;
 
-class ContentLocaleProviderTest extends BaseTestCase
+class ContentLocaleProviderTest extends \PHPUnit_Framework_TestCase
 {
     protected $uriContext;
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
         $this->provider = new ContentLocaleProvider();
     }

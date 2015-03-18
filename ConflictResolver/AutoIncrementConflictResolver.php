@@ -46,7 +46,7 @@ class AutoIncrementConflictResolver implements ConflictResolverInterface
         $uri = $uriContext->getUri();
         $candidateUri = $this->incrementUri($uri);
 
-        while ($route = $this->adapter->findRouteForUri($candidateUri)) {
+        while ($route = $this->adapter->findRouteForUri($candidateUri, $uriContext)) {
             $candidateUri = $this->incrementUri($uri);
         }
 

@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
@@ -17,8 +16,7 @@ use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 /**
- * Adapters will (eventually) abstract all database operations
- * with the aim of enabling other providers such as ORM.
+ * Adapters will abstract all persistence operations.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -49,7 +47,7 @@ interface AdapterInterface
      *
      * @return AutoRouteInterface new route document
      */
-    public function createAutoRoute($path, $document, $tag);
+    public function createAutoRoute(UriContext $uriContext, $document, $tag);
 
     /**
      * Return the canonical name for the given class, this is
@@ -71,11 +69,16 @@ interface AdapterInterface
     /**
      * Attempt to find a route with the given URL
      *
-     * @param string $uri
+     * Note that the URI may not be the same as the URI in the URI context, 
+     * this will happen when the ConflictResolver is trying to find candidate
+     * URLs for example.
+     *
+     * @param string $uri The URI to find
+     * @param UriContext $uri The current URI context
      *
      * @return null|Symfony\Cmf\Component\Routing\RouteObjectInterface
      */
-    public function findRouteForUri($uri);
+    public function findRouteForUri($uri, UriContext $uriContext);
 
     /**
      * Generate a tag which can be used to identify this route from

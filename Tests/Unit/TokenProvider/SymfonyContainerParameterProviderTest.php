@@ -11,19 +11,16 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\SymfonyContainerParameterProvider;
 
-class SymfonyContainerParameterProviderTest extends BaseTestCase
+class SymfonyContainerParameterProviderTest extends \PHPUnit_Framework_TestCase
 {
     private $uriContext;
     private $container;
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
         $this->container = $this->prophesize('Symfony\Component\DependencyInjection\ContainerInterface');
         $this->provider = new SymfonyContainerParameterProvider($this->container->reveal());

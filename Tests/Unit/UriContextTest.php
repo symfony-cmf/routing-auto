@@ -13,15 +13,13 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 
-class UriContextTest extends BaseTestCase
+class UriContextTest extends \PHPUnit_Framework_TestCase
 {
     protected $uriContext;
 
     public function setUp()
     {
-        parent::setUp();
         $this->subjectObject = new \stdClass;
         $this->autoRoute = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
     }

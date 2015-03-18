@@ -12,16 +12,14 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\ConflictResolver;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolver\ThrowExceptionConflictResolver;
 
-class ThrowExceptionConflictResolverTest extends BaseTestCase
+class ThrowExceptionConflictResolverTest extends \PHPUnit_Framework_TestCase
 {
     protected $adapter;
 
     public function setUp()
     {
-        parent::setUp();
         $this->conflictResolver = new ThrowExceptionConflictResolver();
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
     }

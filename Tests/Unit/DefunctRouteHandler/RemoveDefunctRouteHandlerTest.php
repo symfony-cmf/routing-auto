@@ -12,17 +12,15 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\DefunctRouteHandler;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler\RemoveDefunctRouteHandler;
 
-class RemoveDefunctRouteHandlerTest extends BaseTestCase
+class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 {
     protected $adapter;
     protected $uriContextCollection;
 
     public function setUp()
     {
-        parent::setUp();
         $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
         $this->uriContextCollection = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContextCollection');
         $this->route1 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');

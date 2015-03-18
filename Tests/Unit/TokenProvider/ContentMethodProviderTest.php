@@ -12,10 +12,9 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentMethodProvider;
 
-class ContentMethodProviderTest extends BaseTestCase
+class ContentMethodProviderTest extends \PHPUnit_Framework_TestCase
 {
     protected $slugifier;
     protected $article;
@@ -23,8 +22,6 @@ class ContentMethodProviderTest extends BaseTestCase
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->slugifier = $this->prophesize('Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface');
         $this->article = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Article');
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');

@@ -12,10 +12,9 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\DefunctRouteHandler;
 
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler\DelegatingDefunctRouteHandler;
 
-class DelegatingDefunctRouteHandlerTest extends BaseTestCase
+class DelegatingDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 {
     protected $metadataFactory;
     protected $adapter;
@@ -25,7 +24,6 @@ class DelegatingDefunctRouteHandlerTest extends BaseTestCase
 
     public function setUp()
     {
-        parent::setUp();
         $this->metadataFactory = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\MetadataFactory');
         $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
         $this->serviceRegistry = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\ServiceRegistry');

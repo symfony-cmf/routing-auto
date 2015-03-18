@@ -52,7 +52,7 @@ class AutoRouteManager
         $this->getUriContextsForDocument($uriContextCollection);
 
         foreach ($uriContextCollection->getUriContexts() as $uriContext) {
-            $existingRoute = $this->adapter->findRouteForUri($uriContext->getUri());
+            $existingRoute = $this->adapter->findRouteForUri($uriContext->getUri(), $uriContext);
 
             $autoRoute = null;
 
@@ -71,7 +71,7 @@ class AutoRouteManager
 
             if (!$autoRoute) {
                 $autoRouteTag = $this->adapter->generateAutoRouteTag($uriContext);
-                $autoRoute = $this->adapter->createAutoRoute($uriContext->getUri(), $uriContext->getSubjectObject(), $autoRouteTag);
+                $autoRoute = $this->adapter->createAutoRoute($uriContext, $uriContext->getSubjectObject(), $autoRouteTag);
             }
 
             $uriContext->setAutoRoute($autoRoute);

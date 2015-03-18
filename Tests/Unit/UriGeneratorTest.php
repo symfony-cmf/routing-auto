@@ -13,10 +13,9 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Symfony\Cmf\Component\RoutingAuto\UriGenerator;
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 use Prophecy\Argument;
 
-class UriGeneratorTest extends BaseTestCase
+class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     protected $driver;
     protected $serviceRegistry;
@@ -25,8 +24,6 @@ class UriGeneratorTest extends BaseTestCase
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->metadataFactory = $this->prophesize('Metadata\MetadataFactoryInterface');
         $this->metadata = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
         $this->driver = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');

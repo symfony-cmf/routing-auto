@@ -4,8 +4,12 @@ Changelog
 dev-master
 ----------
 
-**2014-01-29**: Added SymfonyContainerParameterTokenProvider for retrieving
-                path elements from the DI container
+* **2015-03-14**: [BC Break] The adapter now accepts the `UriContext` object for
+                  `createRoute` and as an additional parameter to `findRouteForUri`.
+* **2015-03-14**: Changed adapter interface to accept UriContext objects
+                  instead of or in addition to URI strings.
+* **2015-01-29**: Added SymfonyContainerParameterTokenProvider for retrieving
+                  path elements from the DI container
 
 1.0
 ---

@@ -13,18 +13,15 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Mapping\Loader;
 
 use Symfony\Cmf\Component\RoutingAuto\Mapping\Loader\YmlFileLoader;
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\BaseTestCase;
 
-class YmlFileLoaderTest extends BaseTestCase
+class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
     protected $locator;
     protected $loader;
 
     public function setUp()
     {
-        parent::setUp();
-
-        $this->locator = $this->prophet->prophesize('Symfony\Component\Config\FileLocatorInterface');
+        $this->locator = $this->prophesize('Symfony\Component\Config\FileLocatorInterface');
         $this->loader  = new YmlFileLoader($this->locator->reveal());
     }
 
