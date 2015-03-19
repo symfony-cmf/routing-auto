@@ -50,33 +50,55 @@ class UriGenerator implements UriGeneratorInterface
     {
         $realClassName = $this->driver->getRealClassName(get_class($uriContext->getSubjectObject()));
         $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
+        $uriSchema = $metadata->getUriSchema();
 
         $tokenProviderConfigs = $metadata->getTokenProviders();
 
         $tokens = array();
         preg_match_all('/{(.*?)}/', $metadata->getUriSchema(), $matches);
-        $tokens = $matches[1];
+        $tokenNames = $matches[1];
 
-        foreach ($tokens as $name) {
+        foreach ($tokenNames as $index => $name) {
             if (!isset($tokenProviderConfigs[$name])) {
                 throw new \InvalidArgumentException(sprintf(
                     'Unknown token "%s" in URI schema "%s"',
                     $name, $metadata->getUriSchema()
                 ));
             }
-            $options = $tokenProviderConfigs[$name];
+            $tokenProviderConfig = $tokenProviderConfigs[$name];
 
-            $tokenProvider = $this->serviceRegistry->getTokenProvider($options['name']);
+            $tokenProvider = $this->serviceRegistry->getTokenProvider($tokenProviderConfig['name']);
 
-            // I can see the utility of making this a singleton, but it is a massive
-            // code smell to have this in a base class and be also part of the interface
             $optionsResolver = new OptionsResolver();
+            $this->configureGlobalOptions($optionsResolver);
             $tokenProvider->configureOptions($optionsResolver);
+            $tokenProviderOptions = $tokenProviderConfig['options'];
 
-            $tokens['{' . $name . '}'] = $tokenProvider->provideValue($uriContext, $optionsResolver->resolve($options['options']));
+            $tokenValue = $tokenProvider->provideValue($uriContext, $optionsResolver->resolve($tokenProviderOptions));
+
+            $isEmpty = empty($tokenValue) || $tokenValue == '/';
+
+            if ($isEmpty && false === $tokenProviderOptions['allow_empty']) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Token provider "%s" returned an empty value for token "%s" with URI schema "%s"',
+                    $tokenProviderConfig['name'], $name, $uriSchema
+                ));
+            }
+
+            $tokenString = '{' . $name . '}';
+
+            if ($isEmpty && true === $tokenProviderOptions['allow_empty']) {
+                $isLast = count($tokenNames) == $index + 1;
+                $tokens[$tokenString . '/'] = (string) $tokenValue;
+
+                if ($isLast) {
+                    $tokens['/' . $tokenString] = (string) $tokenValue;
+                }
+            }
+
+            $tokens[$tokenString] = $tokenValue;
         }
 
-        $uriSchema = $metadata->getUriSchema();
         $uri = strtr($uriSchema, $tokens);
 
         if (substr($uri, 0, 1) !== '/') {
@@ -105,5 +127,17 @@ class UriGenerator implements UriGeneratorInterface
         $uri = $conflictResolver->resolveConflict($uriContext);
 
         return $uri;
+    }
+
+    /**
+     * Configure options which apply to each token provider
+     *
+     * @param OptionsResolver
+     */
+    private function configureGlobalOptions(OptionsResolver $optionsResolver)
+    {
+        $optionsResolver->setDefaults(array(
+            'allow_empty' => false,
+        ));
     }
 }
