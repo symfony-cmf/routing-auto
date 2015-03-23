@@ -4,6 +4,7 @@ Changelog
 dev-master
 ----------
 
+* **2015-04-23**: Added EventDispatching adapter
 * **2015-04-19**: [BC Break] Empty token values will now throw an exception
 * **2015-04-19**: Added `allow_empty` option to permit empty values and
                   remove any trailing slash.
@@ -13,8 +14,6 @@ dev-master
                   instead of or in addition to URI strings.
 * **2015-01-29**: Added SymfonyContainerParameterTokenProvider for retrieving
                   path elements from the DI container
-* **2014-12-07**: Added event dispatcher and URI_CONTEXT_BUILT event
-
 1.0
 ---
 

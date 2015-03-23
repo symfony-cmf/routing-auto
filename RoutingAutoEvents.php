@@ -14,7 +14,12 @@ namespace Symfony\Cmf\Component\RoutingAuto;
 class RoutingAutoEvents
 {
     /**
-     * Dispatched when the UriContext has been built
+     * Dispatched after the adapter has created a new auto route
      */
-    const URI_CONTEXT_BUILT = 'cmf_routing_auto.uri_context_built';
+    const POST_CREATE = 'cmf_routing_auto.auto_route.post_create';
+
+    /**
+     * Dispatched after the adapter has migrated children from an old route to a new one
+     */
+    const POST_MIGRATE = 'cmf_routing_auto.auto_route.post_migrate';
 }

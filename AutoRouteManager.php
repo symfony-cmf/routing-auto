@@ -17,6 +17,7 @@ use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
 use Symfony\Cmf\Component\RoutingAuto\Event\UriContextEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class is concerned with the automatic creation of route objects.
@@ -41,11 +42,6 @@ class AutoRouteManager
     protected $defunctRouteHandler;
 
     /**
-     * @var EventDispatcher
-     */
-    protected $eventDispatcher;
-
-    /**
      * @var UriContextCollection[]
      */
     private $pendingUriContextCollections = array();
@@ -59,14 +55,12 @@ class AutoRouteManager
     public function __construct(
         AdapterInterface $adapter,
         UriGeneratorInterface $uriGenerator,
-        DefunctRouteHandlerInterface $defunctRouteHandler,
-        EventDispatcher $eventDispatcher
+        DefunctRouteHandlerInterface $defunctRouteHandler
     )
     {
         $this->adapter = $adapter;
         $this->uriGenerator = $uriGenerator;
         $this->defunctRouteHandler = $defunctRouteHandler;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -84,7 +78,7 @@ class AutoRouteManager
             $autoRoute = null;
 
             if ($existingRoute) {
-                $this->handleExistingRoute($existingRoute, $uriContext);
+                $autoRoute = $this->handleExistingRoute($existingRoute, $uriContext);
             }
 
             if (!$autoRoute) {
@@ -93,11 +87,6 @@ class AutoRouteManager
             }
 
             $uriContext->setAutoRoute($autoRoute);
-
-            if ($this->eventDispatcher) {
-                $event = new UriContextEvent($uriContext);
-                $this->eventDispatcher->dispatch(RoutingAutoEvents::URI_CONTEXT_BUILT, $event);
-            }
         }
 
         $this->pendingUriContextCollections[] = $uriContextCollection;
@@ -128,11 +117,14 @@ class AutoRouteManager
         if ($isSameContent) {
             $autoRoute = $existingRoute;
             $autoRoute->setType(AutoRouteInterface::TYPE_PRIMARY);
-        } else {
-            $uri = $uriContext->getUri();
-            $uri = $this->uriGenerator->resolveConflict($uriContext);
-            $uriContext->setUri($uri);
+            return $autoRoute;
         }
+
+        $uri = $uriContext->getUri();
+        $uri = $this->uriGenerator->resolveConflict($uriContext);
+        $uriContext->setUri($uri);
+
+        return null;
     }
 
     /**
