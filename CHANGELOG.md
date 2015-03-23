@@ -4,6 +4,9 @@ Changelog
 dev-master
 ----------
 
+* **2015-04-19**: [BC Break] Empty token values will now throw an exception
+* **2015-04-19**: Added `allow_empty` option to permit empty values and
+                  remove any trailing slash.
 * **2015-03-14**: [BC Break] The adapter now accepts the `UriContext` object for
                   `createRoute` and as an additional parameter to `findRouteForUri`.
 * **2015-03-14**: Changed adapter interface to accept UriContext objects
