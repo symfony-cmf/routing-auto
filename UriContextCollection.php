@@ -120,4 +120,20 @@ class UriContextCollection
 
         return null;
     }
+
+    /**
+     * Return a list of all the autoroute tags contained in this collection
+     *
+     * @return array
+     */
+    public function getAutoRouteTags()
+    {
+        $tags = array();
+        foreach ($this->uriContexts as $uriContext) {
+            $autoRoute = $uriContext->getAutoRoute();
+            $tags[] = $autoRoute->getAutoRouteTag();
+        }
+
+        return $tags;
+    }
 }
