@@ -33,7 +33,7 @@ matrix:
       env: SYMFONY_VERSION=3.0.*
 
 before_script:
-  - composer self-update
+  - composer self-update || true
   - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
   - composer update --prefer-dist $COMPOSER_FLAGS
 
