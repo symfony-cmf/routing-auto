@@ -6,6 +6,7 @@ php:
   - 5.5
   - 5.6
   - hhvm
+  - nightly
 
 sudo: false
 
@@ -14,7 +15,7 @@ cache:
     - $HOME/.composer/cache
 
 env:
-    - SYMFONY_VERSION=2.6.*
+    - SYMFONY_VERSION=2.7.*
 
 matrix:
   include:
@@ -23,19 +24,23 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION=2.3.*
     - php: 5.6
-      env: SYMFONY_VERSION=2.5.*
+      env: SYMFONY_VERSION=2.6.*
     - php: 5.6
-      env: SYMFONY_VERSION=2.7.*
+      env: SYMFONY_VERSION=2.8.*
     - php: 5.6
       env: SYMFONY_VERSION=3.0.*
   allow_failures:
+    - php: nightly
+    - php: 5.6
+      env: SYMFONY_VERSION=2.8.*
     - php: 5.6
       env: SYMFONY_VERSION=3.0.*
 
-before_script:
-  - composer self-update || true
+before_install:
+  - composer self-update
   - composer require symfony/symfony:${SYMFONY_VERSION} --no-update
-  - composer update --prefer-dist $COMPOSER_FLAGS
+  
+install: composer update --prefer-dist $COMPOSER_FLAGS
 
 script: 
   - phpunit
