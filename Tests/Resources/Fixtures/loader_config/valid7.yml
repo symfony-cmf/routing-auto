@@ -1,0 +1,11 @@
+stdClass:
+    extends: foobar
+    routes:
+        one:
+            uri_schema: /forum/{category}/{post_title}
+            token_providers:
+                category: [foo]
+        two:
+            uri_schema: /admin/standard/{id}
+            token_providers:
+                id: [foo]

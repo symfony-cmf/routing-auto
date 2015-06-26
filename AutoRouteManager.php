@@ -101,15 +101,7 @@ class AutoRouteManager
                 $this->adapter->translateObject($uriContextCollection->getSubjectObject(), $locale);
             }
 
-            // create and add uri context to stack
-            $uriContext = $uriContextCollection->createUriContext($locale);
-            $uriContextCollection->addUriContext($uriContext);
-
-            // generate the URL
-            $uri = $this->uriGenerator->generateUri($uriContext);
-
-            // update the context with the URL
-            $uriContext->setUri($uri);
+            $this->uriContextBuilder->buildCollection($uriContextCollection, $locale);
         }
     }
 }

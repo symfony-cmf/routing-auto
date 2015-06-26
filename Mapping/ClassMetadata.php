@@ -25,134 +25,51 @@ class ClassMetadata extends MergeableClassMetadata
     /**
      * @var string
      */
-    protected $uriSchema;
-
-    /**
-     * @var array
-     */
-    protected $tokenProviders = array();
-
-    /** 
-     * @var array
-     */
-    protected $conflictResolver = array('name' => 'throw_exception', 'options' => array());
-
-    /**
-     * Defunct route handler, default to remove
-     *
-     * @var array
-     */
-    protected $defunctRouteHandler = array('name' => 'remove');
-
-    /**
-     * @var string
-     */
     protected $extendedClass;
 
     /**
-     * Set the URL schema to use for the subject class.
-     *
-     * e.g. {foobar}/articles/{date}
-     *
-     * @param string $schema
+     * @var AutoRouteMetadata[]
      */
-    public function setUriSchema($schema)
+    protected $routeMetadatas;
+
+    /**
+     * Return true if this class metadata has route metadata for the given key.
+     *
+     * @param string $key
+     * @return boolean
+     */
+    public function hasRouteMetadata($key)
     {
-        $this->uriSchema = $schema;
+        return isset($this->routeMetadatas[$key]);
     }
 
     /**
-     * Return the URL schema
-     *
-     * @return string
-     */
-    public function getUriSchema()
-    {
-        return $this->uriSchema;
-    }
-
-    /**
-     * Add a token provider configfuration.
-     *
-     * @param string $tokenName
-     * @param array $provider
-     * @param boolean $override
-     */
-    public function addTokenProvider($tokenName, array $provider = array(), $override = false)
-    {
-        if ('schema' === $tokenName) {
-            throw new \InvalidArgumentException(sprintf('Class "%s" has an invalid token name "%s": schema is a reserved token name.', $this->name, $tokenName));
-        }
-
-        if (!$override && isset($this->tokenProvider[$tokenName])) {
-            throw new \InvalidArgumentException(sprintf('Class "%s" already has a token provider for token "%s", set the third argument of addTokenProvider to true to override it.', $this->name, $tokenName));
-        }
-
-        $this->tokenProviders[$tokenName] = $provider;
-    }
-
-    /**
-     * Return an associative array of token provider configurations.
-     * Keys are the token provider names, values are configurations in
-     * array format.
-     *
-     * @return array
-     */
-    public function getTokenProviders()
-    {
-        return $this->tokenProviders;
-    }
-
-    /**
-     * Set the conflict resolver configuration.
-     *
-     * @param array
-     */
-    public function setConflictResolver($conflictResolver)
-    {
-        $this->conflictResolver = $conflictResolver;
-    }
-
-    /**
-     * Return the conflict resolver configuration.
-     *
-     * @return array
-     */
-    public function getConflictResolver()
-    {
-        return $this->conflictResolver;
-    }
-
-    /**
-     * Set the defunct route handler configuration.
-     *
-     * e.g.
-     *
-     *   array('remove', array('option1' => 'value1'))
-     *
-     * @param array
-     */
-    public function setDefunctRouteHandler($defunctRouteHandler)
-    {
-        $this->defunctRouteHandler = $defunctRouteHandler;
-    }
-
-    /**
-     * Return the defunct route handler configuration
-     */
-    public function getDefunctRouteHandler()
-    {
-        return $this->defunctRouteHandler;
-    }
-
-    /**
-     * Extend the metadata of the mapped class with given $name
-     *
      * @param string $name
+     * @param RouteMetadata[] $routeMetadatas
      */
-    public function setExtendedClass($name)
+    public function __construct($name, array $routeMetadatas)
     {
-        $this->extendedClass = $name;
+        parent::__construct($name);
+        $this->routeMetadatas = $routeMetadatas;
+    }
+
+    /**
+     * Return the route metadata for the given key
+     *
+     * @param string $key
+     * @return RouteMetadata
+     * @throws InvalidArgumentException
+     */
+    public function getRouteMetadata($key)
+    {
+        if (!isset($this->routeMetadatas[$key])) {
+            throw new \InvalidArgumentException(sprintf(
+                'Unknown route metadata for key "%s", known keys: "%s"',
+                $key, implode('", "', array_keys($this->routeMetadatas))
+            ));
+        }
+
+        return $this->routeMetadatas[$key];
     }
 
     /**
@@ -176,32 +93,18 @@ class ClassMetadata extends MergeableClassMetadata
     }
 
     /**
-     * Merges another ClassMetadata into the current metadata.
-     *
-     * Caution: the registered token providers will be overriden when the new
-     * ClassMetadata has a token provider with the same name.
-     *
-     * The URL schema will be overriden, you can use {parent} to refer to the
-     * previous URL schema.
-     *
-     * @param ClassMetadata $metadata
+     * {@inheritDoc}
      */
     public function merge(MergeableInterface $metadata)
     {
         parent::merge($metadata);
 
-        $this->uriSchema = str_replace('{parent}', $this->uriSchema, $metadata->getUriSchema());
+        foreach ($this->routeMetadatas as $key => $routeMetadata) {
+            if (false === $metadata->hasRouteMetadata($key)) {
+                continue;
+            }
 
-        foreach ($metadata->getTokenProviders() as $tokenName => $provider) {
-            $this->addTokenProvider($tokenName, $provider, true);
-        }
-
-        if ($defunctRouteHandler = $metadata->getDefunctRouteHandler()) {
-            $this->setDefunctRouteHandler($defunctRouteHandler);
-        }
-
-        if ($conflictResolver = $metadata->getConflictResolver()) {
-            $this->setConflictResolver($conflictResolver);
+            $routeMetadata->merge($metadata->getRouteMetadata($key));
         }
     }
 }

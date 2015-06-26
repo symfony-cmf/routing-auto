@@ -15,6 +15,7 @@ namespace Symfony\Cmf\Component\RoutingAuto\Mapping\Loader;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Config\Loader\FileLoader;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\RouteMetadata;
 
 /**
  * @author Wouter J <wouter@wouterj.nl>
@@ -77,45 +78,64 @@ class YmlFileLoader extends FileLoader
         if (!class_exists($className)) {
             throw new \InvalidArgumentException(sprintf('Configuration found for unknown class "%s" in "%s".', $className, $path));
         }
-        $classMetadata = new ClassMetadata($className);
+        $routeMetadatas = $this->parseRouteMetadatas($mappingNode);
 
-        $validKeys = array(
-            'uri_schema',
-            'conflict_resolver',
-            'defunct_route_handler',
-            'extend',
-            'token_providers',
-        );
+        $classMetadata = new ClassMetadata($className, $routeMetadatas);
 
-        foreach ($mappingNode as $key => $value) {
-            if (!in_array($key, $validKeys)) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Invalid configuration key "%s". Valid keys are "%s"',
-                    $key, implode(',', $validKeys)
-                ));
-            }
-
-            switch ($key) {
-                case 'uri_schema':
-                    $classMetadata->setUriSchema($value);
-                    break;
-                case 'conflict_resolver':
-                    $classMetadata->setConflictResolver($this->parseServiceConfig($mappingNode['conflict_resolver'], $className, $path));
-                    break;
-                case 'defunct_route_handler':
-                    $classMetadata->setDefunctRouteHandler($this->parseServiceConfig($mappingNode['defunct_route_handler'], $className, $path));
-                    break;
-                case 'extend':
-                    $classMetadata->setExtendedClass($mappingNode['extend']);
-                    break;
-                case 'token_providers':
-                    foreach ($mappingNode['token_providers'] as $tokenName => $provider) {
-                        $classMetadata->addTokenProvider($tokenName, $this->parseServiceConfig($provider, $className, $path));
-                    }
-            }
+        if (isset($mappingNode['extend'])) {
+            $classMetadata->setExtendedClass($mappingNode['extend']);
         }
 
         return $classMetadata;
+    }
+
+    protected function parseRouteMetadatas($mappingNode)
+    {
+        if (isset($mappingNode['routes'])) {
+            $routeMappings = $mappingNode['routes'];
+        } else {
+            $routeMappings = array($mappingNode);
+        }
+
+        $routeMetadatas = array();
+        foreach ($routeMappings as $routeMapping) {
+            $routeMetadata = new RouteMetadata();
+            $routeMetadatas[] = $routeMetadata;
+
+            $validKeys = array(
+                'uri_schema',
+                'conflict_resolver',
+                'defunct_route_handler',
+                'token_providers',
+            );
+
+            foreach ($routeMapping as $key => $value) {
+                if (!in_array($key, $validKeys)) {
+                    throw new \InvalidArgumentException(sprintf(
+                        'Invalid configuration key "%s". Valid keys are "%s"',
+                        $key, implode(',', $validKeys)
+                    ));
+                }
+
+                switch ($key) {
+                    case 'uri_schema':
+                        $routeMetadata->setUriSchema($value);
+                        break;
+                    case 'conflict_resolver':
+                        $routeMetadata->setConflictResolver($this->parseServiceConfig($routeMapping['conflict_resolver'], $className, $path));
+                        break;
+                    case 'defunct_route_handler':
+                        $routeMetadata->setDefunctRouteHandler($this->parseServiceConfig($routeMapping['defunct_route_handler'], $className, $path));
+                        break;
+                    case 'token_providers':
+                        foreach ($routeMapping['token_providers'] as $tokenName => $provider) {
+                            $routeMetadata->addTokenProvider($tokenName, $this->parseServiceConfig($provider, $className, $path));
+                        }
+                }
+            }
+        }
+
+        return $routeMetadatas;
     }
 
     /**
