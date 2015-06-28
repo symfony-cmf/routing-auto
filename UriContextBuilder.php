@@ -15,14 +15,17 @@ namespace Symfony\Cmf\Component\RoutingAuto;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\MetadataFactory;
 
 /**
- *
- * @author Daniel Leech <daniel@dantleech.com>
+ * Builds up the URI Context Collections.
  */
 class UriContextBuilder
 {
     private $metadataFactory;
     private $uriGenerator;
 
+    /**
+     * @param MetadataFactoryInterface $metadataFactory
+     * @param UriGeneratorInterface $uriGenerator
+     */
     public function __construct(
         MetadataFactoryInterface $metadataFactory,
         UriGeneratorInterface $uriGenerator
@@ -32,7 +35,14 @@ class UriContextBuilder
         $this->uriGenerator = $uriGenerator;
     }
 
-    public function buildCollection(UriContextCollection $collection, $locale)
+    /**
+     * Populates the given UriContextCollection (with associated subject)
+     * with processed UriContexts.
+     *
+     * @param UriContextCollection $collection
+     * @param string $locale
+     */
+    public function build(UriContextCollection $collection, $locale)
     {
         $subject = $collection->getSubjectObject();
         $realClassName = $this->driver->getRealClassName(get_class($subject));
@@ -40,8 +50,7 @@ class UriContextBuilder
 
         foreach ($metadata->getRouteMetadatas() as $routeMetadata) {
             // create and add uri context to stack
-            $uriContext = $uriContextCollection->createUriContext($locale);
-            $uriContext->setRouteMetadata($routeMetadata);
+            $uriContext = $uriContextCollection->createUriContext($locale, $routeMetadata);
             $uriContextCollection->addUriContext($uriContext);
 
             // generate the URL

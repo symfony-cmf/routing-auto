@@ -113,7 +113,6 @@ class UriGenerator implements UriGeneratorInterface
     public function resolveConflict(UriContext $uriContext)
     {
         $realClassName = $this->driver->getRealClassName(get_class($uriContext->getSubjectObject()));
-        $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
 
         $conflictResolverConfig = $metadata->getConflictResolver();
         $conflictResolver = $this->serviceRegistry->getConflictResolver(

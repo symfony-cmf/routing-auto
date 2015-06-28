@@ -27,10 +27,11 @@ class UriContext
     protected $autoRoute;
     protected $routeMetadata;
 
-    public function __construct($subjectObject, $locale)
+    public function __construct($subjectObject, $routeMetadata, $locale)
     {
         $this->subjectObject = $subjectObject;
         $this->locale = $locale;
+        $this->routeMetadata = $routeMetadata;
     }
 
     public function getUri()
@@ -48,12 +49,6 @@ class UriContext
         return $this->routeMetadata;
     }
     
-    public function setRouteMetadata(RouteMetadata $routeMetadata)
-    {
-        $this->routeMetadata = $routeMetadata;
-    }
-    
-
     public function getSubjectObject()
     {
         return $this->subjectObject;
