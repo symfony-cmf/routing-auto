@@ -53,6 +53,23 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->handler->handleDefunctRoutes($this->uriContextCollection->reveal());
     }
+
+    public function testHandleDefunctRouteWithoutMigrateDueToNotExistingDestination()
+    {
+        $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
+        $this->adapter->getReferringAutoRoutes($this->subjectObject)->willReturn(array(
+            $this->route1
+        ));
+
+        $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(false);
+
+        $this->route1->getAutoRouteTag()->willReturn('fr');
+        $this->uriContextCollection->getAutoRouteByTag('fr')->willReturn(null);
+
+        $this->adapter->removeAutoRoute($this->route1->reveal())->shouldBeCalled();
+
+        $this->handler->handleDefunctRoutes($this->uriContextCollection->reveal());
+    }
 }
 
 
