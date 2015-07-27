@@ -158,7 +158,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('{title}', $resolvedMetadata->getUriSchema());
 
         $resolved1Metadata = $this->factory->getMetadataForClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Parent1Class');
-        $this->assertEquals('{category}/{title}');
+        $this->assertEquals('{category}/{title}', $resolved1Metadata->getUriSchema());
     }
 
     /**
