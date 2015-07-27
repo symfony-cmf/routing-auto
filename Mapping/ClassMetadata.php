@@ -32,7 +32,7 @@ class ClassMetadata extends MergeableClassMetadata
      */
     protected $tokenProviders = array();
 
-    /** 
+    /**
      * @var array
      */
     protected $conflictResolver = array('name' => 'throw_exception', 'options' => array());
@@ -184,7 +184,7 @@ class ClassMetadata extends MergeableClassMetadata
      * The URL schema will be overriden, you can use {parent} to refer to the
      * previous URL schema.
      *
-     * @param ClassMetadata $metadata
+     * @param MergeableInterface $metadata
      */
     public function merge(MergeableInterface $metadata)
     {

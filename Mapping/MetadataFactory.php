@@ -23,7 +23,7 @@ use Metadata\Cache\CacheInterface;
  */
 class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
 {
-    /** 
+    /**
      * @var ClassMetadata[]
      */
     protected $metadatas = array();
@@ -115,7 +115,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
         $metadata = null;
         foreach ($metadatas as $data) {
             if (null === $metadata) {
-                $metadata = $data;
+                $metadata = clone $data;
             } else {
                 $metadata->merge($data);
             }
@@ -142,6 +142,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
                     $metadatas[] = $extendData;
                 }
             }
+
             $metadatas[] = $this->metadatas[$classFqn];
         }
 
