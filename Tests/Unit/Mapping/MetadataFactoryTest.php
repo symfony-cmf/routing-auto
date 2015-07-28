@@ -36,7 +36,7 @@ class MetadataFactoryTest extends BaseTestCase
 
         $this->factory->addMetadatas(array($classMetadata));
 
-        $this->assertSame($classMetadata, $this->factory->getMetadataForClass('stdClass'));
+        $this->assertEquals($classMetadata, $this->factory->getMetadataForClass('stdClass'));
     }
 
     public function provideTestMerge()
@@ -148,8 +148,10 @@ class MetadataFactoryTest extends BaseTestCase
         $parentMetadata->setExtendedClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Parent1Class');
 
         $parent1Metadata = new ClassMetadata('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Parent1Class');
+        $parent1Metadata->setUriSchema('{category}/{title}');
         $parent1TokenProvider = $this->createTokenProvider('provider1');
         $parent1Metadata->addTokenProvider('title', $parent1TokenProvider);
+        $parent1Metadata->addTokenProvider('category', $this->createTokenProvider('provider11'));
 
         $this->factory->addMetadatas(array($parentMetadata, $parent1Metadata));
 
@@ -157,6 +159,9 @@ class MetadataFactoryTest extends BaseTestCase
         $resolvedProviders = $resolvedMetadata->getTokenProviders();
         $this->assertSame($parent1TokenProvider, $resolvedProviders['title']);
         $this->assertEquals('{title}', $resolvedMetadata->getUriSchema());
+
+        $resolved1Metadata = $this->factory->getMetadataForClass('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Parent1Class');
+        $this->assertEquals('{category}/{title}', $resolved1Metadata->getUriSchema());
     }
 
     /**
