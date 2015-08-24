@@ -42,9 +42,10 @@ class RemoveDefunctRouteHandler implements DefunctRouteHandlerInterface
             if (false === $uriContextCollection->containsAutoRoute($referringAutoRoute)) {
                 $newRoute = $uriContextCollection->getAutoRouteByTag($referringAutoRoute->getAutoRouteTag());
 
-                if (!empty($newRoute)) {
+                if (null !== $newRoute) {
                     $this->adapter->migrateAutoRouteChildren($referringAutoRoute, $newRoute);
                 }
+
                 $this->adapter->removeAutoRoute($referringAutoRoute);
             }
         }
