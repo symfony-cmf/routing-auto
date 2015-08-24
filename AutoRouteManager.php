@@ -117,10 +117,10 @@ class AutoRouteManager
         if ($isSameContent) {
             $autoRoute = $existingRoute;
             $autoRoute->setType(AutoRouteInterface::TYPE_PRIMARY);
+
             return $autoRoute;
         }
 
-        $uri = $uriContext->getUri();
         $uri = $this->uriGenerator->resolveConflict($uriContext);
         $uriContext->setUri($uri);
 

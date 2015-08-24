@@ -19,6 +19,11 @@ use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
 use Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteCreateEvent;
 use Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteMigrateEvent;
 
+/**
+ * This adapter wraps a concrete adapter and dispatches events.
+ *
+ * @author Daniel Leech <daniel@dantleech.com>
+ */
 class EventDispatchingAdapter implements AdapterInterface
 {
     private $dispatcher;

@@ -14,9 +14,6 @@ namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
-use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Cmf\Component\RoutingAuto\Event\UriContextEvent;
-use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
 
 class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 {

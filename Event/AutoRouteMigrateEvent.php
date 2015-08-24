@@ -15,22 +15,47 @@ use Symfony\Component\EventDispatcher\Event;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
+/**
+ * Event that is dispatched when an auto route is migrated (moved)
+ * from one place to another.
+ */
 class AutoRouteMigrateEvent extends Event
 {
+    /**
+     * @var AutoRouteInterface
+     */
     private $srcAutoRoute;
+
+    /**
+     * @var AutoRouteInterface
+     */
     private $destAutoRoute;
 
+    /**
+     * @param AutoRouteInterface $srcAutoRoute
+     * @param AutoRouteInterface $destAutoRoute
+     */
     public function __construct(AutoRouteInterface $srcAutoRoute, AutoRouteInterface $destAutoRoute)
     {
         $this->srcAutoRoute = $srcAutoRoute;
         $this->destAutoRoute = $destAutoRoute;
     }
 
+    /**
+     * Return the source (original) auto route
+     *
+     * @return AutoRouteInterface
+     */
     public function getSrcAutoRoute() 
     {
         return $this->srcAutoRoute;
     }
 
+    /**
+     * Return the destination (new) auto route
+     *
+     * @return AutoRouteInterface
+     */
     public function getDestAutoRoute() 
     {
         return $this->destAutoRoute;
