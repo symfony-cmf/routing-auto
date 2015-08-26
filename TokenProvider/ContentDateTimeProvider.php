@@ -63,5 +63,11 @@ class ContentDateTimeProvider extends BaseContentMethodProvider
         } else {
             $optionsResolver->setOptional(array('slugify'));
         }
+
+        $optionsResolver->setNormalizers(array(
+           'slugify' => function ($options, $value) {
+               @trigger_error('The slugify option of '.__CLASS__.' is deprecated as of version 1.1 and will be removed in 2.0. Using it has no effect.', E_USER_DEPRECATED);
+           },
+        ));
     }
 }
