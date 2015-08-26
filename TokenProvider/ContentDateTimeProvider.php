@@ -39,6 +39,8 @@ class ContentDateTimeProvider extends BaseContentMethodProvider
     {
         parent::configureOptions($optionsResolver);
 
+        $newApi = method_exists($optionsResolver, 'setDefined');
+
         $optionsResolver->setRequired(array(
             'date_format',
         ));
@@ -47,16 +49,19 @@ class ContentDateTimeProvider extends BaseContentMethodProvider
             'date_format' => 'Y-m-d',
         ));
 
-        $optionsResolver->setAllowedTypes(array(
-            'date_format' => 'string',
-        ));
-        
-        // The slugify option is deprecated as of version 1.1 and will be removed in 2.0. Setting it doesn't change anything
-        if (!method_exists($optionsResolver, 'setDefined')) {
-            // To support Symfony <2.6
-            $optionsResolver->setOptional(array('slugify'));
+        if ($newApi) {
+            $optionsResolver->setAllowedTypes('date_format', 'string');
         } else {
+            $optionsResolver->setAllowedTypes(array(
+                'date_format' => 'string',
+            ));
+        }
+
+        // The slugify option is deprecated as of version 1.1 and will be removed in 2.0. Setting it doesn't change anything
+        if ($newApi) {
             $optionsResolver->setDefined(array('slugify'));
+        } else {
+            $optionsResolver->setOptional(array('slugify'));
         }
     }
 }
