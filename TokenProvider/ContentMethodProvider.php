@@ -48,8 +48,14 @@ class ContentMethodProvider extends BaseContentMethodProvider
             'slugify' => true,
         ));
 
-        $optionsResolver->setAllowedTypes(array(
-            'slugify' => 'bool',
-        ));
+        $newApi = method_exists($optionsResolver, 'setDefined');
+
+        if ($newApi) {
+            $optionsResolver->setAllowedTypes('slugify', 'bool');
+        } else {
+            $optionsResolver->setAllowedTypes(array(
+                'slugify' => 'bool',
+            ));
+        }
     }
 }

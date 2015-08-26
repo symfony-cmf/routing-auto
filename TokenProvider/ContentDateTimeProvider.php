@@ -47,16 +47,20 @@ class ContentDateTimeProvider extends BaseContentMethodProvider
             'date_format' => 'Y-m-d',
         ));
 
-        $optionsResolver->setAllowedTypes(array(
-            'date_format' => 'string',
-        ));
-        
-        // The slugify option is deprecated as of version 1.1 and will be removed in 2.0. Setting it doesn't change anything
-        if (!method_exists($optionsResolver, 'setDefined')) {
-            // To support Symfony <2.6
-            $optionsResolver->setOptional(array('slugify'));
-        } else {
+        if (method_exists($optionsResolver, 'setDefined')) {
+            // new OptionsResolver API (Symfony 2.6+)
+            $optionsResolver->setAllowedTypes('date_format', 'string');
             $optionsResolver->setDefined(array('slugify'));
+        } else {
+            // old API (Symfony <2.6)
+            $optionsResolver->setAllowedTypes(array('date_format' => 'string'));
+            $optionsResolver->setOptional(array('slugify'));
         }
+
+        $optionsResolver->setNormalizers(array(
+           'slugify' => function ($options, $value) {
+               @trigger_error('The slugify option of '.__CLASS__.' is deprecated as of version 1.1 and will be removed in 2.0. Using it has no effect.', E_USER_DEPRECATED);
+           },
+        ));
     }
 }
