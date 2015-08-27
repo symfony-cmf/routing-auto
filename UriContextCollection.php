@@ -13,6 +13,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\RouteMetadata;
 
 class UriContextCollection
 {
@@ -46,11 +47,12 @@ class UriContextCollection
      *
      * @return UriContext
      */
-    public function createUriContext($locale)
+    public function createUriContext($locale, RouteMetadata $routeMetadata)
     {
         $uriContext = new UriContext(
             $this->getSubjectObject(),
-            $locale
+            $locale,
+            $routeMetadata
         );
 
         return $uriContext;

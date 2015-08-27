@@ -24,7 +24,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class UriGenerator implements UriGeneratorInterface
 {
     protected $driver;
-    protected $metadataFactory;
     protected $serviceRegistry;
 
     /**
@@ -33,12 +32,10 @@ class UriGenerator implements UriGeneratorInterface
      * @param ServiceRegistry  the auto route service registry
      */
     public function __construct(
-        MetadataFactoryInterface $metadataFactory,
         AdapterInterface $driver,
         ServiceRegistry $serviceRegistry
     )
     {
-        $this->metadataFactory = $metadataFactory;
         $this->driver = $driver;
         $this->serviceRegistry = $serviceRegistry;
     }
@@ -48,8 +45,7 @@ class UriGenerator implements UriGeneratorInterface
      */
     public function generateUri(UriContext $uriContext)
     {
-        $realClassName = $this->driver->getRealClassName(get_class($uriContext->getSubjectObject()));
-        $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
+        $metadata = $uriContext->getRouteMetadata();
         $uriSchema = $metadata->getUriSchema();
 
         $tokenProviderConfigs = $metadata->getTokenProviders();
@@ -117,7 +113,6 @@ class UriGenerator implements UriGeneratorInterface
     public function resolveConflict(UriContext $uriContext)
     {
         $realClassName = $this->driver->getRealClassName(get_class($uriContext->getSubjectObject()));
-        $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
 
         $conflictResolverConfig = $metadata->getConflictResolver();
         $conflictResolver = $this->serviceRegistry->getConflictResolver(

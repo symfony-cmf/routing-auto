@@ -12,6 +12,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto;
 
+use Symfony\Cmf\Component\RoutingAuto\Mapping\RouteMetadata;
+
 /**
  * Class which represents a URL and its associated locale
  *
@@ -23,11 +25,13 @@ class UriContext
     protected $locale;
     protected $uri;
     protected $autoRoute;
+    protected $routeMetadata;
 
-    public function __construct($subjectObject, $locale)
+    public function __construct($subjectObject, $routeMetadata, $locale)
     {
         $this->subjectObject = $subjectObject;
         $this->locale = $locale;
+        $this->routeMetadata = $routeMetadata;
     }
 
     public function getUri()
@@ -40,6 +44,11 @@ class UriContext
         $this->uri = $uri;
     }
 
+    public function getRouteMetadata() 
+    {
+        return $this->routeMetadata;
+    }
+    
     public function getSubjectObject()
     {
         return $this->subjectObject;

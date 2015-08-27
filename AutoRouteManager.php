@@ -14,6 +14,7 @@ namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Symfony\Cmf\Component\RoutingAuto\UriContextBuilder;
 
 /**
  * This class is concerned with the automatic creation of route objects.
@@ -23,24 +24,24 @@ use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 class AutoRouteManager
 {
     protected $adapter;
-    protected $uriGenerator;
+    protected $uriContextBuilder;
     protected $defunctRouteHandler;
 
     private $pendingUriContextCollections = array();
 
     /**
      * @param AdapterInterface             $adapter             Database adapter
-     * @param UriGeneratorInterface        $uriGenerator        Routing auto URL generator
+     * @param UriGeneratorInterface        $uriContextBuilder        Routing auto URL generator
      * @param DefunctRouteHandlerInterface $defunctRouteHandler Handler for defunct routes
      */
     public function __construct(
         AdapterInterface $adapter,
-        UriGeneratorInterface $uriGenerator,
+        UriContextBuilder $uriContextBuilder,
         DefunctRouteHandlerInterface $defunctRouteHandler
     )
     {
         $this->adapter = $adapter;
-        $this->uriGenerator = $uriGenerator;
+        $this->uriContextBuilder = $uriContextBuilder;
         $this->defunctRouteHandler = $defunctRouteHandler;
     }
 
@@ -49,7 +50,7 @@ class AutoRouteManager
      */
     public function buildUriContextCollection(UriContextCollection $uriContextCollection)
     {
-        $this->getUriContextsForDocument($uriContextCollection);
+        $this->buildUriContextsForDocument($uriContextCollection);
 
         foreach ($uriContextCollection->getUriContexts() as $uriContext) {
             $existingRoute = $this->adapter->findRouteForUri($uriContext->getUri(), $uriContext);
@@ -57,21 +58,20 @@ class AutoRouteManager
             $autoRoute = null;
 
             if ($existingRoute) {
-                $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $uriContext->getSubjectObject());
+                $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $uriContextCollection->getSubjectObject());
 
                 if ($isSameContent) {
                     $autoRoute = $existingRoute;
                     $autoRoute->setType(AutoRouteInterface::TYPE_PRIMARY);
                 } else {
-                    $uri = $uriContext->getUri();
-                    $uri = $this->uriGenerator->resolveConflict($uriContext);
+                    $uri = $this->resolveConflict($uriContext->getUri());
                     $uriContext->setUri($uri);
                 }
             }
 
             if (!$autoRoute) {
                 $autoRouteTag = $this->adapter->generateAutoRouteTag($uriContext);
-                $autoRoute = $this->adapter->createAutoRoute($uriContext, $uriContext->getSubjectObject(), $autoRouteTag);
+                $autoRoute = $this->adapter->createAutoRoute($uriContext, $uriContextCollection->getSubjectObject(), $autoRouteTag);
             }
 
             $uriContext->setAutoRoute($autoRoute);
@@ -92,7 +92,7 @@ class AutoRouteManager
      *
      * @param $uriContextCollection UriContextCollection
      */
-    private function getUriContextsForDocument(UriContextCollection $uriContextCollection)
+    private function buildUriContextsForDocument(UriContextCollection $uriContextCollection)
     {
         $locales = $this->adapter->getLocales($uriContextCollection->getSubjectObject()) ? : array(null);
 
@@ -101,15 +101,24 @@ class AutoRouteManager
                 $this->adapter->translateObject($uriContextCollection->getSubjectObject(), $locale);
             }
 
-            // create and add uri context to stack
-            $uriContext = $uriContextCollection->createUriContext($locale);
-            $uriContextCollection->addUriContext($uriContext);
-
-            // generate the URL
-            $uri = $this->uriGenerator->generateUri($uriContext);
-
-            // update the context with the URL
-            $uriContext->setUri($uri);
+            $this->uriContextBuilder->build($uriContextCollection, $locale);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function resolveConflict(UriContext $uriContext)
+    {
+        $metadata = $uriContext->getRouteMetadata();
+        $config = $metadata->getConflictResolver();
+        $conflictResolver = $this->serviceRegistry->getConflictResolver(
+            $config['name'], 
+            $config['options']
+        );
+        $uri = $conflictResolver->resolveConflict($uriContext);
+
+        return $uri;
+    }
+
 }
