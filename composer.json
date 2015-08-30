@@ -16,17 +16,18 @@
         "symfony-cmf/routing": "~1.2",
         "symfony/options-resolver": "~2.2",
         "symfony/config": "~2.2",
-        "symfony/event-dispatcher": "~2.2",
         "jms/metadata": "1.5.*"
     },
     "require-dev": {
         "symfony/yaml": "~2.1",
         "symfony/dependency-injection": "~2.0",
+        "symfony/event-dispatcher": "~2.2",
         "phpunit/phpunit": "~4.5"
     },
     "suggest": {
-        "symfony/yaml": "To be able to load Yaml configuration files",
-        "symfony-cmf/routing-auto-bundle": "To integrate this lirbary with Symfony and the CMF"
+        "symfony/yaml": "To be able to load Yaml configuration files (~2.1)",
+        "symfony-cmf/routing-auto-bundle": "To integrate this lirbary with Symfony and the CMF",
+        "symfony/event-dispatcher": "To use the EventDispatchingAdapter, allowing to edit the AutoRoute documents (~2.2)"
     },
     "autoload": {
         "psr-4": { "Symfony\\Cmf\\Component\\RoutingAuto\\": "" }
