@@ -138,7 +138,13 @@ class AutoRouteManager
 
         foreach ($locales as $locale) {
             if (null !== $locale) {
-                $this->adapter->translateObject($uriContextCollection->getSubjectObject(), $locale);
+                $subjectObject = $this->adapter->translateObject($uriContextCollection->getSubjectObject(), $locale);
+
+                if (null !== $subjectObject) {
+                    $uriContextCollection->setSubjectObject($subjectObject);
+                } else {
+                    @trigger_error('AdapterInterface::translateObject() has to return the subjectObject as of version 1.1, support for by reference will be removed in 2.0.', E_USER_DEPRECATED);
+                }
             }
 
             // create and add uri context to stack
