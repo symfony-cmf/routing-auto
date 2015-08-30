@@ -4,6 +4,7 @@ Changelog
 dev-master
 ----------
 
+* **2015-04-23**: Added EventDispatching adapter
 * **2015-04-19**: [BC Break] Empty token values will now throw an exception
 * **2015-04-19**: Added `allow_empty` option to permit empty values and
                   remove any trailing slash.

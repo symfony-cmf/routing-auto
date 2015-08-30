@@ -16,6 +16,7 @@
         "symfony-cmf/routing": "~1.2",
         "symfony/options-resolver": "~2.2",
         "symfony/config": "~2.2",
+        "symfony/event-dispatcher": "~2.2",
         "jms/metadata": "1.5.*"
     },
     "require-dev": {

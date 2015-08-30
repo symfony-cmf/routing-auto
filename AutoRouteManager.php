@@ -14,6 +14,10 @@ namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
+use Symfony\Cmf\Component\RoutingAuto\Event\UriContextEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class is concerned with the automatic creation of route objects.
@@ -22,16 +26,31 @@ use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
  */
 class AutoRouteManager
 {
+    /**
+     * @var AdapterInterface
+     */
     protected $adapter;
+
+    /**
+     * @var UriGeneratorInterface
+     */
     protected $uriGenerator;
+
+    /**
+     * @var DefunctRouteHandlerInterface
+     */
     protected $defunctRouteHandler;
 
+    /**
+     * @var UriContextCollection[]
+     */
     private $pendingUriContextCollections = array();
 
     /**
      * @param AdapterInterface             $adapter             Database adapter
      * @param UriGeneratorInterface        $uriGenerator        Routing auto URL generator
      * @param DefunctRouteHandlerInterface $defunctRouteHandler Handler for defunct routes
+     * @param EventDispatcher              $eventDispatcher     Dispatcher for events
      */
     public function __construct(
         AdapterInterface $adapter,
@@ -45,7 +64,9 @@ class AutoRouteManager
     }
 
     /**
-     * @param object $document
+     * Build the URI context classes into the given UriContextCollection
+     *
+     * @param UriContextCollection $uriContextCollection
      */
     public function buildUriContextCollection(UriContextCollection $uriContextCollection)
     {
@@ -57,16 +78,7 @@ class AutoRouteManager
             $autoRoute = null;
 
             if ($existingRoute) {
-                $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $uriContext->getSubjectObject());
-
-                if ($isSameContent) {
-                    $autoRoute = $existingRoute;
-                    $autoRoute->setType(AutoRouteInterface::TYPE_PRIMARY);
-                } else {
-                    $uri = $uriContext->getUri();
-                    $uri = $this->uriGenerator->resolveConflict($uriContext);
-                    $uriContext->setUri($uri);
-                }
+                $autoRoute = $this->handleExistingRoute($existingRoute, $uriContext);
             }
 
             if (!$autoRoute) {
@@ -80,11 +92,39 @@ class AutoRouteManager
         $this->pendingUriContextCollections[] = $uriContextCollection;
     }
 
+    /**
+     * Process defunct (no longer used) routes
+     */
     public function handleDefunctRoutes()
     {
         while ($uriContextCollection = array_pop($this->pendingUriContextCollections)) {
             $this->defunctRouteHandler->handleDefunctRoutes($uriContextCollection);
         }
+    }
+
+    /**
+     * Handle the case where the generated path already exists.
+     * Either if it does not reference the same content then we 
+     * have a conflict which needs to be resolved.
+     *
+     * @param Route $route
+     * @param UriContext $uriContext
+     */
+    private function handleExistingRoute($existingRoute, $uriContext)
+    {
+        $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $uriContext->getSubjectObject());
+
+        if ($isSameContent) {
+            $autoRoute = $existingRoute;
+            $autoRoute->setType(AutoRouteInterface::TYPE_PRIMARY);
+
+            return $autoRoute;
+        }
+
+        $uri = $this->uriGenerator->resolveConflict($uriContext);
+        $uriContext->setUri($uri);
+
+        return null;
     }
 
     /**
