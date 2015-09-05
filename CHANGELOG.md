@@ -4,6 +4,8 @@ Changelog
 dev-master
 ----------
 
+* **2015-09-05**: "Leave Redirect" defunct route handler now migrates any children
+                  of the original route.
 * **2015-08-23**: `AdapterInterface::translateObject()` now has to return the
                   translated object, by reference is still supported for BC reasons.
 * **2015-04-23**: Added EventDispatching adapter
