@@ -35,7 +35,7 @@ class LeaveRedirectDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testHandleDefunctRoutes()
+    public function testLeaveRedirect()
     {
         $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
         $this->adapter->getReferringAutoRoutes($this->subjectObject)->willReturn(array(
@@ -50,6 +50,24 @@ class LeaveRedirectDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->adapter->createRedirectRoute($this->route2->reveal(), $this->route4->reveal())->shouldBeCalled();
 
+        $this->adapter->migrateAutoRouteChildren($this->route2->reveal(), $this->route4->reveal())->shouldBeCalled();
+        $this->handler->handleDefunctRoutes($this->uriContextCollection->reveal());
+    }
+
+    public function testLeaveDirectNoTranslation()
+    {
+        $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
+        $this->adapter->getReferringAutoRoutes($this->subjectObject)->willReturn(array(
+            $this->route1
+        ));
+        $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(false);
+
+        $this->route1->getAutoRouteTag()->willReturn('fr');
+        $this->uriContextCollection->getAutoRouteByTag('fr')->willReturn(null);
+
+        $this->adapter->createRedirectRoute($this->route2->reveal(), $this->route4->reveal())->shouldNotBeCalled();
+
+        $this->adapter->migrateAutoRouteChildren($this->route2->reveal(), $this->route4->reveal())->shouldNotBeCalled();
         $this->handler->handleDefunctRoutes($this->uriContextCollection->reveal());
     }
 }
