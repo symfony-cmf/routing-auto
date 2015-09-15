@@ -59,12 +59,12 @@ interface AutoRouteInterface extends RouteObjectInterface
     public function setType($mode);
 
     /**
-     * For use in the REDIRECT mode, specifies the AutoRoute
+     * For use in the REDIRECT mode, specifies the routable object
      * that the AutoRoute should redirect to.
      *
      * @param AutoRouteInterface AutoRoute to redirect to.
      */
-    public function setRedirectTarget(AutoRouteInterface $autoTarget);
+    public function setRedirectTarget($autoTarget);
 
     /**
      * Return the redirect target (when the auto route is of type
