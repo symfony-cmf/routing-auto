@@ -29,6 +29,9 @@
         "symfony-cmf/routing-auto-bundle": "To integrate this lirbary with Symfony and the CMF",
         "symfony/event-dispatcher": "To use the EventDispatchingAdapter, allowing to edit the AutoRoute documents (^2.2|3.*)"
     },
+    "conflicts": {
+        "symfony-cmf/routing-auto-bundle": "1.0.*"
+    },
     "autoload": {
         "psr-4": { "Symfony\\Cmf\\Component\\RoutingAuto\\": "" }
     },
