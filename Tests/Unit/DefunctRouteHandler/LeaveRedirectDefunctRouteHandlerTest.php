@@ -13,6 +13,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\DefunctRouteHandler;
 
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler\LeaveRedirectDefunctRouteHandler;
+use Prophecy\Argument;
 
 class LeaveRedirectDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,7 +44,6 @@ class LeaveRedirectDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         ));
         $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(true);
         $this->uriContextCollection->containsAutoRoute($this->route2->reveal())->willReturn(false);
-        $this->uriContextCollection->containsAutoRoute($this->route3->reveal())->willReturn(true);
 
         $this->route2->getAutoRouteTag()->willReturn('fr');
         $this->uriContextCollection->getAutoRouteByTag('fr')->willReturn($this->route4);
@@ -70,5 +70,21 @@ class LeaveRedirectDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->adapter->migrateAutoRouteChildren($this->route2->reveal(), $this->route4->reveal())->shouldNotBeCalled();
         $this->handler->handleDefunctRoutes($this->uriContextCollection->reveal());
     }
-}
 
+    public function testNonExistingReferrerLocale()
+    {
+        $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
+        $this->adapter->getReferringAutoRoutes($this->subjectObject)->willReturn(array(
+            $this->route1, $this->route2
+        ));
+        $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(true);
+        $this->uriContextCollection->containsAutoRoute($this->route2->reveal())->willReturn(false);
+
+        $this->route2->getAutoRouteTag()->willReturn('fr');
+        $this->uriContextCollection->getAutoRouteByTag('fr')->willReturn(null);
+
+        $this->adapter->createRedirectRoute(Argument::any())->shouldNotBeCalled();
+
+        $this->handler->handleDefunctRoutes($this->uriContextCollection->reveal());
+    }
+}

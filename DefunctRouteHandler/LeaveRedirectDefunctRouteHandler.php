@@ -36,17 +36,19 @@ class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
         $referringAutoRouteCollection = $this->adapter->getReferringAutoRoutes($uriContextCollection->getSubjectObject());
 
         foreach ($referringAutoRouteCollection as $referringAutoRoute) {
-            if (false === $uriContextCollection->containsAutoRoute($referringAutoRoute)) {
-                $newRoute = $uriContextCollection->getAutoRouteByTag($referringAutoRoute->getAutoRouteTag());
-
-                if (null === $newRoute) {
-                    continue;
-                }
-
-                $this->adapter->migrateAutoRouteChildren($referringAutoRoute, $newRoute);
-                $this->adapter->createRedirectRoute($referringAutoRoute, $newRoute);
+            if (true === $uriContextCollection->containsAutoRoute($referringAutoRoute)) {
+                continue;
             }
+
+            $newRoute = $uriContextCollection->getAutoRouteByTag($referringAutoRoute->getAutoRouteTag());
+
+            if (!$newRoute) {
+                // it could happen that the referring route is for a non-existing locale
+                continue;
+            }
+
+            $this->adapter->migrateAutoRouteChildren($referringAutoRoute, $newRoute);
+            $this->adapter->createRedirectRoute($referringAutoRoute, $newRoute);
         }
     }
 }
-
