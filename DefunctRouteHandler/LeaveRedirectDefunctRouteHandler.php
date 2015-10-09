@@ -42,13 +42,12 @@ class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
 
             $newRoute = $uriContextCollection->getAutoRouteByTag($referringAutoRoute->getAutoRouteTag());
 
-                if (null === $newRoute) {
-                    continue;
-                }
+            if (!$newRoute) {
+                // it could happen that the referring route is for a non-existing locale
+                continue;
+            }
 
-                $this->adapter->migrateAutoRouteChildren($referringAutoRoute, $newRoute);
-                $this->adapter->createRedirectRoute($referringAutoRoute, $newRoute);
-
+            $this->adapter->migrateAutoRouteChildren($referringAutoRoute, $newRoute);
             $this->adapter->createRedirectRoute($referringAutoRoute, $newRoute);
         }
     }
