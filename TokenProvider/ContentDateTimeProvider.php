@@ -47,22 +47,24 @@ class ContentDateTimeProvider extends BaseContentMethodProvider
             'date_format' => 'Y-m-d',
         ));
 
+        $slugifyNormalizer = function ($options, $value) {
+            if (null !== $value) {
+                @trigger_error('The slugify option of '.__CLASS__.' is deprecated as of version 1.1 and will be removed in 2.0. Using it has no effect.', E_USER_DEPRECATED);
+            }
+        };
+
         if (method_exists($optionsResolver, 'setDefined')) {
             // new OptionsResolver API (Symfony 2.6+)
             $optionsResolver->setAllowedTypes('date_format', 'string');
             $optionsResolver->setDefined(array('slugify'));
+            $optionsResolver->setNormalizer('slugify', $slugifyNormalizer);
         } else {
             // old API (Symfony <2.6)
             $optionsResolver->setAllowedTypes(array('date_format' => 'string'));
             $optionsResolver->setOptional(array('slugify'));
+            $optionsResolver->setNormalizers(array(
+            'slugify' => $slugifyNormalizer,
+            ));
         }
-
-        $optionsResolver->setNormalizers(array(
-           'slugify' => function ($options, $value) {
-               if (null !== $value) {
-                   @trigger_error('The slugify option of '.__CLASS__.' is deprecated as of version 1.1 and will be removed in 2.0. Using it has no effect.', E_USER_DEPRECATED);
-               }
-           },
-        ));
     }
 }
