@@ -9,7 +9,6 @@
  * file that was distributed with this source code.
  */
 
-
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures;
 
 class Article
