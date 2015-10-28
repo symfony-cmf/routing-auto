@@ -33,7 +33,7 @@ class RemoveDefunctRouteHandler implements DefunctRouteHandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function handleDefunctRoutes(UriContextCollection $uriContextCollection)
+    public function handleDefunctRoutes(UriContextCollection $uriContextCollection, array $options = array())
     {
         $referringAutoRouteCollection = $this->adapter->getReferringAutoRoutes($uriContextCollection->getSubjectObject());
 

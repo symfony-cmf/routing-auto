@@ -11,6 +11,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -27,7 +29,8 @@ interface DefunctRouteHandlerInterface
      * or perhaps replaced with a redirect route, or indeed
      * left alone to continue depending on the configuration.
      *
-     * TODO
+     * @param UriContextCollection $uriContextCollection
+     * @param array $options
      */
-    public function handleDefunctRoutes(UriContextCollection $uriContextCollection);
+    public function handleDefunctRoutes(UriContextCollection $uriContextCollection, array $options = array());
 }
