@@ -1,11 +1,8 @@
 Changelog
 =========
 
-dev-master
-----------
-
-* **2015-09-15**: Removed type hint from `AutoRouteInterface::setRedirectTarget` to allow
-                  redirect target to be a content document.
+* **2015-09-15**: [BC Break] Removed type hint from `AutoRouteInterface::setRedirectTarget()`
+                  to allow the redirect target to be a content document.
 * **2015-09-05**: "Leave Redirect" defunct route handler now migrates any children
                   of the original route.
 * **2015-08-23**: `AdapterInterface::translateObject()` now has to return the
@@ -15,7 +12,7 @@ dev-master
 * **2015-04-19**: Added `allow_empty` option to permit empty values and
                   remove any trailing slash.
 * **2015-03-14**: [BC Break] The adapter now accepts the `UriContext` object for
-                  `createRoute` and as an additional parameter to `findRouteForUri`.
+                  `createRoute()` and as an additional parameter to `findRouteForUri()`.
 * **2015-03-14**: Changed adapter interface to accept UriContext objects
                   instead of or in addition to URI strings.
 * **2015-01-29**: Added SymfonyContainerParameterTokenProvider for retrieving
