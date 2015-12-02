@@ -22,11 +22,6 @@ use Metadata\MergeableClassMetadata;
 class ClassMetadata extends MergeableClassMetadata
 {
     /**
-     * @var string
-     */
-    protected $uriSchema;
-
-    /**
      * @var array
      */
     protected $tokenProviders = array();
@@ -49,25 +44,19 @@ class ClassMetadata extends MergeableClassMetadata
     protected $extendedClass;
 
     /**
-     * Set the URL schema to use for the subject class.
-     *
-     * e.g. {foobar}/articles/{date}
-     *
-     * @param string $schema
+     * @var AutoRouteDefinition[]
      */
-    public function setUriSchema($schema)
-    {
-        $this->uriSchema = $schema;
-    }
+    protected $definitions = array();
 
     /**
-     * Return the URL schema.
+     * Add a new auto route definition for this class.
      *
-     * @return string
+     * @param string              $name
+     * @param AutoRouteDefinition $definition
      */
-    public function getUriSchema()
+    public function setAutoRouteDefinition($name, AutoRouteDefinition $definition)
     {
-        return $this->uriSchema;
+        $this->definitions[$name] = $definition;
     }
 
     /**
@@ -189,7 +178,14 @@ class ClassMetadata extends MergeableClassMetadata
     {
         parent::merge($metadata);
 
-        $this->uriSchema = str_replace('{parent}', $this->uriSchema, $metadata->getUriSchema());
+        foreach ($metadata->getAutoRouteDefinitions() as $definitionName => $definition) {
+            if (isset($this->definitions[$definitionName])) {
+                $this->definitions[$definitionName]->merge($definition);
+                continue;
+            }
+
+            $this->definitions[$definitionName] = $definition;
+        }
 
         foreach ($metadata->getTokenProviders() as $tokenName => $provider) {
             $this->addTokenProvider($tokenName, $provider, true);
@@ -202,5 +198,37 @@ class ClassMetadata extends MergeableClassMetadata
         if ($conflictResolver = $metadata->getConflictResolver()) {
             $this->setConflictResolver($conflictResolver);
         }
+    }
+
+    /**
+     * Return the auto route definitions for the class this metadata represents.
+     *
+     * @return AutoRouteDefinition[]
+     */
+    public function getAutoRouteDefinitions()
+    {
+        return $this->definitions;
+    }
+
+    /**
+     * Return the auto route definition with the given name.
+     *
+     * @param mixed $name
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return AutoRouteDefinition
+     */
+    public function getAutoRouteDefinition($name)
+    {
+        if (!isset($this->definitions[$name])) {
+            throw new \InvalidArgumentException(sprintf(
+                'No definition exists at index "%s" in auto route metadata for class "%s"',
+                $name,
+                $this->name
+            ));
+        }
+
+        return $this->definitions[$name];
     }
 }

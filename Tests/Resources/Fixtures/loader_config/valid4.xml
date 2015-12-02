@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <auto-mapping xmlns="http://cmf.symfony.com/schema/routing_auto">
-    <mapping class="stdClass" uri-schema="/cmf/blog">
+    <mapping class="stdClass">
+        <definition name="_default" uri-schema="/cmf/blog"/>
         <conflict-resolver name="auto_increment" />
         <defunct-route-handler name="leave_redirect" />
     </mapping>

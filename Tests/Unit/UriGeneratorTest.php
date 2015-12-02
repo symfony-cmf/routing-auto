@@ -16,23 +16,17 @@ use Prophecy\Argument;
 
 class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 {
-    protected $driver;
     protected $serviceRegistry;
     protected $tokenProviders = array();
     protected $uriContext;
 
     public function setUp()
     {
-        $this->metadataFactory = $this->prophesize('Metadata\MetadataFactoryInterface');
-        $this->metadata = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
-        $this->driver = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
         $this->serviceRegistry = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\ServiceRegistry');
         $this->tokenProvider = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface');
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
 
         $this->uriGenerator = new UriGenerator(
-            $this->metadataFactory->reveal(),
-            $this->driver->reveal(),
             $this->serviceRegistry->reveal()
         );
     }
@@ -228,19 +222,12 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
         $document = new \stdClass();
         $this->uriContext->getSubjectObject()->willReturn($document);
         $this->uriContext->getUri()->willReturn($uriSchema);
-        $this->driver->getRealClassName('stdClass')
-            ->willReturn('ThisIsMyStandardClass');
-
-        $this->metadataFactory->getMetadataForClass('ThisIsMyStandardClass')
-            ->willReturn($this->metadata);
-
-        $this->metadata->getTokenProviders()
+        $this->uriContext->getTokenProviderConfigs()
             ->willReturn($tokenProviderConfigs);
-
-        $this->metadata->getUriSchema()
+        $this->uriContext->getUriSchema()
             ->willReturn($uriSchema);
 
-        foreach ($tokenProviderConfigs as $tokenName => $tokenProviderConfig) {
+        foreach ($tokenProviderConfigs as $tokenProviderConfig) {
             // set the defaults for the predictions
             $tokenProviderConfig['options'] = array_merge(array(
                 'allow_empty' => false,

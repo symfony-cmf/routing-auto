@@ -1,0 +1,12 @@
+stdClass:
+    definitions: 
+        - 
+            uri_schema: /forum/{category}/{post_title}/edit
+            defaults:
+                _type: edit
+        -
+            uri_schema: /forum/{category}/{post_title}/view
+            defaults:
+                _type: view
+    token_providers:
+        category: [foo]

@@ -11,7 +11,6 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto;
 
-use Metadata\MetadataFactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -21,22 +20,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class UriGenerator implements UriGeneratorInterface
 {
-    protected $driver;
-    protected $metadataFactory;
     protected $serviceRegistry;
 
     /**
      * @param MetadataFactory   the metadata factory
-     * @param AdapterInterface  the autoroute backend driver (odm ,orm, etc)
      * @param ServiceRegistry  the auto route service registry
      */
     public function __construct(
-        MetadataFactoryInterface $metadataFactory,
-        AdapterInterface $driver,
         ServiceRegistry $serviceRegistry
     ) {
-        $this->metadataFactory = $metadataFactory;
-        $this->driver = $driver;
         $this->serviceRegistry = $serviceRegistry;
     }
 
@@ -45,21 +37,18 @@ class UriGenerator implements UriGeneratorInterface
      */
     public function generateUri(UriContext $uriContext)
     {
-        $realClassName = $this->driver->getRealClassName(get_class($uriContext->getSubjectObject()));
-        $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
-        $uriSchema = $metadata->getUriSchema();
-
-        $tokenProviderConfigs = $metadata->getTokenProviders();
+        $uriSchema = $uriContext->getUriSchema();
+        $tokenProviderConfigs = $uriContext->getTokenProviderConfigs();
 
         $tokens = array();
-        preg_match_all('/{(.*?)}/', $metadata->getUriSchema(), $matches);
+        preg_match_all('/{(.*?)}/', $uriSchema, $matches);
         $tokenNames = $matches[1];
 
         foreach ($tokenNames as $index => $name) {
             if (!isset($tokenProviderConfigs[$name])) {
                 throw new \InvalidArgumentException(sprintf(
                     'Unknown token "%s" in URI schema "%s"',
-                    $name, $metadata->getUriSchema()
+                    $name, $uriSchema
                 ));
             }
             $tokenProviderConfig = $tokenProviderConfigs[$name];
@@ -101,7 +90,7 @@ class UriGenerator implements UriGeneratorInterface
         if (substr($uri, 0, 1) !== '/') {
             throw new \InvalidArgumentException(sprintf(
                 'Generated non-absolute URI "%s" for object "%s"',
-                $uri, $metadata->name
+                $uri, get_class($uriContext->getSubjectObject())
             ));
         }
 
@@ -113,10 +102,7 @@ class UriGenerator implements UriGeneratorInterface
      */
     public function resolveConflict(UriContext $uriContext)
     {
-        $realClassName = $this->driver->getRealClassName(get_class($uriContext->getSubjectObject()));
-        $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
-
-        $conflictResolverConfig = $metadata->getConflictResolver();
+        $conflictResolverConfig = $uriContext->getConflictResolverConfig();
         $conflictResolver = $this->serviceRegistry->getConflictResolver(
             $conflictResolverConfig['name'],
             $conflictResolverConfig['options']

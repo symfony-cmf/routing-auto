@@ -37,7 +37,13 @@ class UriContextCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateUriContext()
     {
-        $res = $this->uriContextCollection->createUriContext('fr');
+        $res = $this->uriContextCollection->createUriContext(
+            '/foo/{bar}/baz',
+            array(),
+            array(),
+            array(),
+            'fr'
+        );
         $this->assertInstanceOf('Symfony\Cmf\Component\RoutingAuto\UriContext', $res);
         $this->assertEquals('fr', $res->getLocale());
     }

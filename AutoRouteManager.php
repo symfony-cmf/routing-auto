@@ -42,6 +42,11 @@ class AutoRouteManager
     private $pendingUriContextCollections = array();
 
     /**
+     * @var UriContextCollectionBuilder
+     */
+    protected $collectionBuilder;
+
+    /**
      * @param AdapterInterface             $adapter             Database adapter
      * @param UriGeneratorInterface        $uriGenerator        Routing auto URL generator
      * @param DefunctRouteHandlerInterface $defunctRouteHandler Handler for defunct routes
@@ -50,11 +55,13 @@ class AutoRouteManager
     public function __construct(
         AdapterInterface $adapter,
         UriGeneratorInterface $uriGenerator,
-        DefunctRouteHandlerInterface $defunctRouteHandler
+        DefunctRouteHandlerInterface $defunctRouteHandler,
+        UriContextCollectionBuilder $collectionBuilder
     ) {
         $this->adapter = $adapter;
         $this->uriGenerator = $uriGenerator;
         $this->defunctRouteHandler = $defunctRouteHandler;
+        $this->collectionBuilder = $collectionBuilder;
     }
 
     /**
@@ -64,20 +71,44 @@ class AutoRouteManager
      */
     public function buildUriContextCollection(UriContextCollection $uriContextCollection)
     {
-        $this->getUriContextsForDocument($uriContextCollection);
+        $this->collectionBuilder->build($uriContextCollection);
 
         foreach ($uriContextCollection->getUriContexts() as $uriContext) {
-            $existingRoute = $this->adapter->findRouteForUri($uriContext->getUri(), $uriContext);
+            $subject = $uriContextCollection->getSubjectObject();
 
+            if (null !== $uriContext->getLocale()) {
+                $translatedSubject = $this->adapter->translateObject($subject, $uriContext->getLocale());
+
+                if (null === $translatedSubject) {
+                    @trigger_error('AdapterInterface::translateObject() has to return the subject as of version 1.1, support for by reference will be removed in 2.0.', E_USER_DEPRECATED);
+                } else {
+                    if ($translatedSubject !== $subject) {
+                        $uriContext->setTranslatedSubjectObject($translatedSubject);
+                    }
+                }
+            }
+
+            // generate the URI
+            $uri = $this->uriGenerator->generateUri($uriContext);
+            $uriContext->setUri($uri);
+            $existingRoute = $this->adapter->findRouteForUri($uri, $uriContext);
+
+            // handle existing route
             $autoRoute = null;
-
             if ($existingRoute) {
                 $autoRoute = $this->handleExistingRoute($existingRoute, $uriContext);
             }
 
-            if (!$autoRoute) {
+            // handle new route
+            if (null === $autoRoute) {
                 $autoRouteTag = $this->adapter->generateAutoRouteTag($uriContext);
-                $autoRoute = $this->adapter->createAutoRoute($uriContext, $uriContext->getSubjectObject(), $autoRouteTag);
+
+                // TODO: The second argument below is now **pointless**, as the
+                // UriContext contains both the original and translated subject
+                // objects.
+                //
+                // See: https://github.com/symfony-cmf/RoutingAuto/issues/73
+                $autoRoute = $this->adapter->createAutoRoute($uriContext, $subject, $autoRouteTag);
             }
 
             $uriContext->setAutoRoute($autoRoute);
@@ -117,39 +148,5 @@ class AutoRouteManager
 
         $uri = $this->uriGenerator->resolveConflict($uriContext);
         $uriContext->setUri($uri);
-
-        return;
-    }
-
-    /**
-     * Populates an empty UriContextCollection with UriContexts.
-     *
-     * @param $uriContextCollection UriContextCollection
-     */
-    private function getUriContextsForDocument(UriContextCollection $uriContextCollection)
-    {
-        $locales = $this->adapter->getLocales($uriContextCollection->getSubjectObject()) ?: array(null);
-
-        foreach ($locales as $locale) {
-            if (null !== $locale) {
-                $subjectObject = $this->adapter->translateObject($uriContextCollection->getSubjectObject(), $locale);
-
-                if (null !== $subjectObject) {
-                    $uriContextCollection->setSubjectObject($subjectObject);
-                } else {
-                    @trigger_error('AdapterInterface::translateObject() has to return the subjectObject as of version 1.1, support for by reference will be removed in 2.0.', E_USER_DEPRECATED);
-                }
-            }
-
-            // create and add uri context to stack
-            $uriContext = $uriContextCollection->createUriContext($locale);
-            $uriContextCollection->addUriContext($uriContext);
-
-            // generate the URL
-            $uri = $this->uriGenerator->generateUri($uriContext);
-
-            // update the context with the URL
-            $uriContext->setUri($uri);
-        }
     }
 }

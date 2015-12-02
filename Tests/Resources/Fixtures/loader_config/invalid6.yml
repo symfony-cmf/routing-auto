@@ -1,0 +1,9 @@
+stdClass:
+    # contains invalid keys
+    foo_bar: ~
+    bar_foo: ~
+    definitions:
+        foo:
+            uri_schema: bar
+            defaults: 
+                foo: bar

@@ -14,6 +14,7 @@ namespace Symfony\Cmf\Component\RoutingAuto\Mapping\Loader;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
 use Symfony\Component\Config\Util\XmlUtils;
 use Symfony\Component\Config\Loader\FileLoader;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
 
 /**
  * Loader for XML files.
@@ -77,15 +78,21 @@ class XmlFileLoader extends FileLoader
         $classMetadata = new ClassMetadata($className);
 
         try {
-            $classMetadata->setUriSchema(
-                $this->readAttribute($mappingNode, 'uri-schema', sprintf('for "%s" in "%s"', $className, $path))
-            );
-
             $classMetadata->setExtendedClass(
                 $this->readAttribute($mappingNode, 'extend', sprintf('for "%s" in "%s"', $className, $path))
             );
         } catch (\InvalidArgumentException $e) {
             // the extend and uri-schema attributes may be omitted
+        }
+
+        $uriSchemaNodes = $mappingNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'definition');
+
+        // support the old attribute name until 2.0
+        $uriSchemaIndex = 0;
+        foreach ($uriSchemaNodes as $uriSchemaNode) {
+            $uriSchemaName = $uriSchemaNode->hasAttribute('name') ? $uriSchemaNode->getAttribute('name') : $uriSchemaIndex;
+            $classMetadata->setAutoRouteDefinition($uriSchemaName, $this->parseDefinitionNode($uriSchemaNode, $classMetadata, $path));
+            ++$uriSchemaIndex;
         }
 
         $conflictResolverNodes = $mappingNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'conflict-resolver');
@@ -129,6 +136,36 @@ class XmlFileLoader extends FileLoader
         $providerOptions = $this->parseOptionNode($tokenNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'option'), $path);
 
         $classMetadata->addTokenProvider($tokenName, array('name' => $providerName, 'options' => $providerOptions));
+    }
+
+    /**
+     * @param \DOMElement   $tokenNode
+     * @param ClassMetadata $classMetadata
+     * @param string        $path
+     */
+    protected function parseDefinitionNode(\DOMElement $uriSchemaNode, ClassMetadata $classMetadata, $path)
+    {
+        $uriSchema = $this->readAttribute($uriSchemaNode, 'uri-schema', sprintf('in "%s" for "%s"', $path, $classMetadata->name));
+        $defaults = $this->parseDefaultNode($uriSchemaNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'default'), $classMetadata, $path);
+
+        return new AutoRouteDefinition($uriSchema, $defaults);
+    }
+
+    /**
+     * @param \DOMElement   $tokenNode
+     * @param ClassMetadata $classMetadata
+     * @param string        $path
+     */
+    protected function parseDefaultNode(\DOMNodeList $defaultNodes, ClassMetadata $classMetadata, $path)
+    {
+        $defaults = array();
+
+        foreach ($defaultNodes as $defaultNode) {
+            $name = $this->readAttribute($defaultNode, 'key', sprintf('in "%s" for "%s"', $path, $classMetadata->name));
+            $defaults[$name] = $defaultNode->nodeValue;
+        }
+
+        return $defaults;
     }
 
     /**

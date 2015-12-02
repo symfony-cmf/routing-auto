@@ -57,10 +57,19 @@ class UriContextCollection
      *
      * @return UriContext
      */
-    public function createUriContext($locale)
-    {
+    public function createUriContext(
+        $uriSchema,
+        array $defaults,
+        array $tokenProviderConfigs,
+        array $conflictResolverConfigs,
+        $locale
+    ) {
         $uriContext = new UriContext(
             $this->getSubjectObject(),
+            $uriSchema,
+            $defaults,
+            $tokenProviderConfigs,
+            $conflictResolverConfigs,
             $locale
         );
 
