@@ -36,7 +36,7 @@ class AutoIncrementConflictResolver implements ConflictResolverInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolveConflict(UriContext $uriContext)
     {

@@ -3,7 +3,7 @@
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2014 Symfony CMF
+ * (c) 2011-2015 Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -75,7 +75,7 @@ class ServiceRegistry
     }
 
     /**
-     * Register the given token provider under the given name
+     * Register the given token provider under the given name.
      *
      * @param string                 $name
      * @param TokenProviderInterface $provider
@@ -86,7 +86,7 @@ class ServiceRegistry
     }
 
     /**
-     * Register the given conflict resolver  under the given name
+     * Register the given conflict resolver  under the given name.
      *
      * @param string                    $name
      * @param ConflictResolverInterface $conflictResolver
@@ -97,7 +97,7 @@ class ServiceRegistry
     }
 
     /**
-     * Register the given defunct route handler under the given name
+     * Register the given defunct route handler under the given name.
      *
      * @param string                       $name
      * @param DefunctRouteHandlerInterface $defunctRouteHandler

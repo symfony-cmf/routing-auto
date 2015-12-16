@@ -27,7 +27,7 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->route3 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
         $this->route4 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
 
-        $this->subjectObject = new \stdClass;
+        $this->subjectObject = new \stdClass();
 
         $this->handler = new RemoveDefunctRouteHandler(
             $this->adapter->reveal()
@@ -38,7 +38,7 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
         $this->adapter->getReferringAutoRoutes($this->subjectObject)->willReturn(array(
-            $this->route1, $this->route2
+            $this->route1, $this->route2,
         ));
         $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(true);
         $this->uriContextCollection->containsAutoRoute($this->route2->reveal())->willReturn(false);
@@ -57,7 +57,7 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
         $this->adapter->getReferringAutoRoutes($this->subjectObject)->willReturn(array(
-            $this->route1
+            $this->route1,
         ));
 
         $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(false);
@@ -70,5 +70,3 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->handler->handleDefunctRoutes($this->uriContextCollection->reveal());
     }
 }
-
-

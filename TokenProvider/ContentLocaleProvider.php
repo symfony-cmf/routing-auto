@@ -18,7 +18,7 @@ use Symfony\Cmf\Component\RoutingAuto\UriContext;
 class ContentLocaleProvider implements TokenProviderInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function provideValue(UriContext $uriContext, $options)
     {
@@ -26,7 +26,7 @@ class ContentLocaleProvider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolverInterface $optionsResolver)
     {

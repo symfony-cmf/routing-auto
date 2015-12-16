@@ -12,11 +12,9 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Adapter;
 
 use Symfony\Cmf\Component\RoutingAuto\Adapter\EventDispatchingAdapter;
-use Prophecy\Argument;
 use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
 use Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteCreateEvent;
 use Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteMigrateEvent;
-use Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Adapter\EventDispatchingAdapterSubscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

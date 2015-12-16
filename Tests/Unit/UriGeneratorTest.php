@@ -210,7 +210,7 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
             $this->setExpectedException($exceptionType, $exceptionMessage);
         }
 
-        $document = new \stdClass;
+        $document = new \stdClass();
         $this->uriContext->getSubjectObject()->willReturn($document);
         $this->uriContext->getUri()->willReturn($uriSchema);
         $this->driver->getRealClassName('stdClass')

@@ -30,7 +30,7 @@ class DelegatingDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->metadata = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
         $this->delegatedHandler = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface');
 
-        $this->subjectObject = new \stdClass;
+        $this->subjectObject = new \stdClass();
 
         $this->delegatingDefunctRouteHandler = new DelegatingDefunctRouteHandler(
             $this->metadataFactory->reveal(),
@@ -46,7 +46,7 @@ class DelegatingDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->adapter->getRealClassName('stdClass')->willReturn('stdClass');
         $this->metadataFactory->getMetadataForClass('stdClass')->willReturn($this->metadata);
         $this->metadata->getDefunctRouteHandler()->willReturn(array(
-            'name' => 'foobar'
+            'name' => 'foobar',
         ));
         $this->serviceRegistry->getDefunctRouteHandler('foobar')->willReturn($this->delegatedHandler);
         $this->delegatedHandler->handleDefunctRoutes($this->uriContextCollection->reveal())->shouldBeCalled();

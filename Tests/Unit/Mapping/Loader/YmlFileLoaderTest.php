@@ -21,7 +21,7 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->locator = $this->prophesize('Symfony\Component\Config\FileLocatorInterface');
-        $this->loader  = new YmlFileLoader($this->locator->reveal());
+        $this->loader = new YmlFileLoader($this->locator->reveal());
     }
 
     /**

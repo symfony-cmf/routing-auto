@@ -11,12 +11,11 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto;
 
-use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Metadata\MetadataFactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class which handles URL generation and conflict resolution
+ * Class which handles URL generation and conflict resolution.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -35,15 +34,14 @@ class UriGenerator implements UriGeneratorInterface
         MetadataFactoryInterface $metadataFactory,
         AdapterInterface $driver,
         ServiceRegistry $serviceRegistry
-    )
-    {
+    ) {
         $this->metadataFactory = $metadataFactory;
         $this->driver = $driver;
         $this->serviceRegistry = $serviceRegistry;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function generateUri(UriContext $uriContext)
     {
@@ -84,14 +82,14 @@ class UriGenerator implements UriGeneratorInterface
                 ));
             }
 
-            $tokenString = '{' . $name . '}';
+            $tokenString = '{'.$name.'}';
 
             if ($isEmpty && true === $tokenProviderOptions['allow_empty']) {
                 $isLast = count($tokenNames) == $index + 1;
-                $tokens[$tokenString . '/'] = (string) $tokenValue;
+                $tokens[$tokenString.'/'] = (string) $tokenValue;
 
                 if ($isLast) {
-                    $tokens['/' . $tokenString] = (string) $tokenValue;
+                    $tokens['/'.$tokenString] = (string) $tokenValue;
                 }
             }
 
@@ -111,7 +109,7 @@ class UriGenerator implements UriGeneratorInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function resolveConflict(UriContext $uriContext)
     {
@@ -120,7 +118,7 @@ class UriGenerator implements UriGeneratorInterface
 
         $conflictResolverConfig = $metadata->getConflictResolver();
         $conflictResolver = $this->serviceRegistry->getConflictResolver(
-            $conflictResolverConfig['name'], 
+            $conflictResolverConfig['name'],
             $conflictResolverConfig['options']
         );
         $uri = $conflictResolver->resolveConflict($uriContext);
@@ -129,7 +127,7 @@ class UriGenerator implements UriGeneratorInterface
     }
 
     /**
-     * Configure options which apply to each token provider
+     * Configure options which apply to each token provider.
      *
      * @param OptionsResolver
      */

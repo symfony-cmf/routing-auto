@@ -19,7 +19,7 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->subjectObject = new \stdClass;
+        $this->subjectObject = new \stdClass();
         $this->autoRoute = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
     }
 
@@ -43,4 +43,3 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->autoRoute, $uriContext->getAutoRoute());
     }
 }
-

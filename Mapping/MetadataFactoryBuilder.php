@@ -14,14 +14,14 @@ namespace Symfony\Cmf\Component\RoutingAuto\Mapping;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 /**
- * MetaFactoryBuilder
+ * MetaFactoryBuilder.
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
 class MetadataFactoryBuilder
 {
     /** 
-     * @var array 
+     * @var array
      */
     protected $resources;
 
@@ -32,7 +32,7 @@ class MetadataFactoryBuilder
 
     /**
      * @param LoaderInterface $loader
-     * @param array $resources
+     * @param array           $resources
      */
     public function __construct(LoaderInterface $loader, array $resources)
     {
@@ -41,12 +41,11 @@ class MetadataFactoryBuilder
     }
 
     /**
-     * Return the metadata factory
+     * Return the metadata factory.
      *
      * @return MetadataFactory
      */
     public function getMetadataFactory()
-
     {
         $mappingFactory = new MetadataFactory();
 

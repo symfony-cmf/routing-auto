@@ -12,7 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto;
 
 /**
- * Class which represents a URL and its associated locale
+ * Class which represents a URL and its associated locale.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */

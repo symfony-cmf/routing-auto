@@ -13,7 +13,7 @@ namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\ConflictResolver;
 
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolver\ThrowExceptionConflictResolver;
 
-class ThrowExceptionConflictResolverTest extends \PHPUnit_Framework_TestCase
+class ThrowExceptionConflictHandlerTest extends \PHPUnit_Framework_TestCase
 {
     protected $adapter;
 
@@ -33,4 +33,3 @@ class ThrowExceptionConflictResolverTest extends \PHPUnit_Framework_TestCase
         $this->conflictResolver->resolveConflict($this->uriContext->reveal());
     }
 }
-

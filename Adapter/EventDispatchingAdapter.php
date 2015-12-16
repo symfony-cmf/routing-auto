@@ -35,7 +35,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getLocales($contentDocument)
     {
@@ -43,7 +43,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function translateObject($contentDocument, $locale)
     {
@@ -51,7 +51,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function generateAutoRouteTag(UriContext $uriContext)
     {
@@ -59,7 +59,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function migrateAutoRouteChildren(AutoRouteInterface $srcAutoRoute, AutoRouteInterface $destAutoRoute)
     {
@@ -68,7 +68,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function removeAutoRoute(AutoRouteInterface $autoRoute)
     {
@@ -76,7 +76,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function createAutoRoute(UriContext $uriContext, $contentDocument, $autoRouteTag)
     {
@@ -87,7 +87,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function createRedirectRoute(AutoRouteInterface $referringAutoRoute, AutoRouteInterface $newRoute)
     {
@@ -95,7 +95,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getRealClassName($className)
     {
@@ -103,7 +103,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function compareAutoRouteContent(AutoRouteInterface $autoRoute, $contentDocument)
     {
@@ -111,7 +111,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getReferringAutoRoutes($contentDocument)
     {
@@ -119,7 +119,7 @@ class EventDispatchingAdapter implements AdapterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function findRouteForUri($uri, UriContext $uriContext)
     {

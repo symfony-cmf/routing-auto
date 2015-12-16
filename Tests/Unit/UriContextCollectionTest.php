@@ -19,12 +19,12 @@ class UriContextCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->subjectObject = new \stdClass;
+        $this->subjectObject = new \stdClass();
 
-        for ($i = 1; $i <= 3; $i++) {
-            $this->{'autoRoute' . $i} = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
-            $this->{'uriContext' . $i} = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
-            $this->{'uriContext' . $i}->getAutoRoute()->willReturn($this->{'autoRoute' . $i});
+        for ($i = 1; $i <= 3; ++$i) {
+            $this->{'autoRoute'.$i} = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
+            $this->{'uriContext'.$i} = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
+            $this->{'uriContext'.$i}->getAutoRoute()->willReturn($this->{'autoRoute'.$i});
         }
 
         $this->uriContextCollection = new UriContextCollection($this->subjectObject);
@@ -48,16 +48,15 @@ class UriContextCollectionTest extends \PHPUnit_Framework_TestCase
             array(
                 array('uriContext1', 'uriContext2', 'uriContext3'),
                 'autoRoute1',
-                true
+                true,
             ),
             array(
                 array('uriContext2', 'uriContext3'),
                 'autoRoute1',
-                false
+                false,
             ),
         );
     }
-
 
     /**
      * @dataProvider provideContainsAutoRoute

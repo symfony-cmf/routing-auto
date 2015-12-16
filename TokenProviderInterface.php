@@ -27,7 +27,7 @@ interface TokenProviderInterface
     public function provideValue(UriContext $uriContext, $options);
 
     /**
-     * Configure the options for this token provider
+     * Configure the options for this token provider.
      *
      * @param OptionsResolverInterface $optionsResolver
      */

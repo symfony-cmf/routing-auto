@@ -33,7 +33,7 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
                 array(
                     '/foobar/bar-1',
                 ),
-                '/foobar/bar-2'
+                '/foobar/bar-2',
             ),
             array(
                 '/foobar/bar',
@@ -42,8 +42,8 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
                     '/foobar/bar-2',
                     '/foobar/bar-4',
                 ),
-                '/foobar/bar-3'
-            )
+                '/foobar/bar-3',
+            ),
         );
     }
 
@@ -55,7 +55,7 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
         $this->uriContext->getUri()->willReturn($uri);
 
         foreach ($existingRoutes as $existingRoute) {
-            $this->adapter->findRouteForUri($existingRoute, $this->uriContext->reveal())->willReturn(new \stdClass);
+            $this->adapter->findRouteForUri($existingRoute, $this->uriContext->reveal())->willReturn(new \stdClass());
         }
         $this->adapter->findRouteForUri($expectedResult, $this->uriContext->reveal())->willReturn(null);
 

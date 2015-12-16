@@ -11,12 +11,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto;
 
-use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
-use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
-use Symfony\Cmf\Component\RoutingAuto\Event\UriContextEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This class is concerned with the automatic creation of route objects.
@@ -55,15 +51,14 @@ class AutoRouteManager
         AdapterInterface $adapter,
         UriGeneratorInterface $uriGenerator,
         DefunctRouteHandlerInterface $defunctRouteHandler
-    )
-    {
+    ) {
         $this->adapter = $adapter;
         $this->uriGenerator = $uriGenerator;
         $this->defunctRouteHandler = $defunctRouteHandler;
     }
 
     /**
-     * Build the URI context classes into the given UriContextCollection
+     * Build the URI context classes into the given UriContextCollection.
      *
      * @param UriContextCollection $uriContextCollection
      */
@@ -92,7 +87,7 @@ class AutoRouteManager
     }
 
     /**
-     * Process defunct (no longer used) routes
+     * Process defunct (no longer used) routes.
      */
     public function handleDefunctRoutes()
     {
@@ -106,7 +101,7 @@ class AutoRouteManager
      * Either if it does not reference the same content then we 
      * have a conflict which needs to be resolved.
      *
-     * @param Route $route
+     * @param Route      $route
      * @param UriContext $uriContext
      */
     private function handleExistingRoute($existingRoute, $uriContext)
@@ -123,17 +118,17 @@ class AutoRouteManager
         $uri = $this->uriGenerator->resolveConflict($uriContext);
         $uriContext->setUri($uri);
 
-        return null;
+        return;
     }
 
     /**
-     * Populates an empty UriContextCollection with UriContexts
+     * Populates an empty UriContextCollection with UriContexts.
      *
      * @param $uriContextCollection UriContextCollection
      */
     private function getUriContextsForDocument(UriContextCollection $uriContextCollection)
     {
-        $locales = $this->adapter->getLocales($uriContextCollection->getSubjectObject()) ? : array(null);
+        $locales = $this->adapter->getLocales($uriContextCollection->getSubjectObject()) ?: array(null);
 
         foreach ($locales as $locale) {
             if (null !== $locale) {

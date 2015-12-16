@@ -44,7 +44,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
     public function __construct(array $metadatas = array(), CacheInterface $cache = null)
     {
         $this->metadatas = $metadatas;
-        $this->cache     = $cache;
+        $this->cache = $cache;
     }
 
     /**
