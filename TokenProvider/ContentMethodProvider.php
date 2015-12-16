@@ -25,7 +25,7 @@ class ContentMethodProvider extends BaseContentMethodProvider
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function normalizeValue($value, UriContext $uriContext, $options)
     {
@@ -37,7 +37,7 @@ class ContentMethodProvider extends BaseContentMethodProvider
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolverInterface $optionsResolver)
     {

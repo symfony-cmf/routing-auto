@@ -12,14 +12,14 @@
 namespace Symfony\Cmf\Component\RoutingAuto;
 
 /**
- * Interface for class which handles URL generation and conflict resolution
+ * Interface for class which handles URL generation and conflict resolution.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
 interface UriGeneratorInterface
 {
     /**
-     * Generate a URL for the given document
+     * Generate a URL for the given document.
      *
      * @param object $document
      *

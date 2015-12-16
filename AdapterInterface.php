@@ -11,9 +11,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto;
 
-use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
-use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 /**
  * Adapters will abstract all persistence operations.
@@ -32,7 +30,7 @@ interface AdapterInterface
     public function getLocales($object);
 
     /**
-     * Translate the given object into the given locale
+     * Translate the given object into the given locale.
      *
      * @param object $object
      * @param string $locale E.g. fr, en, etc.
@@ -75,7 +73,7 @@ interface AdapterInterface
     public function compareAutoRouteContent(AutoRouteInterface $autoRoute, $contentObject);
 
     /**
-     * Attempt to find a route with the given URL
+     * Attempt to find a route with the given URL.
      *
      * Note that the URI may not be the same as the URI in the URI context,
      * this will happen when the ConflictResolver is trying to find candidate
@@ -122,7 +120,7 @@ interface AdapterInterface
     public function migrateAutoRouteChildren(AutoRouteInterface $srcAutoRoute, AutoRouteInterface $destAutoRoute);
 
     /**
-     * Remove the given auto route
+     * Remove the given auto route.
      *
      * @param AutoRouteInterface $autoRoute
      */

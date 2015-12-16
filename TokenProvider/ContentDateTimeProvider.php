@@ -17,7 +17,7 @@ use Symfony\Cmf\Component\RoutingAuto\UriContext;
 class ContentDateTimeProvider extends BaseContentMethodProvider
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function normalizeValue($date, UriContext $uriContext, $options)
     {
@@ -32,7 +32,7 @@ class ContentDateTimeProvider extends BaseContentMethodProvider
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolverInterface $optionsResolver)
     {

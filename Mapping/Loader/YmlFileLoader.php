@@ -155,7 +155,7 @@ class YmlFileLoader extends FileLoader
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports($resource, $type = null)
     {

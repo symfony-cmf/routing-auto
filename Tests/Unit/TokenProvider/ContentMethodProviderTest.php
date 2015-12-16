@@ -64,7 +64,7 @@ class ContentMethodProviderTest extends \PHPUnit_Framework_TestCase
 
         if (!$methodExists) {
             $this->setExpectedException(
-                'InvalidArgumentException', 'Method "' . $options['method'] . '" does not exist'
+                'InvalidArgumentException', 'Method "'.$options['method'].'" does not exist'
             );
         } else {
             $expectedResult = 'This is value';

@@ -12,7 +12,6 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
 /**
@@ -42,21 +41,21 @@ class AutoRouteMigrateEvent extends Event
     }
 
     /**
-     * Return the source (original) auto route
+     * Return the source (original) auto route.
      *
      * @return AutoRouteInterface
      */
-    public function getSrcAutoRoute() 
+    public function getSrcAutoRoute()
     {
         return $this->srcAutoRoute;
     }
 
     /**
-     * Return the destination (new) auto route
+     * Return the destination (new) auto route.
      *
      * @return AutoRouteInterface
      */
-    public function getDestAutoRoute() 
+    public function getDestAutoRoute()
     {
         return $this->destAutoRoute;
     }

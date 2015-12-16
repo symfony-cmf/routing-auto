@@ -31,7 +31,7 @@ class RemoveDefunctRouteHandler implements DefunctRouteHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function handleDefunctRoutes(UriContextCollection $uriContextCollection)
     {

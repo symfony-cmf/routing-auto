@@ -37,7 +37,7 @@ class ClassMetadata extends MergeableClassMetadata
     protected $conflictResolver = array('name' => 'throw_exception', 'options' => array());
 
     /**
-     * Defunct route handler, default to remove
+     * Defunct route handler, default to remove.
      *
      * @var array
      */
@@ -61,7 +61,7 @@ class ClassMetadata extends MergeableClassMetadata
     }
 
     /**
-     * Return the URL schema
+     * Return the URL schema.
      *
      * @return string
      */
@@ -74,8 +74,8 @@ class ClassMetadata extends MergeableClassMetadata
      * Add a token provider configfuration.
      *
      * @param string $tokenName
-     * @param array $provider
-     * @param boolean $override
+     * @param array  $provider
+     * @param bool   $override
      */
     public function addTokenProvider($tokenName, array $provider = array(), $override = false)
     {
@@ -137,7 +137,7 @@ class ClassMetadata extends MergeableClassMetadata
     }
 
     /**
-     * Return the defunct route handler configuration
+     * Return the defunct route handler configuration.
      */
     public function getDefunctRouteHandler()
     {
@@ -145,7 +145,7 @@ class ClassMetadata extends MergeableClassMetadata
     }
 
     /**
-     * Extend the metadata of the mapped class with given $name
+     * Extend the metadata of the mapped class with given $name.
      *
      * @param string $name
      */
@@ -155,7 +155,7 @@ class ClassMetadata extends MergeableClassMetadata
     }
 
     /**
-     * Return the name of the extended class (if any)
+     * Return the name of the extended class (if any).
      *
      * @return string
      */
@@ -165,7 +165,7 @@ class ClassMetadata extends MergeableClassMetadata
     }
 
     /**
-     * Return the name of the subject class
+     * Return the name of the subject class.
      *
      * @return string
      */

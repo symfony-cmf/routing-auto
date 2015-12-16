@@ -30,4 +30,3 @@ class ContentLocaleProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('de', $res);
     }
 }
-

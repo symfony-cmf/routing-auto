@@ -117,6 +117,6 @@ class UriContextCollection
             }
         }
 
-        return null;
+        return;
     }
 }

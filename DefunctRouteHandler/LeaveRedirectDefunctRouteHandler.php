@@ -28,7 +28,7 @@ class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function handleDefunctRoutes(UriContextCollection $uriContextCollection)
     {
@@ -48,4 +48,3 @@ class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
         }
     }
 }
-

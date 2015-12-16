@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 abstract class BaseContentMethodProvider implements TokenProviderInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function provideValue(UriContext $uriContext, $options)
     {
@@ -41,7 +41,7 @@ abstract class BaseContentMethodProvider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolverInterface $optionsResolver)
     {

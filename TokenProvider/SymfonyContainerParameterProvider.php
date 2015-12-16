@@ -17,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Provide values parameters from a Symfony DI container
+ * Provide values parameters from a Symfony DI container.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -34,7 +34,7 @@ class SymfonyContainerParameterProvider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function provideValue(UriContext $uriContext, $options)
     {
@@ -44,12 +44,12 @@ class SymfonyContainerParameterProvider implements TokenProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configureOptions(OptionsResolverInterface $optionsResolver)
     {
         $optionsResolver->setRequired(array(
-            'parameter'
+            'parameter',
         ));
     }
 }

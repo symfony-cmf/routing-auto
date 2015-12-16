@@ -19,7 +19,7 @@ use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
 /**
  * Defunct route handler which delegates the handling of
- * defunct routes based on the mapped classes confiugration
+ * defunct routes based on the mapped classes confiugration.
  *
  * @author Daniel Leech <daniel@dantleech.com>
  */
@@ -37,15 +37,14 @@ class DelegatingDefunctRouteHandler implements DefunctRouteHandlerInterface
         MetadataFactory $metadataFactory,
         AdapterInterface $adapter,
         ServiceRegistry $serviceRegistry
-    )
-    {
+    ) {
         $this->serviceRegistry = $serviceRegistry;
         $this->adapter = $adapter;
         $this->metadataFactory = $metadataFactory;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function handleDefunctRoutes(UriContextCollection $uriContextCollection)
     {

@@ -16,7 +16,7 @@ use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
 /**
- * Event that is dispatched after an auto route has been created
+ * Event that is dispatched after an auto route has been created.
  */
 class AutoRouteCreateEvent extends Event
 {
@@ -32,7 +32,7 @@ class AutoRouteCreateEvent extends Event
 
     /**
      * @param AutoRouteInterface $autoRoute
-     * @param UriContext $uriContext
+     * @param UriContext         $uriContext
      */
     public function __construct(AutoRouteInterface $autoRoute, UriContext $uriContext)
     {
@@ -41,7 +41,7 @@ class AutoRouteCreateEvent extends Event
     }
 
     /**
-     * Return the URI context
+     * Return the URI context.
      *
      * @return UriContext
      */
@@ -51,7 +51,7 @@ class AutoRouteCreateEvent extends Event
     }
 
     /**
-     * Return the newly created auto route implementation
+     * Return the newly created auto route implementation.
      *
      * @return AutoRouteInterface
      */

@@ -22,5 +22,4 @@ interface ConflictResolverInterface
      * @return string unconflicted URL
      */
     public function resolveConflict(UriContext $uriContext);
-
 }

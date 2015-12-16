@@ -32,13 +32,13 @@ class ContentDateTimeProviderTest extends \PHPUnit_Framework_TestCase
                 array(
                     'date_format' => 'Y-m-d',
                 ),
-                '2014-10-09'
+                '2014-10-09',
             ),
             array(
                 array(
                     'date_format' => 'Y/m/d',
                 ),
-                '2014/10/09'
+                '2014/10/09',
             ),
         );
     }
