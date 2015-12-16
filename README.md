@@ -1,6 +1,7 @@
 # Symfony CMF Routing Auto Component
 
 [![Build Status](https://secure.travis-ci.org/symfony-cmf/RoutingAuto.png)](http://travis-ci.org/symfony-cmf/RoutingAuto)
+[![StyleCI](https://styleci.io/repos/21073460/shield)](https://styleci.io/repos/21073460)
 [![Latest Stable Version](https://poser.pugx.org/symfony-cmf/routing-auto/version.png)](https://packagist.org/packages/symfony-cmf/routing-auto)
 [![Total Downloads](https://poser.pugx.org/symfony-cmf/routing-auto/d/total.png)](https://packagist.org/packages/symfony-cmf/routing-auto)
 
