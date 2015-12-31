@@ -244,7 +244,7 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 
             $this->tokenProviders[$providerName]->provideValue($this->uriContext, $tokenProviderConfig['options'])
                 ->willReturn($tokenProviderConfig['value']);
-            $this->tokenProviders[$providerName]->configureOptions(Argument::type('Symfony\Component\OptionsResolver\OptionsResolverInterface'))->shouldBeCalled();
+            $this->tokenProviders[$providerName]->configureOptions(Argument::type('Symfony\Component\OptionsResolver\OptionsResolver'))->shouldBeCalled();
         }
 
         $res = $this->uriGenerator->generateUri($this->uriContext->reveal());

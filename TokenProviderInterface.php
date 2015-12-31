@@ -11,7 +11,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 interface TokenProviderInterface
 {
@@ -31,5 +31,5 @@ interface TokenProviderInterface
      *
      * @param OptionsResolverInterface $optionsResolver
      */
-    public function configureOptions(OptionsResolverInterface $optionsResolver);
+    public function configureOptions(OptionsResolver $optionsResolver);
 }

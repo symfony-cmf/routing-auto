@@ -12,7 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 
 use Symfony\Cmf\Api\Slugifier\SlugifierInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ContentMethodProvider extends BaseContentMethodProvider
@@ -39,22 +39,12 @@ class ContentMethodProvider extends BaseContentMethodProvider
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolverInterface $optionsResolver)
+    public function configureOptions(OptionsResolver $optionsResolver)
     {
         parent::configureOptions($optionsResolver);
 
-        $optionsResolver->setDefaults(array(
-            'slugify' => true,
-        ));
+        $optionsResolver->setDefault('slugify', true);
 
-        $newApi = method_exists($optionsResolver, 'setDefined');
-
-        if ($newApi) {
-            $optionsResolver->setAllowedTypes('slugify', 'bool');
-        } else {
-            $optionsResolver->setAllowedTypes(array(
-                'slugify' => 'bool',
-            ));
-        }
+        $optionsResolver->setAllowedTypes('slugify', 'bool');
     }
 }

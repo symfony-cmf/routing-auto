@@ -11,7 +11,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ContentDateTimeProvider extends BaseContentMethodProvider
@@ -34,17 +34,11 @@ class ContentDateTimeProvider extends BaseContentMethodProvider
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolverInterface $optionsResolver)
+    public function configureOptions(OptionsResolver $optionsResolver)
     {
         parent::configureOptions($optionsResolver);
 
-        $optionsResolver->setRequired(array(
-            'date_format',
-        ));
-
-        $optionsResolver->setDefaults(array(
-            'date_format' => 'Y-m-d',
-        ));
+        $optionsResolver->setDefault('date_format', 'Y-m-d');
 
         $slugifyNormalizer = function ($options, $value) {
             if (null !== $value) {
@@ -52,18 +46,8 @@ class ContentDateTimeProvider extends BaseContentMethodProvider
             }
         };
 
-        if (method_exists($optionsResolver, 'setDefined')) {
-            // new OptionsResolver API (Symfony 2.6+)
-            $optionsResolver->setAllowedTypes('date_format', 'string');
-            $optionsResolver->setDefined(array('slugify'));
-            $optionsResolver->setNormalizer('slugify', $slugifyNormalizer);
-        } else {
-            // old API (Symfony <2.6)
-            $optionsResolver->setAllowedTypes(array('date_format' => 'string'));
-            $optionsResolver->setOptional(array('slugify'));
-            $optionsResolver->setNormalizers(array(
-            'slugify' => $slugifyNormalizer,
-            ));
-        }
+        $optionsResolver->setAllowedTypes('date_format', 'string');
+        $optionsResolver->setDefined('slugify');
+        $optionsResolver->setNormalizer('slugify', $slugifyNormalizer);
     }
 }

@@ -13,7 +13,7 @@ namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class BaseContentMethodProvider implements TokenProviderInterface
 {
@@ -43,9 +43,9 @@ abstract class BaseContentMethodProvider implements TokenProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolverInterface $optionsResolver)
+    public function configureOptions(OptionsResolver $optionsResolver)
     {
-        $optionsResolver->setRequired(array('method'));
+        $optionsResolver->setRequired('method');
     }
 
     /**
