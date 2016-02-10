@@ -23,7 +23,7 @@ class AutoRouteCreateEvent extends Event
     /**
      * @var UriContext
      */
-    private $uriContext;
+    private $path;
 
     /**
      * @var AutoRouteInterface
@@ -32,22 +32,22 @@ class AutoRouteCreateEvent extends Event
 
     /**
      * @param AutoRouteInterface $autoRoute
-     * @param UriContext         $uriContext
+     * @param UriContext         $path
      */
-    public function __construct(AutoRouteInterface $autoRoute, UriContext $uriContext)
+    public function __construct(AutoRouteInterface $autoRoute, UriContext $path)
     {
-        $this->uriContext = $uriContext;
+        $this->path = $path;
         $this->autoRoute = $autoRoute;
     }
 
     /**
      * Return the URI context.
      *
-     * @return UriContext
+     * @return string
      */
-    public function getUriContext()
+    public function getPath()
     {
-        return $this->uriContext;
+        return $this->path;
     }
 
     /**

@@ -80,11 +80,10 @@ interface AdapterInterface
      * URLs for example.
      *
      * @param string     $uri        The URI to find
-     * @param UriContext $uriContext The current URI context
      *
      * @return null|Symfony\Cmf\Component\Routing\RouteObjectInterface
      */
-    public function findRouteForUri($uri, UriContext $uriContext);
+    public function findRouteForUri($uri);
 
     /**
      * Generate a tag which can be used to identify this route from
