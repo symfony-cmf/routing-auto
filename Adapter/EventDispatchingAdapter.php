@@ -78,10 +78,10 @@ class EventDispatchingAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function createAutoRoute(UriContext $uriContext, $contentDocument, $autoRouteTag)
+    public function createAutoRoute($path, $contentDocument, $autoRouteTag)
     {
-        $autoRoute = $this->adapter->createAutoRoute($uriContext, $contentDocument, $autoRouteTag);
-        $this->dispatcher->dispatch(RoutingAutoEvents::POST_CREATE, new AutoRouteCreateEvent($autoRoute, $uriContext));
+        $autoRoute = $this->adapter->createAutoRoute($path, $contentDocument, $autoRouteTag);
+        $this->dispatcher->dispatch(RoutingAutoEvents::POST_CREATE, new AutoRouteCreateEvent($autoRoute, $path));
 
         return $autoRoute;
     }
@@ -121,8 +121,8 @@ class EventDispatchingAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function findRouteForUri($uri, UriContext $uriContext)
+    public function findRouteForUri($uri)
     {
-        return $this->adapter->findRouteForUri($uri, $uriContext);
+        return $this->adapter->findRouteForUri($uri);
     }
 }

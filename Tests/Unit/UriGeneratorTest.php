@@ -122,6 +122,26 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
                     ),
                 ),
             ),
+            array(
+                '/{parent_locator}/{title}',
+                '/title',
+                array(
+                    'parent_locator' => array(
+                        'name' => 'foobar_provider',
+                        'value' => '',
+                        'options' => array(
+                            'allow_empty' => true,
+                        ),
+                    ),
+                    'title' => array(
+                        'name' => 'bar_provider',
+                        'value' => 'title',
+                        'options' => array(
+                            'allow_empty' => true,
+                        ),
+                    ),
+                ),
+            ),
             // if the token value is a single "/" then it should be treated as an empty value and
             // any trailing slash should be collapsed.
             array(
@@ -225,7 +245,7 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->metadata->getUriSchema()
             ->willReturn($uriSchema);
 
-        foreach ($tokenProviderConfigs as $tokenName => $tokenProviderConfig) {
+        foreach ($tokenProviderConfigs as $tokenProviderConfig) {
             // set the defaults for the predictions
             $tokenProviderConfig['options'] = array_merge(array(
                 'allow_empty' => false,
