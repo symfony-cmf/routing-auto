@@ -77,7 +77,7 @@ class AutoRouteManager
 
             if (!$autoRoute) {
                 $autoRouteTag = $this->adapter->generateAutoRouteTag($uriContext);
-                $autoRoute = $this->adapter->createAutoRoute($uriContext, $uriContext->getSubjectObject(), $autoRouteTag);
+                $autoRoute = $this->adapter->createAutoRoute($uriContext->getUri(), $uriContext->getSubjectObject(), $autoRouteTag);
             }
 
             $uriContext->setAutoRoute($autoRoute);
