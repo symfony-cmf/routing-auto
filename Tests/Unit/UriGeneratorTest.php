@@ -217,6 +217,21 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
                     'InvalidArgumentException', 'Token provider "foobar_provider" returned an empty value',
                 ),
             ),
+            // it should not throw a warning if the allow_empty option is absent and the value is empty.
+            array(
+                '/{parent}/title',
+                '/title',
+                array(
+                    'parent' => array(
+                        'name' => 'foobar_provider',
+                        'value' => '',
+                        'options' => array(),
+                    ),
+                ),
+                array(
+                    'InvalidArgumentException', 'Token provider "foobar_provider" returned an empty value',
+                ),
+            ),
         );
     }
 
