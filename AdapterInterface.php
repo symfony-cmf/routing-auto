@@ -43,13 +43,13 @@ interface AdapterInterface
      * Create a new auto route at the given path
      * with the given document as the content.
      *
-     * @param UriContext $uriContext
-     * @param object     $document
-     * @param string     $tag
+     * @param string $path
+     * @param object $document
+     * @param string $tag
      *
      * @return AutoRouteInterface new route document
      */
-    public function createAutoRoute(UriContext $uriContext, $document, $tag);
+    public function createAutoRoute($path, $document, $tag);
 
     /**
      * Return the canonical name for the given class, this is
@@ -79,7 +79,7 @@ interface AdapterInterface
      * this will happen when the ConflictResolver is trying to find candidate
      * URLs for example.
      *
-     * @param string     $uri        The URI to find
+     * @param string $uri The URI to find
      *
      * @return null|Symfony\Cmf\Component\Routing\RouteObjectInterface
      */

@@ -63,7 +63,7 @@ interface AutoRouteInterface extends RouteObjectInterface
      *
      * @param AutoRouteInterface AutoRoute to redirect to.
      */
-    public function setRedirectTarget($autoTarget);
+    public function setRedirectTarget(AutoRouteInterface $autoTarget);
 
     /**
      * Return the redirect target (when the auto route is of type

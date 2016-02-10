@@ -34,14 +34,14 @@ class AutoRouteCreateEvent extends Event
      * @param AutoRouteInterface $autoRoute
      * @param UriContext         $path
      */
-    public function __construct(AutoRouteInterface $autoRoute, UriContext $path)
+    public function __construct(AutoRouteInterface $autoRoute, $path)
     {
         $this->path = $path;
         $this->autoRoute = $autoRoute;
     }
 
     /**
-     * Return the URI context.
+     * Return the path (uri) of the newly created route.
      *
      * @return string
      */
