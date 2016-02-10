@@ -1,6 +1,9 @@
 Changelog
 =========
 
+* **2016-02-01**: [BC Break] Removed CmfCoreBundle dependency in favor of
+                  SlugifierApi and changed constructor signature of `ContentMethodProvider`
+                  to use the new interface.
 * **2015-09-15**: [BC Break] Removed type hint from `AutoRouteInterface::setRedirectTarget()`
                   to allow the redirect target to be a content document.
 * **2015-09-05**: "Leave Redirect" defunct route handler now migrates any children
