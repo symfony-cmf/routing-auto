@@ -69,9 +69,9 @@ class UriGenerator implements UriGeneratorInterface
             $optionsResolver = new OptionsResolver();
             $this->configureGlobalOptions($optionsResolver);
             $tokenProvider->configureOptions($optionsResolver);
-            $tokenProviderOptions = $tokenProviderConfig['options'];
+            $tokenProviderOptions = $optionsResolver->resolve($tokenProviderConfig['options']);
 
-            $tokenValue = $tokenProvider->provideValue($uriContext, $optionsResolver->resolve($tokenProviderOptions));
+            $tokenValue = $tokenProvider->provideValue($uriContext, $tokenProviderOptions);
 
             $isEmpty = empty($tokenValue) || $tokenValue == '/';
 
