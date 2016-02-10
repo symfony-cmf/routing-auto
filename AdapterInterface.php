@@ -43,13 +43,13 @@ interface AdapterInterface
      * Create a new auto route at the given path
      * with the given document as the content.
      *
-     * @param UriContext $uriContext
+     * @param string     $path
      * @param object     $document
      * @param string     $tag
      *
      * @return AutoRouteInterface new route document
      */
-    public function createAutoRoute(UriContext $uriContext, $document, $tag);
+    public function createAutoRoute($path, $document, $tag);
 
     /**
      * Return the canonical name for the given class, this is

@@ -12,6 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Model;
 
 use Symfony\Cmf\Component\Routing\RouteObjectInterface;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
 /**
  * Interface to be implemented by objects which represent
@@ -63,7 +64,7 @@ interface AutoRouteInterface extends RouteObjectInterface
      *
      * @param AutoRouteInterface AutoRoute to redirect to.
      */
-    public function setRedirectTarget($autoTarget);
+    public function setRedirectTarget(AutoRouteInterface $autoTarget);
 
     /**
      * Return the redirect target (when the auto route is of type
