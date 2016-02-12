@@ -29,11 +29,18 @@ class ContentMethodProvider extends BaseContentMethodProvider
      */
     protected function normalizeValue($value, UriContext $uriContext, $options)
     {
-        if ($options['slugify']) {
-            $value = $this->slugifier->slugify($value);
+        $values = array($value);
+        if ($options['preserve_slashes']) {
+            $values = explode('/', $value);
         }
 
-        return $value;
+        if ($options['slugify']) {
+            foreach ($values as &$value) {
+                $value = $this->slugifier->slugify($value);
+            }
+        }
+
+        return implode('/', $values);
     }
 
     /**
@@ -45,6 +52,7 @@ class ContentMethodProvider extends BaseContentMethodProvider
 
         $optionsResolver->setDefaults(array(
             'slugify' => true,
+            'preserve_slashes' => false,
         ));
 
         $newApi = method_exists($optionsResolver, 'setDefined');
