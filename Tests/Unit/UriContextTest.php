@@ -25,7 +25,7 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSet()
     {
-        $uriContext = new UriContext($this->subjectObject, 'fr');
+        $uriContext = new UriContext($this->subjectObject, '/uri/', array('default1' => 'value1'), array('token'), array('conflict'), 'fr');
 
         // locales
         $this->assertEquals('fr', $uriContext->getLocale());
@@ -41,5 +41,23 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
         // auto route
         $uriContext->setAutoRoute($this->autoRoute);
         $this->assertEquals($this->autoRoute, $uriContext->getAutoRoute());
+
+        // the translated subject should be initially set as the original subject
+        $this->assertSame($this->subjectObject, $uriContext->getTranslatedSubjectObject());
+        $transSubject = new \stdClass();
+        $uriContext->setTranslatedSubjectObject($transSubject);
+        $this->assertSame($transSubject, $uriContext->getTranslatedSubjectObject());
+
+        // uri schema
+        $this->assertEquals('/uri/', $uriContext->getUriSchema());
+
+        // token provider configs
+        $this->assertEquals(array('token'), $uriContext->getTokenProviderConfigs());
+
+        // conflict resolver configs
+        $this->assertEquals(array('conflict'), $uriContext->getConflictResolverConfig());
+
+        // defaults
+        $this->assertEquals(array('default1' => 'value1'), $uriContext->getDefaults());
     }
 }

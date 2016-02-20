@@ -1,0 +1,5 @@
+stdClass:
+    definitions:
+        does_not_have_uri_schema:
+            defaults: 
+                foo: bar

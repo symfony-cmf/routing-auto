@@ -1,4 +1,6 @@
 stdClass:
-    uri_schema: /forum/{category}/{post_title}
+    definitions:
+        _default:
+            uri_schema: /forum/{category}/{post_title}
     token_providers:
         category: [foo]

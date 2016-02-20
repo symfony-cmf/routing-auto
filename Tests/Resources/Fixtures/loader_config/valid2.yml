@@ -1,5 +1,7 @@
 stdClass:
-    uri_schema: /forum/{category}/{post_name}
+    definitions:
+        _default:
+            uri_schema: /forum/{category}/{post_name}
     token_providers:
         category: [method, { method: getCategoryName }]
         post_name: [method, { method: getName }]

@@ -1,2 +1,4 @@
 stdClass:
-    uri_schema: /cmf/blog
+    definitions:
+        _default:
+            uri_schema: /cmf/blog

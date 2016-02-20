@@ -1,6 +1,10 @@
 stdClass:
-    uri_schema: /forum/{category}/{post_name}
+    definitions:
+        _default:
+            uri_schema: /forum/{category}/{post_name}
 
 Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass:
-    uri_schema: /forum/{category}
+    definitions:
+        _default:
+            uri_schema: /forum/{category}
     extend: stdClass

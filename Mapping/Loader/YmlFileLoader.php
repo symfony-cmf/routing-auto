@@ -14,6 +14,7 @@ namespace Symfony\Cmf\Component\RoutingAuto\Mapping\Loader;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
 use Symfony\Component\Yaml\Parser as YamlParser;
 use Symfony\Component\Config\Loader\FileLoader;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
 
 /**
  * @author Wouter J <wouter@wouterj.nl>
@@ -60,7 +61,7 @@ class YmlFileLoader extends FileLoader
 
         $metadatas = array();
         foreach ($config as $className => $mappingNode) {
-            $metadatas[] = $this->parseMappingNode($className, $mappingNode, $path);
+            $metadatas[] = $this->parseMappingNode($className, (array) $mappingNode, $path);
         }
 
         return $metadatas;
@@ -76,27 +77,38 @@ class YmlFileLoader extends FileLoader
         if (!class_exists($className)) {
             throw new \InvalidArgumentException(sprintf('Configuration found for unknown class "%s" in "%s".', $className, $path));
         }
+
         $classMetadata = new ClassMetadata($className);
 
-        $validKeys = array(
-            'uri_schema',
-            'conflict_resolver',
-            'defunct_route_handler',
-            'extend',
-            'token_providers',
+        $this->validateNode(
+            $mappingNode,
+            array(
+                'uri_schema',
+                'definitions',
+                'conflict_resolver',
+                'defunct_route_handler',
+                'extend',
+                'token_providers',
+            ),
+            sprintf(
+                'routing auto class metadata (%s)',
+                $className
+            )
         );
 
-        foreach ($mappingNode as $key => $value) {
-            if (!in_array($key, $validKeys)) {
-                throw new \InvalidArgumentException(sprintf(
-                    'Invalid configuration key "%s". Valid keys are "%s"',
-                    $key, implode(',', $validKeys)
-                ));
-            }
+        if (!isset($mappingNode['definitions'])) {
+            throw new \InvalidArgumentException(sprintf(
+                'Mapping node for "%s" must define a list of auto route definitions under the `definitions` key.',
+                $className
+            ));
+        }
 
+        foreach ($mappingNode as $key => $value) {
             switch ($key) {
-                case 'uri_schema':
-                    $classMetadata->setUriSchema($value);
+                case 'definitions':
+                    foreach ($this->getAutoRouteDefinitions($value) as $definitionName => $definition) {
+                        $classMetadata->setAutoRouteDefinition($definitionName, $definition);
+                    }
                     break;
                 case 'conflict_resolver':
                     $classMetadata->setConflictResolver($this->parseServiceConfig($mappingNode['conflict_resolver'], $className, $path));
@@ -111,6 +123,11 @@ class YmlFileLoader extends FileLoader
                     foreach ($mappingNode['token_providers'] as $tokenName => $provider) {
                         $classMetadata->addTokenProvider($tokenName, $this->parseServiceConfig($provider, $className, $path));
                     }
+                    break;
+                default:
+                    throw new \InvalidArgumentException(sprintf(
+                        'Unknown mapping key "%s"', $key
+                    ));
             }
         }
 
@@ -169,5 +186,72 @@ class YmlFileLoader extends FileLoader
         }
 
         return $this->parser;
+    }
+
+    protected function getAutoRouteDefinitions($definitionsNode)
+    {
+        if (!is_array($definitionsNode)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Expected array or scalar definitionNode, got "%s"',
+                is_object($definitionsNode) ? get_class($definitionsNode) : gettype($definitionsNode)
+            ));
+        }
+
+        $definitions = array();
+        foreach ($definitionsNode as $definitionName => $definitionNode) {
+            $this->validateNode(
+                $definitionNode,
+                array(
+                    'uri_schema',
+                    'defaults',
+                ),
+                'auto route definition'
+            );
+
+            // set default values
+            $definitionNode = array_merge(
+                array(
+                    'defaults' => array(),
+                ),
+                $definitionNode
+            );
+
+            if (!isset($definitionNode['uri_schema'])) {
+                throw new \InvalidArgumentException(
+                    'All auto route definitions must have a `uri_schema` defined.'
+                );
+            }
+
+            $definitions[$definitionName] = new AutoRouteDefinition($definitionNode['uri_schema'], $definitionNode['defaults']);
+        }
+
+        return $definitions;
+    }
+
+    /**
+     * Ensure that $data contains only the keys given by $validKeys.
+     *
+     * @param mixed[]  $data
+     * @param string[] $validKeys
+     * @param string   $context
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return mixed[]
+     */
+    protected function validateNode(array $data, array $validKeys, $context)
+    {
+        $diff = array_diff(array_keys($data), $validKeys);
+
+        if (!$diff) {
+            return;
+        }
+
+        throw new \InvalidArgumentException(sprintf(
+            '[%s] Invalid keys "%s" Valid keys "%s"',
+            $context,
+            implode('", "', $diff),
+            implode('", "', $validKeys)
+        ));
     }
 }

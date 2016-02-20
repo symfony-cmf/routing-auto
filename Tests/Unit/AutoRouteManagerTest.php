@@ -12,83 +12,153 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
-use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
 class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 {
+    private $adapter;
+    private $uriGenerator;
+    private $defunctRouteHandler;
+    private $collectionBuilder;
+
     public function setUp()
     {
-        $this->driver = $this->getMock('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
-        $this->uriGenerator = $this->getMock('Symfony\Cmf\Component\RoutingAuto\UriGeneratorInterface');
-        $this->defunctRouteHandler = $this->getMock('Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface');
-        $this->autoRouteManager = new AutoRouteManager(
-            $this->driver,
-            $this->uriGenerator,
-            $this->defunctRouteHandler
-        );
-    }
+        $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
+        $this->uriGenerator = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriGeneratorInterface');
+        $this->defunctRouteHandler = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface');
+        $this->collectionBuilder = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContextCollectionBuilder');
 
-    public function provideBuildUriContextCollection()
-    {
-        return array(
-            array(
-                array(
-                    'locales' => array('en', 'fr', 'de', 'be'),
-                    'uris' => array(
-                        '/en/this-is-an-route' => array('conflict' => false),
-                        '/fr/this-is-an-route' => array('conflict' => false),
-                        '/de/this-is-an-route' => array('conflict' => false),
-                        '/be/this-is-an-route' => array('conflict' => false),
-                    ),
-                    'existingRoute' => false,
-                ),
-            ),
+        $this->manager = new AutoRouteManager(
+            $this->adapter->reveal(),
+            $this->uriGenerator->reveal(),
+            $this->defunctRouteHandler->reveal(),
+            $this->collectionBuilder->reveal()
         );
+
+        $this->collection = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContextCollection');
+        $this->context1 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
+        $this->context2 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
+        $this->autoRoute1 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
+        $this->autoRoute2 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
+
+        $this->subject = new \stdClass();
     }
 
     /**
-     * @dataProvider provideBuildUriContextCollection
+     * It should delegate the generation of the collection and resolve the URIs
+     * in it (for non-existing URIs).
+     * It should handle defunct routes.
      */
-    public function testBuildUriContextCollection($params)
+    public function testBuildCollection()
     {
-        $params = array_merge(array(
-            'locales' => array(),
-            'uris' => array(),
-        ), $params);
+        $this->prepareBuildCollection();
 
-        $this->driver->expects($this->once())
-            ->method('getLocales')
-            ->will($this->returnValue($params['locales']));
+        $this->context1->getLocale()->willReturn(null);
+        $this->context2->getLocale()->willReturn(null);
 
-        $localesCount = count($params['locales']);
-        $uris = $params['uris'];
-        $indexedUris = array_keys($uris);
-        $expectedRoutes = array();
-        $document = new \stdClass();
+        $this->manager->buildUriContextCollection($this->collection->reveal());
 
-        for ($i = 0; $i < $localesCount; ++$i) {
-            $expectedRoutes[] = $this->getMock('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
+        // test handle defunt routes:
+        // would like to make this a separate test with @depends
+        // but PHPUnit does not allow it.
+        $this->defunctRouteHandler->handleDefunctRoutes($this->collection->reveal())->shouldBeCalled();
+        $this->manager->handleDefunctRoutes();
+    }
 
-            $this->uriGenerator->expects($this->exactly($localesCount))
-                ->method('generateUri')
-                ->will($this->returnCallback(function () use ($i, $indexedUris) {
-                    return $indexedUris[$i];
-                }));
+    /**
+     * It should translate subject objects.
+     */
+    public function testBuildCollectionTranslate()
+    {
+        $this->prepareBuildCollection();
+        $translatedSubject = new \stdClass();
+
+        $this->context1->getLocale()->willReturn('fr');
+        $this->context2->getLocale()->willReturn('de');
+        $this->adapter->translateObject($this->subject, 'fr')->willReturn($translatedSubject)->shouldBeCalled();
+        $this->adapter->translateObject($this->subject, 'de')->willReturn($this->subject)->shouldBeCalled();
+        $this->context1->setTranslatedSubjectObject($this->subject)->shouldBeCalled();
+
+        $this->manager->buildUriContextCollection($this->collection->reveal());
+    }
+
+    private function prepareBuildCollection()
+    {
+        $this->collectionBuilder->build($this->collection->reveal());
+        $this->collection->getUriContexts()->willReturn(array(
+            $this->context1->reveal(),
+            $this->context2->reveal(),
+        ));
+        $this->collection->getSubjectObject()->willReturn($this->subject);
+
+        for ($index = 1; $index <= 2; ++$index) {
+            $contextVar = 'context'.$index;
+            $uri = '/uri'.$index;
+            $autoRouteVar = 'autoRoute'.$index;
+
+            $this->uriGenerator->generateUri($this->{$contextVar}->reveal())->willReturn($uri);
+            $this->{$contextVar}->getSubjectObject()->willReturn($this->subject);
+            $this->{$contextVar}->setUri($uri)->shouldBeCalled();
+
+            $this->adapter->findRouteForUri($uri, $this->{$contextVar})->willReturn(null);
+            $this->adapter->generateAutoRouteTag($this->{$contextVar}->reveal())->willReturn('fr');
+            $this->adapter->createAutoRoute($this->{$contextVar}, $this->subject, 'fr')->willReturn($this->{$autoRouteVar}->reveal());
+            $this->{$contextVar}->setAutoRoute($this->{$autoRouteVar}->reveal())->shouldBeCalled();
+        }
+    }
+
+    /**
+     * It should handle existing URIs.
+     *
+     * @dataProvider provideBuildCollectionExisting
+     */
+    public function testBuildCollectionExisting($sameContent)
+    {
+        $uri = '/uri/to';
+        $resolvedUri = '/resolved/uri';
+
+        $this->collectionBuilder->build($this->collection->reveal());
+        $this->collection->getUriContexts()->willReturn(array(
+            $this->context1->reveal(),
+        ));
+        $this->collection->getSubjectObject()->willReturn($this->subject);
+        $this->uriGenerator->generateUri($this->context1->reveal())->willReturn($uri);
+        $this->context1->setUri($uri)->shouldBeCalled();
+        $this->context1->getLocale()->willReturn(null);
+        $this->context1->getSubjectObject()->willReturn($this->subject);
+        $this->adapter->findRouteForUri($uri, $this->context1)->willReturn(
+            $this->autoRoute1->reveal()
+        );
+
+        // handle existing route
+        $this->adapter->compareAutoRouteContent(
+            $this->autoRoute1->reveal(),
+            $this->subject
+        )->willReturn($sameContent);
+
+        $this->context1->getSubjectObject()->willReturn($this->subject);
+
+        if ($sameContent) {
+            $this->autoRoute1->setType(AutoRouteInterface::TYPE_PRIMARY)
+                ->shouldBeCalled();
+        } else {
+            $this->uriGenerator->resolveConflict($this->context1->reveal())
+                ->willReturn($resolvedUri);
+            $this->context1->setUri($resolvedUri)->shouldBeCalled();
+            $this->adapter->generateAutoRouteTag($this->context1->reveal())->willReturn('fr');
+            $this->adapter->createAutoRoute($this->context1, $this->subject, 'fr')->willReturn($this->autoRoute1->reveal());
         }
 
-        $this->driver->expects($this->exactly($localesCount))
-            ->method('createAutoRoute')
-            ->will($this->returnCallback(function ($uri, $document) use ($expectedRoutes) {
-                static $i = 0;
+        $this->context1->setAutoRoute($this->autoRoute1->reveal())->shouldBeCalled();
 
-                return $expectedRoutes[$i++];
-            }));
+        $this->manager->buildUriContextCollection($this->collection->reveal());
+    }
 
-        $uriContextCollection = new UriContextCollection($document);
-        $this->autoRouteManager->buildUriContextCollection($uriContextCollection);
-
-        foreach ($expectedRoutes as $expectedRoute) {
-            $this->assertTrue($uriContextCollection->containsAutoRoute($expectedRoute), 'URL context collection contains route: '.spl_object_hash($expectedRoute));
-        }
+    public function provideBuildCollectionExisting()
+    {
+        return array(
+            array(true),
+            array(false),
+        );
     }
 }

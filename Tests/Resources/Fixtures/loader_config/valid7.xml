@@ -1,7 +1,14 @@
 <?xml version="1.0" ?>
 <auto-mapping xmlns="http://cmf.symfony.com/schema/routing_auto">
     <mapping class="stdClass">
-        <definition name="_default" uri-schema="/blog/{category}/{slug}"/>
+        <definition name="edit" uri-schema="/forum/{category}/{post_title}/edit">
+            <default key="_type">edit</default>
+        </definition>
+
+        <definition name="view" uri-schema="/forum/{category}/{post_title}/view">
+            <default key="_type">view</default>
+        </definition>
+
         <conflict-resolver name="auto_increment">
             <option name="token">category</option>
         </conflict-resolver>

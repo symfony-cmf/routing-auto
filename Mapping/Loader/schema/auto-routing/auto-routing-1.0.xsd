@@ -14,14 +14,24 @@
 
     <xsd:complexType name="mapping">
         <xsd:sequence>
+            <xsd:element name="definition" type="definition" minOccurs="0" maxOccurs="unbounded" />
             <xsd:element name="conflict-resolver" type="conflict-resolver" minOccurs="0" />
             <xsd:element name="defunct-route-handler" type="defunct-route-handler" minOccurs="0" />
             <xsd:element name="token-provider" type="token-provider" minOccurs="0" maxOccurs="unbounded" />
         </xsd:sequence>
 
         <xsd:attribute name="class" type="xsd:string" />
-        <xsd:attribute name="uri-schema" type="xsd:string" />
+
         <xsd:attribute name="extend" type="xsd:string" />
+    </xsd:complexType>
+
+    <xsd:complexType name="definition">
+        <xsd:sequence>
+            <xsd:element name="default" type="default" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:sequence>
+
+        <xsd:attribute name="uri-schema" type="xsd:string" />
+        <xsd:attribute name="name" type="xsd:string" />
     </xsd:complexType>
 
     <xsd:complexType name="token-provider">
@@ -53,6 +63,14 @@
         <xsd:simpleContent>
             <xsd:extension base="xsd:string">
                 <xsd:attribute name="name" type="xsd:string" />
+            </xsd:extension>
+        </xsd:simpleContent>
+    </xsd:complexType>
+
+    <xsd:complexType name="default">
+        <xsd:simpleContent>
+            <xsd:extension base="xsd:string">
+                <xsd:attribute name="key" type="xsd:string" />
             </xsd:extension>
         </xsd:simpleContent>
     </xsd:complexType>

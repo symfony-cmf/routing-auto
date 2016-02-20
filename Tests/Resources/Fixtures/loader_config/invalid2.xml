@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<auto-mapping xmlns="http://cmf.symfony.com/schema/routing_auto">
+    <!-- Invalid: Cannot define both uri-schema and <url-schema>'s -->
+    <mapping class="stdClass"
+        uri-schema="/cmf/blog"
+        >
+        <definition uri-schema="/cmf/blog" />
+    </mapping>
+</auto-mapping>

@@ -1,6 +1,11 @@
 Changelog
 =========
 
+* **2016-02-17**: [BC Break] Semantics for URI definitions have changed to
+                  permit the definition of multiple routes, see:
+                  http://symfony.com/doc/current/cmf/bundles/routing_auto/introduction.html#usage
+* **2015-12-28**: [BC Break] AutoRouteManager requires an
+                  UriContextCollectionBuilder in its constructor.
 * **2016-02-01**: [BC Break] Removed CmfCoreBundle dependency in favor of
                   SlugifierApi and changed constructor signature of `ContentMethodProvider`
                   to use the new interface.
