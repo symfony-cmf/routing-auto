@@ -12,6 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Sulu\Component\DocumentManager\ClassNameInflector;
 
 /**
  * Adapters will abstract all persistence operations.
