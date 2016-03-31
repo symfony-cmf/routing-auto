@@ -16,7 +16,7 @@ use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 
 /**
- * This conflict resolver will generate candidate URLs by appending 
+ * This conflict resolver will generate candidate URLs by appending
  * a number to the URL. It will keep incrementing this number until
  * the URL does not exist.
  *
