@@ -1,8 +1,14 @@
 Changelog
 =========
 
-1.1
----
+1.1.0
+-----
+
+* **2016-03-31**: [BC Break] Moved the SymfonyContainerParameterTokenProvider to the
+                  RoutingAutoBundle package
+
+1.1.0-RC1
+---------
 
 * **2016-02-01**: [BC Break] Removed CmfCoreBundle dependency in favor of
                   SlugifierApi and changed constructor signature of `ContentMethodProvider`
