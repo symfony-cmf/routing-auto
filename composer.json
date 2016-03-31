@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^5.3.9|^7.0",
-        "symfony-cmf/slugifier-api": "^1.0@rc",
+        "symfony-cmf/slugifier-api": "^1.0",
         "symfony-cmf/routing": "^1.2",
         "symfony/options-resolver": "^2.2",
         "symfony/config": "^2.2|3.*",
