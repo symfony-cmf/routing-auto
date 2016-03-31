@@ -20,7 +20,7 @@ use Symfony\Component\Config\Loader\FileLoader;
  */
 class YmlFileLoader extends FileLoader
 {
-    /** 
+    /**
      * @var null|YamlParser
      */
     private $parser;
