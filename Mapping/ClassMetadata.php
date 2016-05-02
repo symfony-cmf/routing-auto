@@ -26,7 +26,7 @@ class ClassMetadata extends MergeableClassMetadata
      */
     protected $tokenProviders = array();
 
-    /** 
+    /**
      * @var array
      */
     protected $conflictResolver = array('name' => 'throw_exception', 'options' => array());

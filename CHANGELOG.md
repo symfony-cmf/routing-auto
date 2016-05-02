@@ -4,11 +4,14 @@ Changelog
 * **2016-02-17**: [BC Break] Semantics for URI definitions have changed to
                   permit the definition of multiple routes, see:
                   http://symfony.com/doc/current/cmf/bundles/routing_auto/introduction.html#usage
-* **2015-12-28**: [BC Break] AutoRouteManager requires an
-                  UriContextCollectionBuilder in its constructor.
 * **2016-02-01**: [BC Break] Removed CmfCoreBundle dependency in favor of
                   SlugifierApi and changed constructor signature of `ContentMethodProvider`
                   to use the new interface.
+* **2015-12-31**: [BC Break] Changed the type hint of `TokenProviderInterface::configureOptions()`
+                  from `OptionsResolverInterface` to `OptionsResolver` to be compatible
+                  with Symfony 3.
+* **2015-12-28**: [BC Break] AutoRouteManager requires an
+                  UriContextCollectionBuilder in its constructor.
 * **2015-09-15**: [BC Break] Removed type hint from `AutoRouteInterface::setRedirectTarget()`
                   to allow the redirect target to be a content document.
 * **2015-09-05**: "Leave Redirect" defunct route handler now migrates any children

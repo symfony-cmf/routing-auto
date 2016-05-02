@@ -21,7 +21,7 @@ use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
  */
 class YmlFileLoader extends FileLoader
 {
-    /** 
+    /**
      * @var null|YamlParser
      */
     private $parser;

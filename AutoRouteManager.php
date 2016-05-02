@@ -129,7 +129,7 @@ class AutoRouteManager
 
     /**
      * Handle the case where the generated path already exists.
-     * Either if it does not reference the same content then we 
+     * Either if it does not reference the same content then we
      * have a conflict which needs to be resolved.
      *
      * @param Route      $route

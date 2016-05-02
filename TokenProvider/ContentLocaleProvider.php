@@ -12,7 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 
 use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ContentLocaleProvider implements TokenProviderInterface
@@ -28,7 +28,7 @@ class ContentLocaleProvider implements TokenProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function configureOptions(OptionsResolverInterface $optionsResolver)
+    public function configureOptions(OptionsResolver $optionsResolver)
     {
     }
 }

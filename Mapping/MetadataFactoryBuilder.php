@@ -20,12 +20,12 @@ use Symfony\Component\Config\Loader\LoaderInterface;
  */
 class MetadataFactoryBuilder
 {
-    /** 
+    /**
      * @var array
      */
     protected $resources;
 
-    /** 
+    /**
      * @var LoaderInterface
      */
     protected $loader;
