@@ -33,7 +33,7 @@ interface AdapterInterface
      * Translate the given object into the given locale.
      *
      * @param object $object
-     * @param string $locale E.g. fr, en, etc.
+     * @param string $locale E.g. fr, en, etc
      *
      * @return object The translated subject object
      */
