@@ -20,7 +20,7 @@ class ServiceRegistry
     /**
      * Return the named token provider.
      *
-     * @throws \InvalidArgumentException if the named token provider does not exist.
+     * @throws \InvalidArgumentException if the named token provider does not exist
      *
      * @return TokenProviderInterface
      */
@@ -39,7 +39,7 @@ class ServiceRegistry
     /**
      * Return the named conflict resolver.
      *
-     * @throws \InvalidArgumentException if the named token provider does not exist.
+     * @throws \InvalidArgumentException if the named token provider does not exist
      *
      * @return ConflictResolverInterface
      */
@@ -58,7 +58,7 @@ class ServiceRegistry
     /**
      * Return the named conflict resolver.
      *
-     * @throws \InvalidArgumentException if the named token provider does not exist.
+     * @throws \InvalidArgumentException if the named token provider does not exist
      *
      * @return ConflictResolverInterface
      */
