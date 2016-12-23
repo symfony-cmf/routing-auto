@@ -53,7 +53,7 @@ class ContentDateTimeProviderTest extends \PHPUnit_Framework_TestCase
             'slugify' => true,
         ), $options);
 
-        $this->uriContext->getSubjectObject()->willReturn($this->article);
+        $this->uriContext->getSubject()->willReturn($this->article);
         $this->article->getDate()->willReturn(new \DateTime('2014-10-09'));
 
         $res = $this->provider->provideValue($this->uriContext->reveal(), $options);

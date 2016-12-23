@@ -60,7 +60,7 @@ class ContentMethodProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetValue($options, $methodExists = false)
     {
         $method = $options['method'];
-        $this->uriContext->getSubjectObject()->willReturn($this->article);
+        $this->uriContext->getSubject()->willReturn($this->article);
 
         if (!$methodExists) {
             $this->setExpectedException(

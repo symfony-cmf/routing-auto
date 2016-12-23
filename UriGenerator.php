@@ -90,7 +90,7 @@ class UriGenerator implements UriGeneratorInterface
         if (substr($uri, 0, 1) !== '/') {
             throw new \InvalidArgumentException(sprintf(
                 'Generated non-absolute URI "%s" for object "%s"',
-                $uri, get_class($uriContext->getSubjectObject())
+                $uri, get_class($uriContext->getSubject())
             ));
         }
 

@@ -27,7 +27,7 @@ class LeaveRedirectDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->route3 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
         $this->route4 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
 
-        $this->subjectObject = new \stdClass();
+        $this->subject = new \stdClass();
 
         $this->handler = new LeaveRedirectDefunctRouteHandler(
             $this->adapter->reveal()
@@ -36,8 +36,8 @@ class LeaveRedirectDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testLeaveRedirect()
     {
-        $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
-        $this->adapter->getReferringAutoRoutes($this->subjectObject)->willReturn(array(
+        $this->uriContextCollection->getSubject()->willReturn($this->subject);
+        $this->adapter->getReferringAutoRoutes($this->subject)->willReturn(array(
             $this->route1, $this->route2,
         ));
         $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(true);
@@ -55,8 +55,8 @@ class LeaveRedirectDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testLeaveDirectNoTranslation()
     {
-        $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
-        $this->adapter->getReferringAutoRoutes($this->subjectObject)->willReturn(array(
+        $this->uriContextCollection->getSubject()->willReturn($this->subject);
+        $this->adapter->getReferringAutoRoutes($this->subject)->willReturn(array(
             $this->route1,
         ));
         $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(false);

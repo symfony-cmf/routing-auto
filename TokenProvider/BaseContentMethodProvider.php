@@ -22,7 +22,7 @@ abstract class BaseContentMethodProvider implements TokenProviderInterface
      */
     public function provideValue(UriContext $uriContext, $options)
     {
-        $object = $uriContext->getSubjectObject();
+        $object = $uriContext->getSubject();
         $method = $options['method'];
         $this->checkMethodExists($object, $method);
 

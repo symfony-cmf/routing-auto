@@ -77,7 +77,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $this->context2->getLocale()->willReturn('de');
         $this->adapter->translateObject($this->subject, 'fr')->willReturn($translatedSubject)->shouldBeCalled();
         $this->adapter->translateObject($this->subject, 'de')->willReturn($this->subject)->shouldBeCalled();
-        $this->context1->setTranslatedSubjectObject($this->subject)->shouldBeCalled();
+        $this->context1->setTranslatedSubject($this->subject)->shouldBeCalled();
 
         $this->manager->buildUriContextCollection($this->collection->reveal());
     }
@@ -89,7 +89,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             $this->context1->reveal(),
             $this->context2->reveal(),
         ));
-        $this->collection->getSubjectObject()->willReturn($this->subject);
+        $this->collection->getSubject()->willReturn($this->subject);
 
         for ($index = 1; $index <= 2; ++$index) {
             $contextVar = 'context'.$index;
@@ -97,7 +97,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             $autoRouteVar = 'autoRoute'.$index;
 
             $this->uriGenerator->generateUri($this->{$contextVar}->reveal())->willReturn($uri);
-            $this->{$contextVar}->getSubjectObject()->willReturn($this->subject);
+            $this->{$contextVar}->getSubject()->willReturn($this->subject);
             $this->{$contextVar}->setUri($uri)->shouldBeCalled();
 
             $this->adapter->findRouteForUri($uri, $this->{$contextVar})->willReturn(null);
@@ -121,11 +121,11 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $this->collection->getUriContexts()->willReturn(array(
             $this->context1->reveal(),
         ));
-        $this->collection->getSubjectObject()->willReturn($this->subject);
+        $this->collection->getSubject()->willReturn($this->subject);
         $this->uriGenerator->generateUri($this->context1->reveal())->willReturn($uri);
         $this->context1->setUri($uri)->shouldBeCalled();
         $this->context1->getLocale()->willReturn(null);
-        $this->context1->getSubjectObject()->willReturn($this->subject);
+        $this->context1->getSubject()->willReturn($this->subject);
         $this->adapter->findRouteForUri($uri, $this->context1)->willReturn(
             $this->autoRoute1->reveal()
         );
@@ -136,7 +136,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             $this->subject
         )->willReturn($sameContent);
 
-        $this->context1->getSubjectObject()->willReturn($this->subject);
+        $this->context1->getSubject()->willReturn($this->subject);
 
         if ($sameContent) {
             $this->autoRoute1->setType(AutoRouteInterface::TYPE_PRIMARY)

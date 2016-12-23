@@ -32,7 +32,7 @@ class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
      */
     public function handleDefunctRoutes(UriContextCollection $uriContextCollection)
     {
-        $referringAutoRouteCollection = $this->adapter->getReferringAutoRoutes($uriContextCollection->getSubjectObject());
+        $referringAutoRouteCollection = $this->adapter->getReferringAutoRoutes($uriContextCollection->getSubject());
 
         foreach ($referringAutoRouteCollection as $referringAutoRoute) {
             if (false === $uriContextCollection->containsAutoRoute($referringAutoRoute)) {

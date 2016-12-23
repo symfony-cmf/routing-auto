@@ -18,25 +18,25 @@ class UriContextCollection
     /**
      * @var object
      */
-    protected $subjectObject;
+    protected $subject;
     protected $uriContexts = array();
 
     /**
-     * @param object $subjectObject Subject for URL generation
+     * @param object $subject Subject for URL generation
      */
-    public function __construct($subjectObject)
+    public function __construct($subject)
     {
-        $this->subjectObject = $subjectObject;
+        $this->subject = $subject;
     }
 
     /**
      * Set the subject for URL generation.
      *
-     * @param object $subjectObject
+     * @param object $subject
      */
-    public function setSubjectObject($subjectObject)
+    public function setSubject($subject)
     {
-        $this->subjectObject = $subjectObject;
+        $this->subject = $subject;
     }
 
     /**
@@ -45,9 +45,9 @@ class UriContextCollection
      *
      * @return object
      */
-    public function getSubjectObject()
+    public function getSubject()
     {
-        return $this->subjectObject;
+        return $this->subject;
     }
 
     /**
@@ -65,7 +65,7 @@ class UriContextCollection
         $locale
     ) {
         $uriContext = new UriContext(
-            $this->getSubjectObject(),
+            $this->getSubject(),
             $uriSchema,
             $defaults,
             $tokenProviderConfigs,

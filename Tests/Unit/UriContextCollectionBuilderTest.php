@@ -57,7 +57,7 @@ class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
             )),
         );
 
-        $this->collection->getSubjectObject()->willReturn($this->subject);
+        $this->collection->getSubject()->willReturn($this->subject);
         $this->adapter->getRealClassName('stdClass')->willReturn('STDCLASS');
         $this->metadataFactory->getMetadataForClass('STDCLASS')->willReturn($this->metadata->reveal());
         $this->adapter->getLocales($this->subject)->willReturn($locales);
