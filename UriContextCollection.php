@@ -113,19 +113,19 @@ class UriContextCollection
     /**
      * Get an auto route by its tag (e.g. the locale).
      *
-     * @param mixed $tag
+     * @param string $locale
      *
      * @return AutoRouteInterface|null
      */
-    public function getAutoRouteByTag($tag)
+    public function getAutoRouteByLocale($locale)
     {
         foreach ($this->uriContexts as $uriContext) {
             $autoRoute = $uriContext->getAutoRoute();
-            if ($tag === $autoRoute->getAutoRouteTag()) {
+            if ($locale === $autoRoute->getAutoRouteLocale()) {
                 return $autoRoute;
             }
         }
 
-        return;
+        return null;
     }
 }

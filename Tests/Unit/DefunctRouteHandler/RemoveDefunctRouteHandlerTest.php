@@ -44,8 +44,8 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->uriContextCollection->containsAutoRoute($this->route2->reveal())->willReturn(false);
         $this->uriContextCollection->containsAutoRoute($this->route3->reveal())->willReturn(true);
 
-        $this->route2->getAutoRouteTag()->willReturn('fr');
-        $this->uriContextCollection->getAutoRouteByTag('fr')->willReturn($this->route4);
+        $this->route2->getLocale()->willReturn('fr');
+        $this->uriContextCollection->getAutoRouteByLocale('fr')->willReturn($this->route4);
 
         $this->adapter->migrateAutoRouteChildren($this->route2->reveal(), $this->route4->reveal())->shouldBeCalled();
         $this->adapter->removeAutoRoute($this->route2->reveal())->shouldBeCalled();
@@ -62,8 +62,8 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(false);
 
-        $this->route1->getAutoRouteTag()->willReturn('fr');
-        $this->uriContextCollection->getAutoRouteByTag('fr')->willReturn(null);
+        $this->route1->getLocale()->willReturn('fr');
+        $this->uriContextCollection->getAutoRouteByLocale('fr')->willReturn(null);
 
         $this->adapter->removeAutoRoute($this->route1->reveal())->shouldBeCalled();
 
