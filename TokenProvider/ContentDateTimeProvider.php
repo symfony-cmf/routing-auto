@@ -40,14 +40,6 @@ class ContentDateTimeProvider extends BaseContentMethodProvider
 
         $optionsResolver->setDefault('date_format', 'Y-m-d');
 
-        $slugifyNormalizer = function ($options, $value) {
-            if (null !== $value) {
-                @trigger_error('The slugify option of '.__CLASS__.' is deprecated as of version 1.1 and will be removed in 2.0. Using it has no effect.', E_USER_DEPRECATED);
-            }
-        };
-
         $optionsResolver->setAllowedTypes('date_format', 'string');
-        $optionsResolver->setDefined('slugify');
-        $optionsResolver->setNormalizer('slugify', $slugifyNormalizer);
     }
 }
