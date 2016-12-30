@@ -34,19 +34,18 @@ interface AutoRouteInterface extends RouteObjectInterface
     const TYPE_REDIRECT = 'cmf_routing_auto.redirect';
 
     /**
-     * Set a tag which can be used by a database implementation
-     * to distinguish a route from other routes as required.
+     * Set a locale related to this auto route.
      *
-     * @param string $tag
+     * @param string $locale
      */
-    public function setAutoRouteTag($tag);
+    public function setLocale($locale);
 
     /**
-     * Return the auto route tag.
+     * Return the locale.
      *
      * @return string
      */
-    public function getAutoRouteTag();
+    public function getLocale();
 
     /**
      * Set the auto route mode.

@@ -19,13 +19,13 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->subjectObject = new \stdClass();
+        $this->subject = new \stdClass();
         $this->autoRoute = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
     }
 
     public function testGetSet()
     {
-        $uriContext = new UriContext($this->subjectObject, '/uri/', array('default1' => 'value1'), array('token'), array('conflict'), 'fr');
+        $uriContext = new UriContext($this->subject, '/uri/', array('default1' => 'value1'), array('token'), array('conflict'), 'fr');
 
         // locales
         $this->assertEquals('fr', $uriContext->getLocale());
@@ -36,17 +36,17 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/foo/bar', $uriContext->getUri());
 
         // subject object
-        $this->assertEquals($this->subjectObject, $uriContext->getSubjectObject());
+        $this->assertEquals($this->subject, $uriContext->getSubject());
 
         // auto route
         $uriContext->setAutoRoute($this->autoRoute);
         $this->assertEquals($this->autoRoute, $uriContext->getAutoRoute());
 
         // the translated subject should be initially set as the original subject
-        $this->assertSame($this->subjectObject, $uriContext->getTranslatedSubjectObject());
+        $this->assertSame($this->subject, $uriContext->getTranslatedSubject());
         $transSubject = new \stdClass();
-        $uriContext->setTranslatedSubjectObject($transSubject);
-        $this->assertSame($transSubject, $uriContext->getTranslatedSubjectObject());
+        $uriContext->setTranslatedSubject($transSubject);
+        $this->assertSame($transSubject, $uriContext->getTranslatedSubject());
 
         // uri schema
         $this->assertEquals('/uri/', $uriContext->getUriSchema());

@@ -74,7 +74,7 @@ class AutoRouteManager
         $this->collectionBuilder->build($uriContextCollection);
 
         foreach ($uriContextCollection->getUriContexts() as $uriContext) {
-            $subject = $uriContextCollection->getSubjectObject();
+            $subject = $uriContextCollection->getSubject();
 
             if (null !== $uriContext->getLocale()) {
                 $translatedSubject = $this->adapter->translateObject($subject, $uriContext->getLocale());
@@ -83,7 +83,7 @@ class AutoRouteManager
                     @trigger_error('AdapterInterface::translateObject() has to return the subject as of version 1.1, support for by reference will be removed in 2.0.', E_USER_DEPRECATED);
                 } else {
                     if ($translatedSubject !== $subject) {
-                        $uriContext->setTranslatedSubjectObject($translatedSubject);
+                        $uriContext->setTranslatedSubject($translatedSubject);
                     }
                 }
             }
@@ -137,7 +137,7 @@ class AutoRouteManager
      */
     private function handleExistingRoute($existingRoute, $uriContext)
     {
-        $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $uriContext->getSubjectObject());
+        $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $uriContext->getSubject());
 
         if ($isSameContent) {
             $autoRoute = $existingRoute;

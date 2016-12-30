@@ -18,25 +18,25 @@ class UriContextCollection
     /**
      * @var object
      */
-    protected $subjectObject;
+    protected $subject;
     protected $uriContexts = array();
 
     /**
-     * @param object $subjectObject Subject for URL generation
+     * @param object $subject Subject for URL generation
      */
-    public function __construct($subjectObject)
+    public function __construct($subject)
     {
-        $this->subjectObject = $subjectObject;
+        $this->subject = $subject;
     }
 
     /**
      * Set the subject for URL generation.
      *
-     * @param object $subjectObject
+     * @param object $subject
      */
-    public function setSubjectObject($subjectObject)
+    public function setSubject($subject)
     {
-        $this->subjectObject = $subjectObject;
+        $this->subject = $subject;
     }
 
     /**
@@ -45,9 +45,9 @@ class UriContextCollection
      *
      * @return object
      */
-    public function getSubjectObject()
+    public function getSubject()
     {
-        return $this->subjectObject;
+        return $this->subject;
     }
 
     /**
@@ -65,7 +65,7 @@ class UriContextCollection
         $locale
     ) {
         $uriContext = new UriContext(
-            $this->getSubjectObject(),
+            $this->getSubject(),
             $uriSchema,
             $defaults,
             $tokenProviderConfigs,
@@ -113,19 +113,19 @@ class UriContextCollection
     /**
      * Get an auto route by its tag (e.g. the locale).
      *
-     * @param mixed $tag
+     * @param string $locale
      *
      * @return AutoRouteInterface|null
      */
-    public function getAutoRouteByTag($tag)
+    public function getAutoRouteByLocale($locale)
     {
         foreach ($this->uriContexts as $uriContext) {
             $autoRoute = $uriContext->getAutoRoute();
-            if ($tag === $autoRoute->getAutoRouteTag()) {
+            if ($locale === $autoRoute->getAutoRouteLocale()) {
                 return $autoRoute;
             }
         }
 
-        return;
+        return null;
     }
 }

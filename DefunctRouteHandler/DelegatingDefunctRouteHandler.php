@@ -48,8 +48,8 @@ class DelegatingDefunctRouteHandler implements DefunctRouteHandlerInterface
      */
     public function handleDefunctRoutes(UriContextCollection $uriContextCollection)
     {
-        $subject = $uriContextCollection->getSubjectObject();
-        $realClassName = $this->adapter->getRealClassName(get_class($uriContextCollection->getSubjectObject()));
+        $subject = $uriContextCollection->getSubject();
+        $realClassName = $this->adapter->getRealClassName(get_class($uriContextCollection->getSubject()));
         $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
 
         $defunctRouteHandlerConfig = $metadata->getDefunctRouteHandler();

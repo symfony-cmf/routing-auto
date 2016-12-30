@@ -27,7 +27,7 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->route3 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
         $this->route4 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
 
-        $this->subjectObject = new \stdClass();
+        $this->subject = new \stdClass();
 
         $this->handler = new RemoveDefunctRouteHandler(
             $this->adapter->reveal()
@@ -36,16 +36,16 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleDefunctRoutes()
     {
-        $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
-        $this->adapter->getReferringAutoRoutes($this->subjectObject)->willReturn(array(
+        $this->uriContextCollection->getSubject()->willReturn($this->subject);
+        $this->adapter->getReferringAutoRoutes($this->subject)->willReturn(array(
             $this->route1, $this->route2,
         ));
         $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(true);
         $this->uriContextCollection->containsAutoRoute($this->route2->reveal())->willReturn(false);
         $this->uriContextCollection->containsAutoRoute($this->route3->reveal())->willReturn(true);
 
-        $this->route2->getAutoRouteTag()->willReturn('fr');
-        $this->uriContextCollection->getAutoRouteByTag('fr')->willReturn($this->route4);
+        $this->route2->getLocale()->willReturn('fr');
+        $this->uriContextCollection->getAutoRouteByLocale('fr')->willReturn($this->route4);
 
         $this->adapter->migrateAutoRouteChildren($this->route2->reveal(), $this->route4->reveal())->shouldBeCalled();
         $this->adapter->removeAutoRoute($this->route2->reveal())->shouldBeCalled();
@@ -55,15 +55,15 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testHandleDefunctRouteWithoutMigrateDueToNotExistingDestination()
     {
-        $this->uriContextCollection->getSubjectObject()->willReturn($this->subjectObject);
-        $this->adapter->getReferringAutoRoutes($this->subjectObject)->willReturn(array(
+        $this->uriContextCollection->getSubject()->willReturn($this->subject);
+        $this->adapter->getReferringAutoRoutes($this->subject)->willReturn(array(
             $this->route1,
         ));
 
         $this->uriContextCollection->containsAutoRoute($this->route1->reveal())->willReturn(false);
 
-        $this->route1->getAutoRouteTag()->willReturn('fr');
-        $this->uriContextCollection->getAutoRouteByTag('fr')->willReturn(null);
+        $this->route1->getLocale()->willReturn('fr');
+        $this->uriContextCollection->getAutoRouteByLocale('fr')->willReturn(null);
 
         $this->adapter->removeAutoRoute($this->route1->reveal())->shouldBeCalled();
 

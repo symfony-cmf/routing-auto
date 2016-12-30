@@ -18,7 +18,7 @@ namespace Symfony\Cmf\Component\RoutingAuto;
  */
 class UriContext
 {
-    protected $subjectObject;
+    protected $subject;
     protected $translatedSubject;
     protected $locale;
     protected $uri;
@@ -30,15 +30,15 @@ class UriContext
     protected $defaults;
 
     public function __construct(
-        $subjectObject,
+        $subject,
         $uriSchema,
         array $defaults,
         array $tokenProviderConfigs,
         array $conflictResolverConfig,
         $locale
     ) {
-        $this->subjectObject = $subjectObject;
-        $this->translatedSubject = $subjectObject;
+        $this->subject = $subject;
+        $this->translatedSubject = $subject;
         $this->locale = $locale;
         $this->uriSchema = $uriSchema;
         $this->tokenProviderConfigs = $tokenProviderConfigs;
@@ -61,9 +61,9 @@ class UriContext
      *
      * @return object
      */
-    public function getSubjectObject()
+    public function getSubject()
     {
-        return $this->subjectObject;
+        return $this->subject;
     }
 
     /**
@@ -72,7 +72,7 @@ class UriContext
      *
      * @return object
      */
-    public function getTranslatedSubjectObject()
+    public function getTranslatedSubject()
     {
         return $this->translatedSubject;
     }
@@ -82,7 +82,7 @@ class UriContext
      *
      * @param object $translatedSubject
      */
-    public function setTranslatedSubjectObject($translatedSubject)
+    public function setTranslatedSubject($translatedSubject)
     {
         $this->translatedSubject = $translatedSubject;
     }

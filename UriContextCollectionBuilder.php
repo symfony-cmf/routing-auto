@@ -44,8 +44,8 @@ class UriContextCollectionBuilder
      */
     public function build(UriContextCollection $uriContextCollection)
     {
-        $subjectObject = $uriContextCollection->getSubjectObject();
-        $realClassName = $this->adapter->getRealClassName(get_class($subjectObject));
+        $subject = $uriContextCollection->getSubject();
+        $realClassName = $this->adapter->getRealClassName(get_class($subject));
         $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
 
         // TODO: This is where we will call $metadata->getUriSchemas() which will return an
@@ -53,7 +53,7 @@ class UriContextCollectionBuilder
         $definitions = $metadata->getAutoRouteDefinitions();
 
         foreach ($definitions as $definition) {
-            $locales = $this->adapter->getLocales($subjectObject) ?: array(null);
+            $locales = $this->adapter->getLocales($subject) ?: array(null);
             foreach ($locales as $locale) {
                 // create and add uri context to stack
                 $uriContext = $uriContextCollection->createUriContext(

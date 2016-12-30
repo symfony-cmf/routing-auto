@@ -220,7 +220,7 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
         }
 
         $document = new \stdClass();
-        $this->uriContext->getSubjectObject()->willReturn($document);
+        $this->uriContext->getSubject()->willReturn($document);
         $this->uriContext->getUri()->willReturn($uriSchema);
         $this->uriContext->getTokenProviderConfigs()
             ->willReturn($tokenProviderConfigs);
