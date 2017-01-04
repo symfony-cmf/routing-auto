@@ -28,7 +28,10 @@
         "symfony/event-dispatcher": "To use the EventDispatchingAdapter, allowing to edit the AutoRoute documents (^2.2|3.*)"
     },
     "autoload": {
-        "psr-4": { "Symfony\\Cmf\\Component\\RoutingAuto\\": "" }
+        "psr-4": { "Symfony\\Cmf\\Component\\RoutingAuto\\": "src/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "Symfony\\Cmf\\Component\\RoutingAuto\\Tests\\": "tests/" }
     },
     "extra": {
         "branch-alias": {
