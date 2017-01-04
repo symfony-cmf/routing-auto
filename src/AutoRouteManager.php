@@ -79,12 +79,8 @@ class AutoRouteManager
             if (null !== $uriContext->getLocale()) {
                 $translatedSubject = $this->adapter->translateObject($subject, $uriContext->getLocale());
 
-                if (null === $translatedSubject) {
-                    @trigger_error('AdapterInterface::translateObject() has to return the subject as of version 1.1, support for by reference will be removed in 2.0.', E_USER_DEPRECATED);
-                } else {
-                    if ($translatedSubject !== $subject) {
-                        $uriContext->setTranslatedSubject($translatedSubject);
-                    }
+                if ($translatedSubject !== $subject) {
+                    $uriContext->setTranslatedSubject($translatedSubject);
                 }
             }
 
