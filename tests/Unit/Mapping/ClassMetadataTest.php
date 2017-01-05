@@ -16,7 +16,7 @@ use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
 class ClassMetadataTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage No definition
      */
     public function testThrowExceptionNoDefinitionAtIndex()

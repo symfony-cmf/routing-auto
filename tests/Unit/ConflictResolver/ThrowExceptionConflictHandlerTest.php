@@ -24,7 +24,7 @@ class ThrowExceptionConflictHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException Symfony\Cmf\Component\RoutingAuto\ConflictResolver\Exception\ExistingUriException
+     * @expectedException \Symfony\Cmf\Component\RoutingAuto\ConflictResolver\Exception\ExistingUriException
      * @expectedExceptionMessage There already exists an auto route for URL "/foobar"
      */
     public function testResolveConflict()
