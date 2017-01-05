@@ -1,6 +1,9 @@
 Changelog
 =========
 
+2.0.0-RC1
+---------
+
 * **2016-02-17**: [BC Break] Semantics for URI definitions have changed to
                   permit the definition of multiple routes, see:
                   http://symfony.com/doc/current/cmf/bundles/routing_auto/introduction.html#usage
