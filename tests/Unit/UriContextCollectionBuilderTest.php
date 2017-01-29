@@ -11,8 +11,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
-use Symfony\Cmf\Component\RoutingAuto\UriContextCollectionBuilder;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollectionBuilder;
 
 class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -36,26 +36,26 @@ class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuild()
     {
-        $locales = array('de', 'en');
-        $metadata = array(
-            'token_provider_configs' => array(
-                'foobar' => array('bar' => 'foo'),
-            ),
-            'conflict_resolver_config' => array(
+        $locales = ['de', 'en'];
+        $metadata = [
+            'token_provider_configs' => [
+                'foobar' => ['bar' => 'foo'],
+            ],
+            'conflict_resolver_config' => [
                 'name' => 'foobar',
-            ),
-        );
-        $definitions = array(
-            'one' => new AutoRouteDefinition('/path/one', array(
+            ],
+        ];
+        $definitions = [
+            'one' => new AutoRouteDefinition('/path/one', [
                 '_type' => 'edit',
-            )),
-            'two' => new AutoRouteDefinition('/path/to', array(
+            ]),
+            'two' => new AutoRouteDefinition('/path/to', [
                 'uri_schema' => '/path/two',
-                'defaults' => array(
+                'defaults' => [
                     '_type' => 'view',
-                ),
-            )),
-        );
+                ],
+            ]),
+        ];
 
         $this->collection->getSubject()->willReturn($this->subject);
         $this->adapter->getRealClassName('stdClass')->willReturn('STDCLASS');

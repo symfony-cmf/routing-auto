@@ -12,12 +12,12 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Adapter;
 
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Cmf\Component\RoutingAuto\UriContext;
-use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
-use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
 use Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteCreateEvent;
 use Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteMigrateEvent;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * This adapter wraps a concrete adapter and dispatches events.

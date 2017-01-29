@@ -11,10 +11,10 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Mapping\Loader;
 
-use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
-use Symfony\Component\Yaml\Parser as YamlParser;
-use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
+use Symfony\Component\Config\Loader\FileLoader;
+use Symfony\Component\Yaml\Parser as YamlParser;
 
 /**
  * @author Wouter J <wouter@wouterj.nl>
@@ -52,14 +52,14 @@ class YmlFileLoader extends FileLoader
 
         // empty file
         if (empty($config)) {
-            return array();
+            return [];
         }
 
         if (!is_array($config)) {
             throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $path));
         }
 
-        $metadatas = array();
+        $metadatas = [];
         foreach ($config as $className => $mappingNode) {
             $metadatas[] = $this->parseMappingNode($className, (array) $mappingNode, $path);
         }
@@ -82,14 +82,14 @@ class YmlFileLoader extends FileLoader
 
         $this->validateNode(
             $mappingNode,
-            array(
+            [
                 'uri_schema',
                 'definitions',
                 'conflict_resolver',
                 'defunct_route_handler',
                 'extend',
                 'token_providers',
-            ),
+            ],
             sprintf(
                 'routing auto class metadata (%s)',
                 $className
@@ -144,7 +144,7 @@ class YmlFileLoader extends FileLoader
     protected function parseServiceConfig($service, $className, $path)
     {
         $name = '';
-        $options = array();
+        $options = [];
 
         if (is_string($service)) {
             // provider: method
@@ -168,7 +168,7 @@ class YmlFileLoader extends FileLoader
             throw new \InvalidArgumentException(sprintf('Unknown builder service configuration for "%s" for class "%s" in "%s": %s', $name, $className, $path, json_encode($service)));
         }
 
-        return array('name' => $name, 'options' => $options);
+        return ['name' => $name, 'options' => $options];
     }
 
     /**
@@ -197,22 +197,22 @@ class YmlFileLoader extends FileLoader
             ));
         }
 
-        $definitions = array();
+        $definitions = [];
         foreach ($definitionsNode as $definitionName => $definitionNode) {
             $this->validateNode(
                 $definitionNode,
-                array(
+                [
                     'uri_schema',
                     'defaults',
-                ),
+                ],
                 'auto route definition'
             );
 
             // set default values
             $definitionNode = array_merge(
-                array(
-                    'defaults' => array(),
-                ),
+                [
+                    'defaults' => [],
+                ],
                 $definitionNode
             );
 

@@ -29,29 +29,29 @@ class ContentMethodProviderTest extends \PHPUnit_Framework_TestCase
 
     public function provideGetValue()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'method' => 'getTitle',
                     'slugify' => true,
-                ),
+                ],
                 true,
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'method' => 'getTitle',
                     'slugify' => false,
-                ),
+                ],
                 true,
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'method' => 'getMethodNotExist',
                     'slugify' => false,
-                ),
+                ],
                 false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**

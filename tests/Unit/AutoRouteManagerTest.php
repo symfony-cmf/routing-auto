@@ -85,10 +85,10 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     private function prepareBuildCollection()
     {
         $this->collectionBuilder->build($this->collection->reveal());
-        $this->collection->getUriContexts()->willReturn(array(
+        $this->collection->getUriContexts()->willReturn([
             $this->context1->reveal(),
             $this->context2->reveal(),
-        ));
+        ]);
         $this->collection->getSubject()->willReturn($this->subject);
 
         for ($index = 1; $index <= 2; ++$index) {
@@ -118,9 +118,9 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $resolvedUri = '/resolved/uri';
 
         $this->collectionBuilder->build($this->collection->reveal());
-        $this->collection->getUriContexts()->willReturn(array(
+        $this->collection->getUriContexts()->willReturn([
             $this->context1->reveal(),
-        ));
+        ]);
         $this->collection->getSubject()->willReturn($this->subject);
         $this->uriGenerator->generateUri($this->context1->reveal())->willReturn($uri);
         $this->context1->setUri($uri)->shouldBeCalled();
@@ -156,9 +156,9 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
     public function provideBuildCollectionExisting()
     {
-        return array(
-            array(true),
-            array(false),
-        );
+        return [
+            [true],
+            [false],
+        ];
     }
 }

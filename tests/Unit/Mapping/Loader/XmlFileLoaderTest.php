@@ -40,12 +40,12 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function getSupportsData()
     {
-        return array(
-            array('foo.xml'),
-            array('foo.yml', null, false),
-            array('foo.xml', 'xml'),
-            array('foo.xml', 'yaml', false),
-        );
+        return [
+            ['foo.xml'],
+            ['foo.yml', null, false],
+            ['foo.xml', 'xml'],
+            ['foo.xml', 'yaml', false],
+        ];
     }
 
     public function testDoesNothingIfFileIsEmpty()
@@ -69,12 +69,12 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function getFailsOnInvalidConfigFilesData()
     {
-        $files = array(
+        $files = [
             'invalid1.xml',
-        );
+        ];
 
         return array_map(function ($file) {
-            return array($file);
+            return [$file];
         }, $files);
     }
 
@@ -94,19 +94,19 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
     public function getCorrectlyParsesValidConfigFilesData()
     {
         $test = $this;
-        $serviceConfig = function ($name, $options = array()) {
-            return array('name' => $name, 'options' => $options);
+        $serviceConfig = function ($name, $options = []) {
+            return ['name' => $name, 'options' => $options];
         };
 
-        return array(
-            array('valid1.xml', function ($metadatas) use ($test) {
+        return [
+            ['valid1.xml', function ($metadatas) use ($test) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
                 $test->assertEquals('/cmf/blog', $metadata->getAutoRouteDefinition('_default')->getUriSchema());
                 $test->assertCount(0, $metadata->getTokenProviders());
-            }),
-            array('valid2.xml', function ($metadatas) use ($test, $serviceConfig) {
+            }],
+            ['valid2.xml', function ($metadatas) use ($test, $serviceConfig) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
@@ -116,12 +116,12 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $units = $metadata->getTokenProviders();
 
                 $test->assertArrayHasKey('category', $units);
-                $test->assertEquals($serviceConfig('method', array('method' => 'getCategoryName')), $units['category']);
+                $test->assertEquals($serviceConfig('method', ['method' => 'getCategoryName']), $units['category']);
 
                 $test->assertArrayHasKey('post_name', $units);
-                $test->assertEquals($serviceConfig('method', array('method' => 'getName')), $units['post_name']);
-            }),
-            array('valid3.xml', function ($metadatas) use ($test) {
+                $test->assertEquals($serviceConfig('method', ['method' => 'getName']), $units['post_name']);
+            }],
+            ['valid3.xml', function ($metadatas) use ($test) {
                 $test->assertCount(2, $metadatas);
                 $test->assertEquals('stdClass', $metadatas[0]->getClassName());
                 $test->assertEquals('/forum/{category}/{post_name}', $metadatas[0]->getAutoRouteDefinition('_default')->getUriSchema());
@@ -129,8 +129,8 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $test->assertEquals('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass', $metadatas[1]->getClassName());
                 $test->assertEquals('/forum/{category}', $metadatas[1]->getAutoRouteDefinition('_default')->getUriSchema());
                 $test->assertEquals('stdClass', $metadatas[1]->getExtendedClass());
-            }),
-            array('valid4.xml', function ($metadatas) use ($test, $serviceConfig) {
+            }],
+            ['valid4.xml', function ($metadatas) use ($test, $serviceConfig) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
 
@@ -138,46 +138,46 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $test->assertEquals('/cmf/blog', $metadata->getAutoRouteDefinition('_default')->getUriSchema());
                 $test->assertEquals($serviceConfig('auto_increment'), $metadata->getConflictResolver());
                 $test->assertEquals($serviceConfig('leave_redirect'), $metadata->getDefunctRouteHandler());
-            }),
-            array('valid5.xml', function ($metadatas) use ($test, $serviceConfig) {
+            }],
+            ['valid5.xml', function ($metadatas) use ($test, $serviceConfig) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
 
                 $test->assertEquals('stdClass', $metadata->getClassName());
                 $test->assertEquals('/blog/{category}/{slug}', $metadata->getAutoRouteDefinition('_default')->getUriSchema());
-                $test->assertEquals($serviceConfig('auto_increment', array('token' => 'category')), $metadata->getConflictResolver());
+                $test->assertEquals($serviceConfig('auto_increment', ['token' => 'category']), $metadata->getConflictResolver());
 
                 $test->assertCount(2, $metadata->getTokenProviders());
                 $providers = $metadata->getTokenProviders();
                 $test->assertArrayHasKey('category', $providers);
-                $test->assertEquals($serviceConfig('method', array('method' => 'getCategoryName')), $providers['category']);
+                $test->assertEquals($serviceConfig('method', ['method' => 'getCategoryName']), $providers['category']);
                 $test->assertArrayHasKey('slug', $providers);
-                $test->assertEquals($serviceConfig('property', array('property' => 'title', 'slugify' => true)), $providers['slug']);
-            }),
-            array('valid7.xml', function ($metadatas) use ($test, $serviceConfig) {
+                $test->assertEquals($serviceConfig('property', ['property' => 'title', 'slugify' => true]), $providers['slug']);
+            }],
+            ['valid7.xml', function ($metadatas) use ($test, $serviceConfig) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
 
                 $test->assertEquals('/forum/{category}/{post_title}/edit', $metadata->getAutoRouteDefinition('edit')->getUriSchema());
                 $test->assertEquals(
-                    array(
+                    [
                         '_type' => 'edit',
-                    ), $metadata->getAutoRouteDefinition('edit')->getDefaults()
+                    ], $metadata->getAutoRouteDefinition('edit')->getDefaults()
                 );
 
                 $test->assertEquals('/forum/{category}/{post_title}/view', $metadata->getAutoRouteDefinition('view')->getUriSchema());
                 $test->assertEquals(
-                    array(
+                    [
                         '_type' => 'view',
-                    ), $metadata->getAutoRouteDefinition('view')->getDefaults()
+                    ], $metadata->getAutoRouteDefinition('view')->getDefaults()
                 );
 
                 $providers = $metadata->getTokenProviders();
                 $test->assertArrayHasKey('category', $providers);
                 $test->assertEquals('method', $providers['category']['name']);
-            }),
-        );
+            }],
+        ];
     }
 
     protected function getFixturesPath($fixture)

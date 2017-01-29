@@ -30,9 +30,9 @@ class ServiceRegistryTest extends \PHPUnit_Framework_TestCase
 
     public function testRegistration()
     {
-        $tps = array('tp_1', 'tp_2');
-        $crs = array('cr_1', 'cr_2');
-        $defunctRouteHandlers = array('dfrh_1', 'dfrh_2');
+        $tps = ['tp_1', 'tp_2'];
+        $crs = ['cr_1', 'cr_2'];
+        $defunctRouteHandlers = ['dfrh_1', 'dfrh_2'];
 
         foreach ($tps as $tp) {
             $this->serviceRegistry->registerTokenProvider($tp, $this->tokenProvider);

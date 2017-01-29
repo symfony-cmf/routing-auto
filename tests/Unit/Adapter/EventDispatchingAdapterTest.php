@@ -12,11 +12,11 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Adapter;
 
 use Symfony\Cmf\Component\RoutingAuto\Adapter\EventDispatchingAdapter;
-use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
 use Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteCreateEvent;
 use Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteMigrateEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,9 +61,9 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLocales()
     {
-        $this->realAdapter->getLocales($this->content)->shouldBeCalled()->willReturn(array('de', 'de_at'));
+        $this->realAdapter->getLocales($this->content)->shouldBeCalled()->willReturn(['de', 'de_at']);
         $locales = $this->adapter->getLocales($this->content);
-        $this->assertEquals(array('de', 'de_at'), $locales);
+        $this->assertEquals(['de', 'de_at'], $locales);
     }
 
     public function testTranslateObject()
@@ -125,7 +125,7 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetReferringAutoRoutes()
     {
-        $referrers = array($this->autoRoute->reveal(), $this->autoRoute2->reveal());
+        $referrers = [$this->autoRoute->reveal(), $this->autoRoute2->reveal()];
         $this->realAdapter->getReferringAutoRoutes(
             $this->content
         )->willReturn($referrers);
@@ -135,7 +135,7 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testFindRouteForUri()
     {
-        $routes = array($this->autoRoute->reveal(), $this->autoRoute2->reveal());
+        $routes = [$this->autoRoute->reveal(), $this->autoRoute2->reveal()];
 
         $this->realAdapter->findRouteForUri('uri', $this->uriContext->reveal())->willReturn($routes);
 
@@ -150,10 +150,10 @@ class EventDispatchingAdapterSubscriber implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        return array(
+        return [
             RoutingAutoEvents::POST_CREATE => 'handleCreate',
             RoutingAutoEvents::POST_MIGRATE => 'handleMigrate',
-        );
+        ];
     }
 
     public function handleCreate(AutoRouteCreateEvent $createEvent)

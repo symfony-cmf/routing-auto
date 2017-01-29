@@ -11,13 +11,13 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
-use Symfony\Cmf\Component\RoutingAuto\UriGenerator;
 use Prophecy\Argument;
+use Symfony\Cmf\Component\RoutingAuto\UriGenerator;
 
 class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     protected $serviceRegistry;
-    protected $tokenProviders = array();
+    protected $tokenProviders = [];
     protected $uriContext;
 
     public function setUp()
@@ -33,180 +33,180 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function provideGenerateUri()
     {
-        return array(
+        return [
             // tokens should be substituted with values from the token providers
-            array(
+            [
                 '/this/is/{token_the_first}/a/uri',
                 '/this/is/foobar_value/a/uri',
-                array(
-                    'token_the_first' => array(
+                [
+                    'token_the_first' => [
                         'name' => 'foobar_provider',
                         'value' => 'foobar_value',
-                        'options' => array(),
-                    ),
-                ),
-            ),
+                        'options' => [],
+                    ],
+                ],
+            ],
             // tokens should be substituted with values from the token providers
-            array(
+            [
                 '/{this}/{is}/{token_the_first}/a/uri',
                 '/that/was/foobar_value/a/uri',
-                array(
-                    'token_the_first' => array(
+                [
+                    'token_the_first' => [
                         'name' => 'foobar_provider',
                         'value' => 'foobar_value',
-                        'options' => array(),
-                    ),
-                    'this' => array(
+                        'options' => [],
+                    ],
+                    'this' => [
                         'name' => 'barfoo_provider',
                         'value' => 'that',
-                        'options' => array(),
-                    ),
-                    'is' => array(
+                        'options' => [],
+                    ],
+                    'is' => [
                         'name' => 'dobar_provider',
                         'value' => 'was',
-                        'options' => array(),
-                    ),
-                ),
-            ),
+                        'options' => [],
+                    ],
+                ],
+            ],
             // an exception should be thrown if the token provider is not known
-            array(
+            [
                 '/this/is/{unknown_token}/life',
                 null,
-                array(),
-                array('InvalidArgumentException', 'Unknown token "unknown_token"'),
-            ),
+                [],
+                ['InvalidArgumentException', 'Unknown token "unknown_token"'],
+            ],
             // an exception should be thrown if the generated URI is not absolute
-            array(
+            [
                 'this/is/not/absolute',
                 null,
-                array(),
-                array('InvalidArgumentException', 'Generated non-absolute URI'),
-            ),
+                [],
+                ['InvalidArgumentException', 'Generated non-absolute URI'],
+            ],
             // no tokens need to be specified
-            array(
+            [
                 '/this/is/has/no/tokens',
                 '/this/is/has/no/tokens',
-                array(),
-            ),
+                [],
+            ],
             // nothing should happen if allow_empty is true and the value is not empty
-            array(
+            [
                 '/{parent}/title',
                 '/foobar_value/title',
-                array(
-                    'parent' => array(
+                [
+                    'parent' => [
                         'name' => 'foobar_provider',
                         'value' => 'foobar_value',
-                        'options' => array(
+                        'options' => [
                             'allow_empty' => true,
-                        ),
-                    ),
-                ),
-            ),
+                        ],
+                    ],
+                ],
+            ],
             // the empty token should be collapsed when allow_empty is true
-            array(
+            [
                 '/{parent}/title',
                 '/title',
-                array(
-                    'parent' => array(
+                [
+                    'parent' => [
                         'name' => 'foobar_provider',
                         'value' => '',
-                        'options' => array(
+                        'options' => [
                             'allow_empty' => true,
-                        ),
-                    ),
-                ),
-            ),
+                        ],
+                    ],
+                ],
+            ],
             // if the token value is a single "/" then it should be treated as an empty value and
             // any trailing slash should be collapsed.
-            array(
+            [
                 '{parent}/title',
                 '/title',
-                array(
-                    'parent' => array(
+                [
+                    'parent' => [
                         'name' => 'foobar_provider',
                         'value' => '/',
-                        'options' => array(
+                        'options' => [
                             'allow_empty' => true,
-                        ),
-                    ),
-                ),
-            ),
+                        ],
+                    ],
+                ],
+            ],
             // if the last segment is empty and allow empty is true, then remove the leading slash
-            array(
+            [
                 '/{locale}/{parent}',
                 '/de',
-                array(
-                    'locale' => array(
+                [
+                    'locale' => [
                         'name' => 'foobar_provider',
                         'value' => 'de',
-                        'options' => array(
+                        'options' => [
                             'allow_empty' => true,
-                        ),
-                    ),
-                    'parent' => array(
+                        ],
+                    ],
+                    'parent' => [
                         'name' => 'barbar_provider',
                         'value' => '',
-                        'options' => array(
+                        'options' => [
                             'allow_empty' => true,
-                        ),
-                    ),
-                ),
-            ),
+                        ],
+                    ],
+                ],
+            ],
             // if the last segment is empty and has a trailing slash then the trailing slash should be
             // preserved
-            array(
+            [
                 '/{locale}/{parent}/',
                 '/de/',
-                array(
-                    'locale' => array(
+                [
+                    'locale' => [
                         'name' => 'foobar_provider',
                         'value' => 'de',
-                        'options' => array(
+                        'options' => [
                             'allow_empty' => true,
-                        ),
-                    ),
-                    'parent' => array(
+                        ],
+                    ],
+                    'parent' => [
                         'name' => 'barbar_provider',
                         'value' => '',
-                        'options' => array(
+                        'options' => [
                             'allow_empty' => true,
-                        ),
-                    ),
-                ),
-            ),
+                        ],
+                    ],
+                ],
+            ],
             // an exception should be thrown if a token is empty and allow_empty is false
-            array(
+            [
                 '/{parent}/title',
                 '/title',
-                array(
-                    'parent' => array(
+                [
+                    'parent' => [
                         'name' => 'foobar_provider',
                         'value' => '',
-                        'options' => array(
+                        'options' => [
                             'allow_empty' => false,
-                        ),
-                    ),
-                ),
-                array(
+                        ],
+                    ],
+                ],
+                [
                     'InvalidArgumentException', 'Token provider "foobar_provider" returned an empty value',
-                ),
-            ),
+                ],
+            ],
             // it should not throw a warning if the allow_empty option is absent and the value is empty.
-            array(
+            [
                 '/{parent}/title',
                 '/title',
-                array(
-                    'parent' => array(
+                [
+                    'parent' => [
                         'name' => 'foobar_provider',
                         'value' => '',
-                        'options' => array(),
-                    ),
-                ),
-                array(
+                        'options' => [],
+                    ],
+                ],
+                [
                     'InvalidArgumentException', 'Token provider "foobar_provider" returned an empty value',
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 
     /**
@@ -229,9 +229,9 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 
         foreach ($tokenProviderConfigs as $tokenProviderConfig) {
             // set the defaults for the predictions
-            $tokenProviderConfig['options'] = array_merge(array(
+            $tokenProviderConfig['options'] = array_merge([
                 'allow_empty' => false,
-            ), $tokenProviderConfig['options']);
+            ], $tokenProviderConfig['options']);
 
             $providerName = $tokenProviderConfig['name'];
 

@@ -26,7 +26,7 @@ class ContentLocaleProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetValue()
     {
         $this->uriContext->getLocale()->willReturn('de');
-        $res = $this->provider->provideValue($this->uriContext->reveal(), array());
+        $res = $this->provider->provideValue($this->uriContext->reveal(), []);
         $this->assertEquals('de', $res);
     }
 }

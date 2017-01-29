@@ -13,9 +13,9 @@ namespace Symfony\Cmf\Component\RoutingAuto;
 
 class ServiceRegistry
 {
-    protected $tokenProviders = array();
-    protected $conflictResolvers = array();
-    protected $defunctRouteHandlers = array();
+    protected $tokenProviders = [];
+    protected $conflictResolvers = [];
+    protected $defunctRouteHandlers = [];
 
     /**
      * Return the named token provider.

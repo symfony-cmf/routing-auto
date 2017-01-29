@@ -25,7 +25,7 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSet()
     {
-        $uriContext = new UriContext($this->subject, '/uri/', array('default1' => 'value1'), array('token'), array('conflict'), 'fr');
+        $uriContext = new UriContext($this->subject, '/uri/', ['default1' => 'value1'], ['token'], ['conflict'], 'fr');
 
         // locales
         $this->assertEquals('fr', $uriContext->getLocale());
@@ -52,12 +52,12 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('/uri/', $uriContext->getUriSchema());
 
         // token provider configs
-        $this->assertEquals(array('token'), $uriContext->getTokenProviderConfigs());
+        $this->assertEquals(['token'], $uriContext->getTokenProviderConfigs());
 
         // conflict resolver configs
-        $this->assertEquals(array('conflict'), $uriContext->getConflictResolverConfig());
+        $this->assertEquals(['conflict'], $uriContext->getConflictResolverConfig());
 
         // defaults
-        $this->assertEquals(array('default1' => 'value1'), $uriContext->getDefaults());
+        $this->assertEquals(['default1' => 'value1'], $uriContext->getDefaults());
     }
 }

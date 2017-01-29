@@ -39,7 +39,7 @@ class AutoRouteManager
     /**
      * @var UriContextCollection[]
      */
-    private $pendingUriContextCollections = array();
+    private $pendingUriContextCollections = [];
 
     /**
      * @var UriContextCollectionBuilder

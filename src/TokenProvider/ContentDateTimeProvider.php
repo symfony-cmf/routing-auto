@@ -11,8 +11,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ContentDateTimeProvider extends BaseContentMethodProvider
 {

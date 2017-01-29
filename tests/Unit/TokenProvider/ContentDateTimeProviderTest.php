@@ -27,20 +27,20 @@ class ContentDateTimeProviderTest extends \PHPUnit_Framework_TestCase
 
     public function provideGetValue()
     {
-        return array(
-            array(
-                array(
+        return [
+            [
+                [
                     'date_format' => 'Y-m-d',
-                ),
+                ],
                 '2014-10-09',
-            ),
-            array(
-                array(
+            ],
+            [
+                [
                     'date_format' => 'Y/m/d',
-                ),
+                ],
                 '2014/10/09',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -48,10 +48,10 @@ class ContentDateTimeProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValue($options, $expectedResult)
     {
-        $options = array_merge(array(
+        $options = array_merge([
             'method' => 'getDate',
             'slugify' => true,
-        ), $options);
+        ], $options);
 
         $this->uriContext->getSubject()->willReturn($this->article);
         $this->article->getDate()->willReturn(new \DateTime('2014-10-09'));
