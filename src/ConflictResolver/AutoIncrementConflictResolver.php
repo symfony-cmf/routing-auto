@@ -11,9 +11,9 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\ConflictResolver;
 
+use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
-use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 
 /**
  * This conflict resolver will generate candidate URLs by appending

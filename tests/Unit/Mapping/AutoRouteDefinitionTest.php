@@ -34,26 +34,26 @@ class AutoRouteDefinitionTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergeDefaults()
     {
-        $childDefinition = $this->createDefinition('/test', array(
+        $childDefinition = $this->createDefinition('/test', [
             'one' => 'two',
             'three' => 'four',
-        ));
-        $parentDefinition = $this->createDefinition('/test', array(
+        ]);
+        $parentDefinition = $this->createDefinition('/test', [
             'one' => 'seven',
             'three' => 'nine',
             'six' => 'seven',
-        ));
+        ]);
 
         $parentDefinition->merge($childDefinition);
 
-        $this->assertEquals(array(
+        $this->assertEquals([
             'one' => 'two',
             'three' => 'four',
             'six' => 'seven',
-        ), $parentDefinition->getDefaults());
+        ], $parentDefinition->getDefaults());
     }
 
-    private function createDefinition($uriSchema, array $defaults = array())
+    private function createDefinition($uriSchema, array $defaults = [])
     {
         return new AutoRouteDefinition($uriSchema, $defaults);
     }

@@ -11,8 +11,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Mapping;
 
-use Metadata\MetadataFactoryInterface;
 use Metadata\Cache\CacheInterface;
+use Metadata\MetadataFactoryInterface;
 
 /**
  * The MetadataFactory class should be used to get the metadata for a specific
@@ -25,12 +25,12 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
     /**
      * @var ClassMetadata[]
      */
-    protected $metadatas = array();
+    protected $metadatas = [];
 
     /**
      * @var ClassMetadata[]
      */
-    protected $resolvedMetadatas = array();
+    protected $resolvedMetadatas = [];
 
     /**
      * @var null|CacheInterface
@@ -41,7 +41,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
      * @param ClassMetadata[] $metadatas Optional
      * @param CacheInterface  $cache     Optional
      */
-    public function __construct(array $metadatas = array(), CacheInterface $cache = null)
+    public function __construct(array $metadatas = [], CacheInterface $cache = null)
     {
         $this->metadatas = $metadatas;
         $this->cache = $cache;
@@ -94,8 +94,8 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
     {
         $classFqns = array_reverse(class_parents($class));
         $classFqns[] = $class;
-        $metadatas = array();
-        $addedClasses = array();
+        $metadatas = [];
+        $addedClasses = [];
 
         try {
             foreach ($classFqns as $classFqn) {
@@ -125,7 +125,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
 
     protected function doResolve($classFqn, array &$addedClasses)
     {
-        $metadatas = array();
+        $metadatas = [];
 
         if (in_array($classFqn, $addedClasses)) {
             throw new Exception\CircularReferenceException('Circular reference detected for "%s", make sure you don\'t mix PHP extends and mapping extends.');

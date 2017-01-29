@@ -11,9 +11,9 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Event that is dispatched after an auto route has been created.

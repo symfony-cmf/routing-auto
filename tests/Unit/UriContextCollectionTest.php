@@ -39,9 +39,9 @@ class UriContextCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $res = $this->uriContextCollection->createUriContext(
             '/foo/{bar}/baz',
-            array(),
-            array(),
-            array(),
+            [],
+            [],
+            [],
             'fr'
         );
         $this->assertInstanceOf('Symfony\Cmf\Component\RoutingAuto\UriContext', $res);
@@ -50,18 +50,18 @@ class UriContextCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function provideContainsAutoRoute()
     {
-        return array(
-            array(
-                array('uriContext1', 'uriContext2', 'uriContext3'),
+        return [
+            [
+                ['uriContext1', 'uriContext2', 'uriContext3'],
                 'autoRoute1',
                 true,
-            ),
-            array(
-                array('uriContext2', 'uriContext3'),
+            ],
+            [
+                ['uriContext2', 'uriContext3'],
                 'autoRoute1',
                 false,
-            ),
-        );
+            ],
+        ];
     }
 
     /**

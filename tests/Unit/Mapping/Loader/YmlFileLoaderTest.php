@@ -40,12 +40,12 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function getSupportsData()
     {
-        return array(
-            array('foo.yml'),
-            array('foo.xml', null, false),
-            array('foo.yml', 'yaml'),
-            array('foo.yml', 'xml', false),
-        );
+        return [
+            ['foo.yml'],
+            ['foo.xml', null, false],
+            ['foo.yml', 'yaml'],
+            ['foo.yml', 'xml', false],
+        ];
     }
 
     public function testDoesNothingIfFileIsEmpty()
@@ -75,32 +75,32 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function getFailsOnInvalidConfigFilesData()
     {
-        return array(
-            array(
+        return [
+            [
                 'invalid1.yml',
                 null,
-            ),
-            array(
+            ],
+            [
                 'invalid2.yml',
                 null,
-            ),
-            array(
+            ],
+            [
                 'invalid3.yml',
                 null,
-            ),
-            array(
+            ],
+            [
                 'invalid4.yml',
                 null,
-            ),
-            array(
+            ],
+            [
                 'invalid5.yml',
                 'Mapping node for "stdClass" must define a list of auto route definitions',
-            ),
-            array(
+            ],
+            [
                 'invalid6.yml',
                 'Invalid keys "foo_bar", "bar_foo"',
-            ),
-        );
+            ],
+        ];
     }
 
     /**
@@ -119,12 +119,12 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
     public function getCorrectlyParsesValidConfigFilesData()
     {
         $test = $this;
-        $serviceConfig = function ($name, $options = array()) {
-            return array('name' => $name, 'options' => $options);
+        $serviceConfig = function ($name, $options = []) {
+            return ['name' => $name, 'options' => $options];
         };
 
-        return array(
-            array('valid1.yml', function ($metadatas) use ($test) {
+        return [
+            ['valid1.yml', function ($metadatas) use ($test) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
@@ -132,8 +132,8 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
                 $definitions = $metadata->getAutoRouteDefinitions();
                 $test->assertEquals('/cmf/blog', $metadata->getAutoRouteDefinition('_default')->getUriSchema());
-            }),
-            array('valid2.yml', function ($metadatas) use ($test, $serviceConfig) {
+            }],
+            ['valid2.yml', function ($metadatas) use ($test, $serviceConfig) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
@@ -146,12 +146,12 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $units = $metadata->getTokenProviders();
 
                 $test->assertArrayHasKey('category', $units);
-                $test->assertEquals($serviceConfig('method', array('method' => 'getCategoryName')), $units['category']);
+                $test->assertEquals($serviceConfig('method', ['method' => 'getCategoryName']), $units['category']);
 
                 $test->assertArrayHasKey('post_name', $units);
-                $test->assertEquals($serviceConfig('method', array('method' => 'getName')), $units['post_name']);
-            }),
-            array('valid3.yml', function ($metadatas) use ($test) {
+                $test->assertEquals($serviceConfig('method', ['method' => 'getName']), $units['post_name']);
+            }],
+            ['valid3.yml', function ($metadatas) use ($test) {
                 $test->assertCount(2, $metadatas);
                 $test->assertEquals('stdClass', $metadatas[0]->getClassName());
                 $test->assertEquals('/forum/{category}/{post_name}', $metadatas[0]->getAutoRouteDefinition('_default')->getUriSchema());
@@ -159,8 +159,8 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $test->assertEquals('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass', $metadatas[1]->getClassName());
                 $test->assertEquals('/forum/{category}', $metadatas[1]->getAutoRouteDefinition('_default')->getUriSchema());
                 $test->assertEquals('stdClass', $metadatas[1]->getExtendedClass());
-            }),
-            array('valid4.yml', function ($metadatas) use ($test, $serviceConfig) {
+            }],
+            ['valid4.yml', function ($metadatas) use ($test, $serviceConfig) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
 
@@ -168,23 +168,23 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $test->assertEquals('/cmf/blog', $metadata->getAutoRouteDefinition('_default')->getUriSchema());
                 $test->assertEquals($serviceConfig('auto_increment'), $metadata->getConflictResolver());
                 $test->assertEquals($serviceConfig('leave_redirect'), $metadata->getDefunctRouteHandler());
-            }),
-            array('valid5.yml', function ($metadatas) use ($test, $serviceConfig) {
+            }],
+            ['valid5.yml', function ($metadatas) use ($test, $serviceConfig) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
 
                 $test->assertEquals('stdClass', $metadata->getClassName());
                 $test->assertEquals('/blog/{category}/{slug}', $metadata->getAutoRouteDefinition('_default')->getUriSchema());
-                $test->assertEquals($serviceConfig('auto_increment', array('token' => 'category')), $metadata->getConflictResolver());
+                $test->assertEquals($serviceConfig('auto_increment', ['token' => 'category']), $metadata->getConflictResolver());
 
                 $test->assertCount(2, $metadata->getTokenProviders());
                 $providers = $metadata->getTokenProviders();
                 $test->assertArrayHasKey('category', $providers);
-                $test->assertEquals($serviceConfig('method', array('method' => 'getCategoryName')), $providers['category']);
+                $test->assertEquals($serviceConfig('method', ['method' => 'getCategoryName']), $providers['category']);
                 $test->assertArrayHasKey('slug', $providers);
-                $test->assertEquals($serviceConfig('property', array('property' => 'title', 'slugify' => true)), $providers['slug']);
-            }),
-            array('valid6.yml', function ($metadatas) use ($test, $serviceConfig) {
+                $test->assertEquals($serviceConfig('property', ['property' => 'title', 'slugify' => true]), $providers['slug']);
+            }],
+            ['valid6.yml', function ($metadatas) use ($test, $serviceConfig) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
@@ -192,31 +192,31 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $providers = $metadata->getTokenProviders();
                 $test->assertArrayHasKey('category', $providers);
                 $test->assertEquals('foo', $providers['category']['name']);
-            }),
-            array('valid7.yml', function ($metadatas) use ($test, $serviceConfig) {
+            }],
+            ['valid7.yml', function ($metadatas) use ($test, $serviceConfig) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
 
                 $test->assertEquals('/forum/{category}/{post_title}/edit', $metadata->getAutoRouteDefinition(0)->getUriSchema());
                 $test->assertEquals(
-                    array(
+                    [
                         '_type' => 'edit',
-                    ), $metadata->getAutoRouteDefinition(0)->getDefaults()
+                    ], $metadata->getAutoRouteDefinition(0)->getDefaults()
                 );
 
                 $test->assertEquals('/forum/{category}/{post_title}/view', $metadata->getAutoRouteDefinition(1)->getUriSchema());
                 $test->assertEquals(
-                    array(
+                    [
                         '_type' => 'view',
-                    ), $metadata->getAutoRouteDefinition(1)->getDefaults()
+                    ], $metadata->getAutoRouteDefinition(1)->getDefaults()
                 );
 
                 $providers = $metadata->getTokenProviders();
                 $test->assertArrayHasKey('category', $providers);
                 $test->assertEquals('foo', $providers['category']['name']);
-            }),
-        );
+            }],
+        ];
     }
 
     protected function getFixturesPath($fixture)

@@ -45,9 +45,9 @@ class DelegatingDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->uriContextCollection->getSubject()->willReturn($this->subject);
         $this->adapter->getRealClassName('stdClass')->willReturn('stdClass');
         $this->metadataFactory->getMetadataForClass('stdClass')->willReturn($this->metadata);
-        $this->metadata->getDefunctRouteHandler()->willReturn(array(
+        $this->metadata->getDefunctRouteHandler()->willReturn([
             'name' => 'foobar',
-        ));
+        ]);
         $this->serviceRegistry->getDefunctRouteHandler('foobar')->willReturn($this->delegatedHandler);
         $this->delegatedHandler->handleDefunctRoutes($this->uriContextCollection->reveal())->shouldBeCalled();
         $this->delegatingDefunctRouteHandler->handleDefunctRoutes($this->uriContextCollection->reveal());

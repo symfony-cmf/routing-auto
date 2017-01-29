@@ -24,8 +24,8 @@ class UriContext
     protected $uri;
     protected $autoRoute;
     protected $uriSchema;
-    protected $tokenProviderConfigs = array();
-    protected $conflictResolverConfig = array();
+    protected $tokenProviderConfigs = [];
+    protected $conflictResolverConfig = [];
     protected $subjectMetadata;
     protected $defaults;
 

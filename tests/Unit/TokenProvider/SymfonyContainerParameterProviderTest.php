@@ -11,8 +11,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\SymfonyContainerParameterProvider;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SymfonyContainerParameterProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,11 +28,11 @@ class SymfonyContainerParameterProviderTest extends \PHPUnit_Framework_TestCase
 
     public function provideParameterValue()
     {
-        return array(
-            array(array('parameter' => 'foobar'), null),
-            array(array('foobar' => 'barfoo'), 'InvalidArgumentException'), // This is deliberately generic to preserve BC from SF 2.5 > 2.6
-            array(array(), 'Symfony\Component\OptionsResolver\Exception\MissingOptionsException'),
-        );
+        return [
+            [['parameter' => 'foobar'], null],
+            [['foobar' => 'barfoo'], 'InvalidArgumentException'], // This is deliberately generic to preserve BC from SF 2.5 > 2.6
+            [[], 'Symfony\Component\OptionsResolver\Exception\MissingOptionsException'],
+        ];
     }
 
     /**

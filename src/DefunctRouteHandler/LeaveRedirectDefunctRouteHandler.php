@@ -11,9 +11,9 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler;
 
+use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
-use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 
 class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
 {

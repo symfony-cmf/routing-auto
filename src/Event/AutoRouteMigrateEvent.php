@@ -11,8 +11,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Symfony\Component\EventDispatcher\Event;
 
 /**
  * Event that is dispatched when an auto route is migrated (moved)

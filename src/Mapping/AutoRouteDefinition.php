@@ -24,9 +24,9 @@ class AutoRouteDefinition
     /**
      * @var array
      */
-    private $defaults = array();
+    private $defaults = [];
 
-    public function __construct($uriSchema, array $defaults = array())
+    public function __construct($uriSchema, array $defaults = [])
     {
         $this->uriSchema = $uriSchema;
         $this->defaults = $defaults;

@@ -53,7 +53,7 @@ class UriContextCollectionBuilder
         $definitions = $metadata->getAutoRouteDefinitions();
 
         foreach ($definitions as $definition) {
-            $locales = $this->adapter->getLocales($subject) ?: array(null);
+            $locales = $this->adapter->getLocales($subject) ?: [null];
             foreach ($locales as $locale) {
                 // create and add uri context to stack
                 $uriContext = $uriContextCollection->createUriContext(

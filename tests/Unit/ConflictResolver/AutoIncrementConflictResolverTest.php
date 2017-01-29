@@ -27,24 +27,24 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
 
     public function provideResolveConflict()
     {
-        return array(
-            array(
+        return [
+            [
                 '/foobar/bar',
-                array(
+                [
                     '/foobar/bar-1',
-                ),
+                ],
                 '/foobar/bar-2',
-            ),
-            array(
+            ],
+            [
                 '/foobar/bar',
-                array(
+                [
                     '/foobar/bar-1',
                     '/foobar/bar-2',
                     '/foobar/bar-4',
-                ),
+                ],
                 '/foobar/bar-3',
-            ),
-        );
+            ],
+        ];
     }
 
     /**

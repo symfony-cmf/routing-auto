@@ -19,7 +19,7 @@ class UriContextCollection
      * @var object
      */
     protected $subject;
-    protected $uriContexts = array();
+    protected $uriContexts = [];
 
     /**
      * @param object $subject Subject for URL generation

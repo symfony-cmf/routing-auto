@@ -11,8 +11,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Mapping;
 
-use Metadata\MergeableInterface;
 use Metadata\MergeableClassMetadata;
+use Metadata\MergeableInterface;
 
 /**
  * Holds the metadata for one class.
@@ -24,19 +24,19 @@ class ClassMetadata extends MergeableClassMetadata
     /**
      * @var array
      */
-    protected $tokenProviders = array();
+    protected $tokenProviders = [];
 
     /**
      * @var array
      */
-    protected $conflictResolver = array('name' => 'throw_exception', 'options' => array());
+    protected $conflictResolver = ['name' => 'throw_exception', 'options' => []];
 
     /**
      * Defunct route handler, default to remove.
      *
      * @var array
      */
-    protected $defunctRouteHandler = array('name' => 'remove');
+    protected $defunctRouteHandler = ['name' => 'remove'];
 
     /**
      * @var string
@@ -46,7 +46,7 @@ class ClassMetadata extends MergeableClassMetadata
     /**
      * @var AutoRouteDefinition[]
      */
-    protected $definitions = array();
+    protected $definitions = [];
 
     /**
      * Add a new auto route definition for this class.
@@ -66,7 +66,7 @@ class ClassMetadata extends MergeableClassMetadata
      * @param array  $provider
      * @param bool   $override
      */
-    public function addTokenProvider($tokenName, array $provider = array(), $override = false)
+    public function addTokenProvider($tokenName, array $provider = [], $override = false)
     {
         if ('schema' === $tokenName) {
             throw new \InvalidArgumentException(sprintf('Class "%s" has an invalid token name "%s": schema is a reserved token name.', $this->name, $tokenName));

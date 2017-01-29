@@ -11,10 +11,10 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Mapping\Loader;
 
-use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
-use Symfony\Component\Config\Util\XmlUtils;
-use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
+use Symfony\Component\Config\Loader\FileLoader;
+use Symfony\Component\Config\Util\XmlUtils;
 
 /**
  * Loader for XML files.
@@ -55,7 +55,7 @@ class XmlFileLoader extends FileLoader
 
         $xml = XmlUtils::loadFile($path, __DIR__.static::SCHEMA_FILE);
 
-        $metadatas = array();
+        $metadatas = [];
         foreach ($xml->documentElement->getElementsByTagNameNS(self::NAMESPACE_URI, 'mapping') as $mappingNode) {
             $metadatas[] = $this->parseMappingNode($mappingNode, $path);
         }
@@ -135,7 +135,7 @@ class XmlFileLoader extends FileLoader
         $providerName = $this->readAttribute($tokenNode, 'name', sprintf('in "%s" for "%s"', $path, $classMetadata->name));
         $providerOptions = $this->parseOptionNode($tokenNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'option'), $path);
 
-        $classMetadata->addTokenProvider($tokenName, array('name' => $providerName, 'options' => $providerOptions));
+        $classMetadata->addTokenProvider($tokenName, ['name' => $providerName, 'options' => $providerOptions]);
     }
 
     /**
@@ -158,7 +158,7 @@ class XmlFileLoader extends FileLoader
      */
     protected function parseDefaultNode(\DOMNodeList $defaultNodes, ClassMetadata $classMetadata, $path)
     {
-        $defaults = array();
+        $defaults = [];
 
         foreach ($defaultNodes as $defaultNode) {
             $name = $this->readAttribute($defaultNode, 'key', sprintf('in "%s" for "%s"', $path, $classMetadata->name));
@@ -178,7 +178,7 @@ class XmlFileLoader extends FileLoader
         $name = $this->readAttribute($node, 'name', sprintf('in "%s" for "%s"', $path, $classMetadata->name));
         $options = $this->parseOptionNode($node->getElementsByTagNameNS(self::NAMESPACE_URI, 'option'), $path);
 
-        $classMetadata->setConflictResolver(array('name' => $name, 'options' => $options));
+        $classMetadata->setConflictResolver(['name' => $name, 'options' => $options]);
     }
 
     /**
@@ -191,12 +191,12 @@ class XmlFileLoader extends FileLoader
         $name = $this->readAttribute($node, 'name', sprintf('in "%s" for "%s"', $path, $classMetadata->name));
         $options = $this->parseOptionNode($node->getElementsByTagNameNS(self::NAMESPACE_URI, 'option'), $path);
 
-        $classMetadata->setDefunctRouteHandler(array('name' => $name, 'options' => $options));
+        $classMetadata->setDefunctRouteHandler(['name' => $name, 'options' => $options]);
     }
 
     protected function parseOptionNode(\DOMNodeList $nodes, $path)
     {
-        $options = array();
+        $options = [];
         foreach ($nodes as $node) {
             $options[$this->readAttribute($node, 'name', sprintf('in "%s"', $path))] = XmlUtils::phpize($node->nodeValue);
         }

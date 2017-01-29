@@ -13,8 +13,8 @@ namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 
 use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Provide values parameters from a Symfony DI container.

@@ -40,7 +40,7 @@ class UriGenerator implements UriGeneratorInterface
         $uriSchema = $uriContext->getUriSchema();
         $tokenProviderConfigs = $uriContext->getTokenProviderConfigs();
 
-        $tokens = array();
+        $tokens = [];
         preg_match_all('/{(.*?)}/', $uriSchema, $matches);
         $tokenNames = $matches[1];
 
@@ -119,8 +119,8 @@ class UriGenerator implements UriGeneratorInterface
      */
     private function configureGlobalOptions(OptionsResolver $optionsResolver)
     {
-        $optionsResolver->setDefaults(array(
+        $optionsResolver->setDefaults([
             'allow_empty' => false,
-        ));
+        ]);
     }
 }

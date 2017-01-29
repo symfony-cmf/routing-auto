@@ -11,8 +11,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\TokenProvider;
 
-use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 abstract class BaseContentMethodProvider implements TokenProviderInterface
