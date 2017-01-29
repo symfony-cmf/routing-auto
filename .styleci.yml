@@ -3,5 +3,5 @@ preset: symfony
 enabled:
   - ordered_use
   - short_array_syntax
-
-disabled: [simplified_null_return, single_line_class_definition]
+  
+disabled: [single_line_class_definition]
