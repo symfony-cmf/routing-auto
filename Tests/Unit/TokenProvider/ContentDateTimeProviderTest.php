@@ -17,7 +17,6 @@ use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentDateTimeProvider;
 
 class ContentDateTimeProviderTest extends BaseTestCase
 {
-    protected $slugifier;
     protected $article;
     protected $uriContext;
 
@@ -25,10 +24,9 @@ class ContentDateTimeProviderTest extends BaseTestCase
     {
         parent::setUp();
 
-        $this->slugifier = $this->prophesize('Symfony\Cmf\Bundle\CoreBundle\Slugifier\SlugifierInterface');
         $this->article = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Article');
         $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
-        $this->provider = new ContentDateTimeProvider($this->slugifier->reveal());
+        $this->provider = new ContentDateTimeProvider();
     }
 
     public function provideGetValue()
