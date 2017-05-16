@@ -30,7 +30,9 @@ before_install:
   
 install: composer update --prefer-dist $COMPOSER_FLAGS
 
-script: phpunit
+before_script: vendor/bin/phpunit --version
+
+script: vendor/bin/phpunit
 
 notifications:
   irc: "irc.freenode.org#symfony-cmf"
