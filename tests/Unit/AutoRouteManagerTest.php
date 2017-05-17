@@ -13,6 +13,7 @@ namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -162,49 +163,77 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function routes()
+    {
+        return [
+            'two conflicting routes' => [
+                [
+                    [
+                        'generatedUri' => '/uri/to',
+                        'exitsInDatabase' => false,
+                        'expectedUri' => '/uri/to'
+                    ],
+                    [
+                        'generatedUri' => '/uri/to',
+                        'existsInDatabase' => false,
+                        'expectedUri' => '/resolved/uri'
+                    ]
+                ]
+            ]
+        ];
+    }
+
     /**
      * @testdox handles conflicting routes within the collection
+     * @dataProvider routes
      */
-    public function testHandlesConflictingRoutesWithinCollection()
+    public function testHandlesConflictingRoutesWithinCollection($routes)
     {
-        $uri = '/uri/to';
-        $resolvedUri = '/resolved/uri';
+        $subject = new \stdClass();
+        $tag = 'tag';
+        $autoRoute = $this->prophesize(AutoRouteInterface::class);
 
-        // Make the context stubs
-        $this->context1->getLocale()->willReturn(null);
-        $this->context1->getSubject()->willReturn($this->subject);
-        $this->context2->getLocale()->willReturn(null);
-        $this->context1->getSubject()->willReturn($this->subject);
+        $contexts = [];
 
-        // Make the collection stub
-        $this->collection->getUriContexts()->willReturn([
-            $this->context1,
-            $this->context2
-        ]);
-        $this->collection->getSubject()->willReturn($this->subject);
+        foreach ($routes as $route) {
+            $context = $this->prophesize(UriContext::class);
 
-        // Make the adapter stub
-        $this->adapter->findRouteForUri($uri, $this->context1)->willReturn(null);
-        $this->adapter->findRouteForUri($uri, $this->context2)->willReturn(null);
-        $this->adapter->generateAutoRouteTag($this->context1)->willReturn('fr');
-        $this->adapter->createAutoRoute($this->context1, $this->subject, 'fr')->willReturn($this->autoRoute1);
+            // Configure the context mock
+            $context->getLocale()->willReturn(null);
+            $context->getSubject()->willReturn($subject);
+
+            // Configure the URI generator stub behavior regarding this route
+            $this->uriGenerator->generateUri($context->reveal())->willReturn($route['generatedUri']);
+
+            if ($route['expectedUri'] !== $route['generatedUri']) {
+                $this->uriGenerator->resolveConflict($context->reveal())->willReturn($route['expectedUri']);
+            }
+
+            // Configure the adapter stub behavior regarding this route
+            $this->adapter->findRouteForUri($route['generatedUri'], $context)->willReturn(null); ///////
+            $this->adapter->generateAutoRouteTag($context)->willReturn($tag);
+            $this->adapter->createAutoRoute($context, $subject, $tag)->willReturn($autoRoute);
+
+            // Expect the URI
+            $context->setUri($route['expectedUri'])->shouldBeCalled();
+
+            // Expect the autoroute
+            $context->setAutoRoute($autoRoute)->shouldBeCalled();
+
+            $contexts[] = $context;
+        }
+
+        // Configure the collection stub
+        $this->collection->getUriContexts()->willReturn($contexts);
+        $this->collection->getSubject()->willReturn($subject);
+
+        // Configure the adapter stub
         $this->adapter->compareAutoRouteContent(
-            $this->autoRoute1->reveal(),
-            $this->subject
+            $autoRoute->reveal(),
+            $subject
         )->willReturn(false);
 
-        // Make the URI generator stub
-        $this->uriGenerator->generateUri($this->context1->reveal())->willReturn($uri);
-        $this->uriGenerator->generateUri($this->context2->reveal())->willReturn($uri);
-        $this->uriGenerator->resolveConflict($this->context2->reveal())->willReturn($resolvedUri);
-
-        // Expect the autoroute
-        $this->context1->setAutoRoute($this->autoRoute1)->shouldBeCalled();
-
-        // Expect the generated URI
-        $this->context1->setUri($uri)->shouldBeCalled();
-        $this->context2->setUri($resolvedUri)->shouldBeCalled();
-
+        // Run the tested method
         $this->manager->buildUriContextCollection($this->collection->reveal());
     }
 }
