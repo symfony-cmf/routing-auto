@@ -161,4 +161,50 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             [false],
         ];
     }
+
+    /**
+     * @testdox handles conflicting routes within the collection
+     */
+    public function testHandlesConflictingRoutesWithinCollection()
+    {
+        $uri = '/uri/to';
+        $resolvedUri = '/resolved/uri';
+
+        // Make the context stubs
+        $this->context1->getLocale()->willReturn(null);
+        $this->context1->getSubject()->willReturn($this->subject);
+        $this->context2->getLocale()->willReturn(null);
+        $this->context1->getSubject()->willReturn($this->subject);
+
+        // Make the collection stub
+        $this->collection->getUriContexts()->willReturn([
+            $this->context1,
+            $this->context2
+        ]);
+        $this->collection->getSubject()->willReturn($this->subject);
+
+        // Make the adapter stub
+        $this->adapter->findRouteForUri($uri, $this->context1)->willReturn(null);
+        $this->adapter->findRouteForUri($uri, $this->context2)->willReturn(null);
+        $this->adapter->generateAutoRouteTag($this->context1)->willReturn('fr');
+        $this->adapter->createAutoRoute($this->context1, $this->subject, 'fr')->willReturn($this->autoRoute1);
+        $this->adapter->compareAutoRouteContent(
+            $this->autoRoute1->reveal(),
+            $this->subject
+        )->willReturn(false);
+
+        // Make the URI generator stub
+        $this->uriGenerator->generateUri($this->context1->reveal())->willReturn($uri);
+        $this->uriGenerator->generateUri($this->context2->reveal())->willReturn($uri);
+        $this->uriGenerator->resolveConflict($this->context2->reveal())->willReturn($resolvedUri);
+
+        // Expect the autoroute
+        $this->context1->setAutoRoute($this->autoRoute1)->shouldBeCalled();
+
+        // Expect the generated URI
+        $this->context1->setUri($uri)->shouldBeCalled();
+        $this->context2->setUri($resolvedUri)->shouldBeCalled();
+
+        $this->manager->buildUriContextCollection($this->collection->reveal());
+    }
 }
