@@ -15,6 +15,9 @@ use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
+/**
+ * @testdox The manager
+ */
 class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 {
     private $adapter;
@@ -163,20 +166,70 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function routes()
+    /**
+     * Provides the routes configuration for each tested use case.
+     *
+     * Each dataset is an array of routes configuration. Each configuration
+     * is an associative array containing:
+     *  - generatedUri (string): the URI made by the URI generator for this route,
+     *  - existsInDatabase (boolean): is there an existing persisted route matching the same URI,
+     *  - expectedUri (string): the URI expected to be set on the current route.
+     *
+     * If the generated URI and the expected one are different, it means that
+     * the conflict resolver should be called by the manager.
+     */
+    public function routesConfigurations()
     {
         return [
+            'a single route' => [
+                [
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar'
+                    ]
+                ]
+            ],
+            'two routes' => [
+                [
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar'
+                    ],
+                    [
+                        'generatedUri' => '/bar/baz',
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/bar/baz'
+                    ]
+                ]
+            ],
+            'a single route conflicting with a persisted one' => [
+                [
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'existsInDatabase' => true,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar-resolved'
+                    ]
+                ]
+            ],
             'two conflicting routes' => [
                 [
                     [
-                        'generatedUri' => '/uri/to',
-                        'exitsInDatabase' => false,
-                        'expectedUri' => '/uri/to'
+                        'generatedUri' => '/foo/bar',
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar'
                     ],
                     [
-                        'generatedUri' => '/uri/to',
+                        'generatedUri' => '/foo/bar',
                         'existsInDatabase' => false,
-                        'expectedUri' => '/resolved/uri'
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar-resolved'
                     ]
                 ]
             ]
@@ -184,41 +237,68 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @testdox handles conflicting routes within the collection
-     * @dataProvider routes
+     * @testdox builds the collection with
+     * @dataProvider routesConfigurations
      */
-    public function testHandlesConflictingRoutesWithinCollection($routes)
+    public function buildUriContextCollection($routes)
     {
         $subject = new \stdClass();
-        $tag = 'tag';
-        $autoRoute = $this->prophesize(AutoRouteInterface::class);
 
+        // Build the context stubs collection and configure the stubs behavior
+        // regarding each route
         $contexts = [];
 
         foreach ($routes as $route) {
             $context = $this->prophesize(UriContext::class);
+            $tag = 'tag';
+            $newAutoRoute = $this->prophesize(AutoRouteInterface::class);
+            $existingAutoRoute = $this->prophesize(AutoRouteInterface::class);
 
-            // Configure the context mock
             $context->getLocale()->willReturn(null);
             $context->getSubject()->willReturn($subject);
-
-            // Configure the URI generator stub behavior regarding this route
-            $this->uriGenerator->generateUri($context->reveal())->willReturn($route['generatedUri']);
-
-            if ($route['expectedUri'] !== $route['generatedUri']) {
-                $this->uriGenerator->resolveConflict($context->reveal())->willReturn($route['expectedUri']);
+            
+            // If the route exists within the database and matches the same
+            // content, it is reused. Otherwize, a new one is expected.
+            if ($route['existsInDatabase'] and $route['withSameContent']) {
+                $context->setAutoRoute($existingAutoRoute)->shouldBeCalled();
+            } else {
+                $context->setAutoRoute($newAutoRoute)->shouldBeCalled();
             }
 
-            // Configure the adapter stub behavior regarding this route
-            $this->adapter->findRouteForUri($route['generatedUri'], $context)->willReturn(null); ///////
-            $this->adapter->generateAutoRouteTag($context)->willReturn($tag);
-            $this->adapter->createAutoRoute($context, $subject, $tag)->willReturn($autoRoute);
+            // Expect generated URI
+            $context->setUri($route['generatedUri'])->shouldBeCalled();
 
             // Expect the URI
             $context->setUri($route['expectedUri'])->shouldBeCalled();
 
-            // Expect the autoroute
-            $context->setAutoRoute($autoRoute)->shouldBeCalled();
+            // The URI generator stub:
+            //  - generates the provided URI,
+            $this->uriGenerator->generateUri($context->reveal())->willReturn($route['generatedUri']);
+            //  - if the expected URI is different from the generated one,
+            //    resolves the conflict.
+            if ($route['expectedUri'] !== $route['generatedUri']) {
+                $this->uriGenerator->resolveConflict($context->reveal())->willReturn($route['expectedUri']);
+            }
+
+            // The adapter:
+            //  - generates the tag,
+            $this->adapter->generateAutoRouteTag($context)->willReturn($tag);
+            //  - creates a new autoroute,
+            $this->adapter->createAutoRoute($context, $subject, $tag)
+                ->willReturn($newAutoRoute);
+            //  - if the route exists in database, finds it,
+            if ($route['existsInDatabase']) {
+                $this->adapter->findRouteForUri($route['generatedUri'], $context)->willReturn($existingAutoRoute);
+
+                //  - tells if the existing route matches the same content
+                $this->adapter->compareAutoRouteContent(
+                    $existingAutoRoute->reveal(),
+                    $subject
+                )->willReturn($route['withSameContent'] === true);
+            } else {
+                $expectedAutoRoute =  $newAutoRoute;
+                $this->adapter->findRouteForUri($route['generatedUri'], $context)->willReturn(null);
+            }
 
             $contexts[] = $context;
         }
@@ -226,12 +306,6 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         // Configure the collection stub
         $this->collection->getUriContexts()->willReturn($contexts);
         $this->collection->getSubject()->willReturn($subject);
-
-        // Configure the adapter stub
-        $this->adapter->compareAutoRouteContent(
-            $autoRoute->reveal(),
-            $subject
-        )->willReturn(false);
 
         // Run the tested method
         $this->manager->buildUriContextCollection($this->collection->reveal());
