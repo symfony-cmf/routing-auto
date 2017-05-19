@@ -11,6 +11,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
+use Prophecy\Argument;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
@@ -297,6 +298,15 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             // Configure the context mock
             $context->getLocale()->willReturn($route['locale']);
             $context->getSubject()->willReturn($subject);
+            $context->getUri()->willReturn(null);
+            $context->setUri(Argument::type('string'))->will(function ($uri) {
+                $this->getUri()->willReturn($uri);
+            });
+            $context->getAutoRoute()->willReturn(null);
+            $context->setAutoRoute(Argument::type(AutoRouteInterface::class))
+                ->will(function (AutoRouteInterface $autoRoute) {
+                    $this->getAutoRoute()->willReturn($autoRoute);
+                });
 
             // Configure the stubs
             $this->configureUriGenerator($context, $route);
