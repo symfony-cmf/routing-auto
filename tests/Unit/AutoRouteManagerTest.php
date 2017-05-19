@@ -70,8 +70,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar',
-                    ]
-                ]
+                    ],
+                ],
             ],
             'a single localized route' => [
                 [
@@ -81,8 +81,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar',
-                    ]
-                ]
+                    ],
+                ],
             ],
             'two routes' => [
                 [
@@ -99,8 +99,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/bar/baz',
-                    ]
-                ]
+                    ],
+                ],
             ],
             'two localized routes' => [
                 [
@@ -117,8 +117,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/bar/baz',
-                    ]
-                ]
+                    ],
+                ],
             ],
             'a single route conflicting with a persisted one' => [
                 [
@@ -128,8 +128,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'existsInDatabase' => true,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar-resolved',
-                    ]
-                ]
+                    ],
+                ],
             ],
             'a single localized route conflicting with a persisted one' => [
                 [
@@ -139,8 +139,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'existsInDatabase' => true,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar-resolved',
-                    ]
-                ]
+                    ],
+                ],
             ],
             'two conflicting routes' => [
                 [
@@ -157,8 +157,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar-resolved',
-                    ]
-                ]
+                    ],
+                ],
             ],
             'two localized conflicting routes' => [
                 [
@@ -175,9 +175,9 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar-resolved',
-                    ]
-                ]
-            ]
+                    ],
+                ],
+            ],
         ];
     }
 
