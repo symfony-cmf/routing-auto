@@ -178,6 +178,42 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ],
+            'two conflicting routes whose the first one conflicts with a persisted route' => [
+                [
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'locale' => null,
+                        'existsInDatabase' => true,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar-resolved',
+                    ],
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'locale' => null,
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar-also-resolved',
+                    ],
+                ],
+            ],
+            'two localized conflicting routes whose the first one conflicts with a persisted route' => [
+                [
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'locale' => 'de',
+                        'existsInDatabase' => true,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar-resolved',
+                    ],
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'locale' => 'en',
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar-also-resolved',
+                    ],
+                ],
+            ],
         ];
     }
 
