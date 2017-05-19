@@ -111,6 +111,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      * Each dataset is an array of routes configuration. Each configuration
      * is an associative array containing:
      *  - generatedUri (string): the URI made by the URI generator for this route,
+     *  - locale (string): the locale
      *  - existsInDatabase (boolean): is there an existing persisted route matching the same URI,
      *  - expectedUri (string): the URI expected to be set on the current route.
      *
@@ -124,6 +125,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'generatedUri' => '/foo/bar',
+                        'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar'
@@ -134,12 +136,43 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'generatedUri' => '/foo/bar',
+                        'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar'
                     ],
                     [
                         'generatedUri' => '/bar/baz',
+                        'locale' => null,
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/bar/baz'
+                    ]
+                ]
+            ],
+            'a single localized route' => [
+                [
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'locale' => 'fr',
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar'
+                    ]
+                ]
+            ],
+            'two localized routes' => [
+                [
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'locale' => 'en',
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar'
+                    ],
+                    [
+                        'generatedUri' => '/bar/baz',
+                        'locale' => 'fr',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/bar/baz'
@@ -150,6 +183,18 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'generatedUri' => '/foo/bar',
+                        'locale' => null,
+                        'existsInDatabase' => true,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar-resolved'
+                    ]
+                ]
+            ],
+            'a single localized route conflicting with a persisted one' => [
+                [
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'locale' => 'fr',
                         'existsInDatabase' => true,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar-resolved'
@@ -160,12 +205,32 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 [
                     [
                         'generatedUri' => '/foo/bar',
+                        'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar'
                     ],
                     [
                         'generatedUri' => '/foo/bar',
+                        'locale' => null,
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar-resolved'
+                    ]
+                ]
+            ],
+            'two localized conflicting routes' => [
+                [
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'locale' => 'en',
+                        'existsInDatabase' => false,
+                        'withSameContent' => false,
+                        'expectedUri' => '/foo/bar'
+                    ],
+                    [
+                        'generatedUri' => '/foo/bar',
+                        'locale' => 'fr',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
                         'expectedUri' => '/foo/bar-resolved'
@@ -182,6 +247,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     public function buildUriContextCollection($routes)
     {
         $subject = new \stdClass();
+        $translatedSubject = new \stdClass();
+        $tag = 'tag';
 
         // Build the context mocks and configure the stubs behavior
         // regarding each route
@@ -189,11 +256,10 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
         foreach ($routes as $route) {
             $context = $this->prophesize(UriContext::class);
-            $tag = 'tag';
             $newAutoRoute = $this->prophesize(AutoRouteInterface::class);
             $existingAutoRoute = $this->prophesize(AutoRouteInterface::class);
 
-            $context->getLocale()->willReturn(null);
+            $context->getLocale()->willReturn($route['locale']);
             $context->getSubject()->willReturn($subject);
             
             // If the route exists within the database and matches the same
@@ -204,7 +270,13 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 $context->setAutoRoute($newAutoRoute)->shouldBeCalled();
             }
 
-            // Expect generated URI
+            // If the route specify a locale, the translated subject is put in
+            // the context
+            if (!is_null($route['locale'])) {
+                $context->setTranslatedSubject($translatedSubject)->shouldBeCalled();
+            }
+
+            // Expect the generated URI
             $context->setUri($route['generatedUri'])->shouldBeCalled();
 
             // Expect the URI
@@ -237,6 +309,12 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             } else {
                 $expectedAutoRoute =  $newAutoRoute;
                 $this->adapter->findRouteForUri($route['generatedUri'], $context)->willReturn(null);
+            }
+            //  - if the route specify a locale, translates the subject
+            if (!is_null($route['locale'])) {
+                $this->adapter->translateObject($subject, $route['locale'])->willReturn($translatedSubject);
+            } else {
+                $this->adapter->translateObject($subject, $route['locale'])->willReturn($subject);
             }
 
             $contexts[] = $context;
