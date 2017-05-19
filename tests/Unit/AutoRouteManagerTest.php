@@ -61,12 +61,6 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $this->context2->getLocale()->willReturn(null);
 
         $this->manager->buildUriContextCollection($this->collection->reveal());
-
-        // test handle defunt routes:
-        // would like to make this a separate test with @depends
-        // but PHPUnit does not allow it.
-        $this->defunctRouteHandler->handleDefunctRoutes($this->collection->reveal())->shouldBeCalled();
-        $this->manager->handleDefunctRoutes();
     }
 
     /**
@@ -254,5 +248,13 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
         // Run the tested method
         $this->manager->buildUriContextCollection($this->collection->reveal());
+
+        // The defunct routes handler handles the defunct routes after the
+        // processing of the contexts collection.
+        // This should be done in a depending test. But PHPUnit does not
+        // allow a depending test to receive the result of a test which use
+        // a data provider.
+        $this->defunctRouteHandler->handleDefunctRoutes($this->collection->reveal())->shouldBeCalled();
+        $this->manager->handleDefunctRoutes();
     }
 }
