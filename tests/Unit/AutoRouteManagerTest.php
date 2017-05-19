@@ -244,7 +244,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     {
         $subject = new \stdClass();
 
-        // Build the context stubs collection and configure the stubs behavior
+        // Build the context mocks and configure the stubs behavior
         // regarding each route
         $contexts = [];
 
