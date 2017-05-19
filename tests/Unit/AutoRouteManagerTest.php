@@ -112,61 +112,6 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * It should handle existing URIs.
-     *
-     * @dataProvider provideBuildCollectionExisting
-     */
-    public function testBuildCollectionExisting($sameContent)
-    {
-        $uri = '/uri/to';
-        $resolvedUri = '/resolved/uri';
-
-        $this->collectionBuilder->build($this->collection->reveal());
-        $this->collection->getUriContexts()->willReturn([
-            $this->context1->reveal(),
-        ]);
-        $this->collection->getSubject()->willReturn($this->subject);
-        $this->uriGenerator->generateUri($this->context1->reveal())->willReturn($uri);
-        $this->context1->setUri($uri)->shouldBeCalled();
-        $this->context1->getLocale()->willReturn(null);
-        $this->context1->getSubject()->willReturn($this->subject);
-        $this->adapter->findRouteForUri($uri, $this->context1)->willReturn(
-            $this->autoRoute1->reveal()
-        );
-
-        // handle existing route
-        $this->adapter->compareAutoRouteContent(
-            $this->autoRoute1->reveal(),
-            $this->subject
-        )->willReturn($sameContent);
-
-        $this->context1->getSubject()->willReturn($this->subject);
-
-        if ($sameContent) {
-            $this->autoRoute1->setType(AutoRouteInterface::TYPE_PRIMARY)
-                ->shouldBeCalled();
-        } else {
-            $this->uriGenerator->resolveConflict($this->context1->reveal())
-                ->willReturn($resolvedUri);
-            $this->context1->setUri($resolvedUri)->shouldBeCalled();
-            $this->adapter->generateAutoRouteTag($this->context1->reveal())->willReturn('fr');
-            $this->adapter->createAutoRoute($this->context1, $this->subject, 'fr')->willReturn($this->autoRoute1->reveal());
-        }
-
-        $this->context1->setAutoRoute($this->autoRoute1->reveal())->shouldBeCalled();
-
-        $this->manager->buildUriContextCollection($this->collection->reveal());
-    }
-
-    public function provideBuildCollectionExisting()
-    {
-        return [
-            [true],
-            [false],
-        ];
-    }
-
-    /**
      * Provides the routes configuration for each tested use case.
      *
      * Each dataset is an array of routes configuration. Each configuration
