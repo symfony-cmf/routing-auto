@@ -14,11 +14,11 @@ namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
-use Symfony\Cmf\Component\RoutingAuto\UriContextCollectionBuilder;
-use Symfony\Cmf\Component\RoutingAuto\UriGeneratorInterface;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
-use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollectionBuilder;
+use Symfony\Cmf\Component\RoutingAuto\UriGeneratorInterface;
 
 /**
  * @testdox The manager
@@ -69,7 +69,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
-                        'expectedUri' => '/foo/bar'
+                        'expectedUri' => '/foo/bar',
                     ]
                 ]
             ],
@@ -80,7 +80,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'fr',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
-                        'expectedUri' => '/foo/bar'
+                        'expectedUri' => '/foo/bar',
                     ]
                 ]
             ],
@@ -91,14 +91,14 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
-                        'expectedUri' => '/foo/bar'
+                        'expectedUri' => '/foo/bar',
                     ],
                     [
                         'generatedUri' => '/bar/baz',
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
-                        'expectedUri' => '/bar/baz'
+                        'expectedUri' => '/bar/baz',
                     ]
                 ]
             ],
@@ -109,14 +109,14 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'en',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
-                        'expectedUri' => '/foo/bar'
+                        'expectedUri' => '/foo/bar',
                     ],
                     [
                         'generatedUri' => '/bar/baz',
                         'locale' => 'fr',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
-                        'expectedUri' => '/bar/baz'
+                        'expectedUri' => '/bar/baz',
                     ]
                 ]
             ],
@@ -127,7 +127,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => true,
                         'withSameContent' => false,
-                        'expectedUri' => '/foo/bar-resolved'
+                        'expectedUri' => '/foo/bar-resolved',
                     ]
                 ]
             ],
@@ -138,7 +138,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'fr',
                         'existsInDatabase' => true,
                         'withSameContent' => false,
-                        'expectedUri' => '/foo/bar-resolved'
+                        'expectedUri' => '/foo/bar-resolved',
                     ]
                 ]
             ],
@@ -149,14 +149,14 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
-                        'expectedUri' => '/foo/bar'
+                        'expectedUri' => '/foo/bar',
                     ],
                     [
                         'generatedUri' => '/foo/bar',
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
-                        'expectedUri' => '/foo/bar-resolved'
+                        'expectedUri' => '/foo/bar-resolved',
                     ]
                 ]
             ],
@@ -167,14 +167,14 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'en',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
-                        'expectedUri' => '/foo/bar'
+                        'expectedUri' => '/foo/bar',
                     ],
                     [
                         'generatedUri' => '/foo/bar',
                         'locale' => 'fr',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
-                        'expectedUri' => '/foo/bar-resolved'
+                        'expectedUri' => '/foo/bar-resolved',
                     ]
                 ]
             ]
@@ -191,7 +191,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     private function configureUriGenerator($context, $route)
     {
         $this->uriGenerator->generateUri($context)->willReturn($route['generatedUri']);
-        
+
         if ($route['expectedUri'] !== $route['generatedUri']) {
             $this->uriGenerator->resolveConflict($context)->willReturn($route['expectedUri']);
         }
@@ -216,7 +216,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->adapter->createAutoRoute($context, $subject, $tag)
             ->willReturn($this->prophesize(AutoRouteInterface::class));
-        
+
         if ($route['existsInDatabase']) {
             $existingAutoRoute = $this->prophesize(AutoRouteInterface::class);
 
@@ -261,7 +261,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             // Configure the context mock
             $context->getLocale()->willReturn($route['locale']);
             $context->getSubject()->willReturn($subject);
-            
+
             // Configure the stubs
             $this->configureUriGenerator($context, $route);
             $this->configureAdapter($context, $route);
