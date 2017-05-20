@@ -11,6 +11,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
+use Prophecy\Argument;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
@@ -250,7 +251,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->adapter->generateAutoRouteTag($context)->willReturn($tag);
 
-        $this->adapter->createAutoRoute($context, $subject, $tag)
+        $this->adapter->createAutoRoute($context, $route['subject'], $tag)
             ->willReturn($this->prophesize(AutoRouteInterface::class));
 
         if ($route['existsInDatabase']) {
@@ -263,7 +264,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
             $this->adapter->compareAutoRouteContent(
                 $existingAutoRoute->reveal(),
-                $subject
+                $route['subject']
             )->willReturn($route['withSameContent'] === true);
         } else {
             $this->adapter->findRouteForUri($route['generatedUri'], $context)->willReturn(null);
@@ -272,10 +273,36 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         if (!is_null($route['locale'])) {
             $translatedSubject = new \stdClass();
 
-            $this->adapter->translateObject($subject, $route['locale'])->willReturn($translatedSubject);
+            $this->adapter->translateObject($route['subject'], $route['locale'])->willReturn($translatedSubject);
         } else {
-            $this->adapter->translateObject($subject, $route['locale'])->willReturn($subject);
+            $this->adapter->translateObject($route['subject'], $route['locale'])->willReturn($subject);
         }
+    }
+
+    /**
+     * Configure the context.
+     *
+     * The context stub:
+     *  - gives the locale,
+     *  - gives the subject,
+     *  - takes and gives a URI,
+     *  - takes and gives an auto route.
+     */
+    private function configureContext($context, $route)
+    {
+        $context->getLocale()->willReturn($route['locale']);
+        $context->getSubject()->willReturn($route['subject']);
+
+        $context->getUri()->willReturn(null);
+        $context->setUri(Argument::type('string'))->will(function ($args) {
+            $this->getUri()->willReturn($args[0]);
+        });
+
+        $context->getAutoRoute()->willReturn(null);
+        $context->setAutoRoute(Argument::type(AutoRouteInterface::class))
+            ->will(function ($args) {
+                $this->getAutoRoute()->willReturn($args[0]);
+            });
     }
 
     /**
@@ -285,22 +312,23 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     public function buildUriContextCollection($routes)
     {
         $collection = $this->prophesize(UriContextCollection::class);
-        $subject = new \stdClass();
+
+        // Configure the collection stub
+        $collection->getSubject()->willReturn(new \stdClass());
 
         // Build the context mocks and configure the stubs behavior
         // regarding each route
         $contexts = [];
 
         foreach ($routes as $route) {
-            $context = $this->prophesize(UriContext::class);
+            $route['subject'] = $collection->reveal()->getSubject();
 
-            // Configure the context mock
-            $context->getLocale()->willReturn($route['locale']);
-            $context->getSubject()->willReturn($subject);
+            $context = $this->prophesize(UriContext::class);
 
             // Configure the stubs
             $this->configureUriGenerator($context, $route);
             $this->configureAdapter($context, $route);
+            $this->configureContext($context, $route);
 
             // If the route exists within the database and matches the same
             // content, it is reused. Otherwize, a new one is expected.
@@ -315,7 +343,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 $tag = $this->adapter->reveal()->generateAutoRouteTag($context->reveal());
                 $newAutoRoute = $this->adapter->reveal()->createAutoRoute(
                     $context->reveal(),
-                    $subject,
+                    $route['subject'],
                     $tag
                 );
 
@@ -326,25 +354,20 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             // the context
             if (!is_null($route['locale'])) {
                 $translatedSubject = $this->adapter->reveal()->translateObject(
-                    $subject,
+                    $route['subject'],
                     $route['locale']
                 );
 
                 $context->setTranslatedSubject($translatedSubject)->shouldBeCalled();
             }
 
-            // Expect the generated URI
-            $context->setUri($route['generatedUri'])->shouldBeCalled();
-
             // Expect the URI
             $context->setUri($route['expectedUri'])->shouldBeCalled();
 
-            $contexts[] = $context;
+            $contexts[] = $context->reveal();
         }
 
-        // Configure the collection stub
         $collection->getUriContexts()->willReturn($contexts);
-        $collection->getSubject()->willReturn($subject);
 
         // Run the tested method
         $this->manager->buildUriContextCollection($collection->reveal());
