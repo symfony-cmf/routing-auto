@@ -247,7 +247,6 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     private function configureAdapter($context, $route)
     {
         $tag = 'tag';
-        $subject = $context->reveal()->getSubject();
 
         $this->adapter->generateAutoRouteTag($context)->willReturn($tag);
 
@@ -275,7 +274,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
             $this->adapter->translateObject($route['subject'], $route['locale'])->willReturn($translatedSubject);
         } else {
-            $this->adapter->translateObject($route['subject'], $route['locale'])->willReturn($subject);
+            $this->adapter->translateObject($route['subject'], $route['locale'])->willReturn($route['subject']);
         }
     }
 
@@ -303,6 +302,12 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             ->will(function ($args) {
                 $this->getAutoRoute()->willReturn($args[0]);
             });
+
+        $context->getTranslatedSubject()->willReturn(null);
+        $context->setTranslatedSubject(Argument::type(\stdClass::class))
+            ->will(function ($args) {
+                $this->getTranslatedSubject()->willReturn($args[0]);
+            });
     }
 
     /**
@@ -316,39 +321,49 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         // Configure the collection stub
         $collection->getSubject()->willReturn(new \stdClass());
 
-        // Build the context mocks and configure the stubs behavior
-        // regarding each route
+        // Configure the stubs behavior regarding each route
         $contexts = [];
 
-        foreach ($routes as $route) {
+        foreach ($routes as $i => $route) {
             $route['subject'] = $collection->reveal()->getSubject();
 
             $context = $this->prophesize(UriContext::class);
 
-            // Configure the stubs
             $this->configureUriGenerator($context, $route);
             $this->configureAdapter($context, $route);
             $this->configureContext($context, $route);
 
+            $route['context'] = $context;
+            $routes[$i] = $route;
+            $contexts[] = $context->reveal();
+        }
+
+        $collection->getUriContexts()->willReturn($contexts);
+
+        // Run the tested method
+        $this->manager->buildUriContextCollection($collection->reveal());
+
+        // Expect manipulations on the contexts
+        foreach ($routes as $route) {
+            $context = $route['context'];
+
             // If the route exists within the database and matches the same
             // content, it is reused. Otherwize, a new one is expected.
             if ($route['existsInDatabase'] and $route['withSameContent']) {
-                $existingAutoRoute = $this->adapter->reveal()->findRouteForUri(
+                $expectedAutoRoute = $this->adapter->reveal()->findRouteForUri(
                     $route['generatedUri'],
                     $context->reveal()
                 );
-
-                $context->setAutoRoute($existingAutoRoute)->shouldBeCalled();
             } else {
                 $tag = $this->adapter->reveal()->generateAutoRouteTag($context->reveal());
-                $newAutoRoute = $this->adapter->reveal()->createAutoRoute(
+                $expectedAutoRoute = $this->adapter->reveal()->createAutoRoute(
                     $context->reveal(),
                     $route['subject'],
                     $tag
                 );
-
-                $context->setAutoRoute($newAutoRoute)->shouldBeCalled();
             }
+
+            $context->setAutoRoute($expectedAutoRoute)->shouldHaveBeenCalled();
 
             // If the route specify a locale, the translated subject is put in
             // the context
@@ -358,19 +373,12 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                     $route['locale']
                 );
 
-                $context->setTranslatedSubject($translatedSubject)->shouldBeCalled();
+                $context->setTranslatedSubject($translatedSubject)->shouldHaveBeenCalled();
             }
 
             // Expect the URI
-            $context->setUri($route['expectedUri'])->shouldBeCalled();
-
-            $contexts[] = $context->reveal();
+            $context->setUri($route['expectedUri'])->shouldHaveBeenCalled();
         }
-
-        $collection->getUriContexts()->willReturn($contexts);
-
-        // Run the tested method
-        $this->manager->buildUriContextCollection($collection->reveal());
 
         // The defunct routes handler handles the defunct routes after the
         // processing of the contexts collection.
