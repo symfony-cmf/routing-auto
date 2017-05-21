@@ -21,9 +21,6 @@ use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollectionBuilder;
 use Symfony\Cmf\Component\RoutingAuto\UriGeneratorInterface;
 
-/**
- * @testdox The manager
- */
 class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 {
     private $adapter;
@@ -60,7 +57,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      * If the generated URI and the expected one are different, it means that
      * the conflict resolver should be called by the manager.
      */
-    public function routesConfigurations()
+    public function provideBuildUriContextCollection()
     {
         return [
             'a single route' => [
@@ -143,7 +140,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ],
-            'two conflicting routes' => [
+            'two routes where the second one conflicts with the first one' => [
                 [
                     [
                         'generatedUri' => '/foo/bar',
@@ -161,7 +158,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ],
-            'two localized conflicting routes' => [
+            'two localized routes where the second one conflicts with the first one' => [
                 [
                     [
                         'generatedUri' => '/foo/bar',
@@ -179,7 +176,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ],
-            'two conflicting routes whose the first one conflicts with a persisted route' => [
+            'two routes where the second one conflicts with the first one which conflicts with a persisted route' => [
                 [
                     [
                         'generatedUri' => '/foo/bar',
@@ -197,7 +194,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
             ],
-            'two localized conflicting routes whose the first one conflicts with a persisted route' => [
+            'two localized routes where the second one conflicts with the first one which conflicts with a persisted route' => [
                 [
                     [
                         'generatedUri' => '/foo/bar',
@@ -216,6 +213,84 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @dataProvider provideBuildUriContextCollection
+     */
+    public function testBuildUriContextCollection($routes)
+    {
+        $collection = $this->prophesize(UriContextCollection::class);
+
+        // Configure the collection stub
+        $collection->getSubject()->willReturn(new \stdClass());
+
+        // Configure the stubs behavior regarding each route
+        $contexts = [];
+
+        foreach ($routes as $i => $route) {
+            $route['subject'] = $collection->reveal()->getSubject();
+
+            $context = $this->prophesize(UriContext::class);
+
+            $this->configureUriGenerator($context, $route);
+            $this->configureAdapter($context, $route);
+            $this->configureContext($context, $route);
+
+            $route['context'] = $context;
+            $routes[$i] = $route;
+            $contexts[] = $context->reveal();
+        }
+
+        $collection->getUriContexts()->willReturn($contexts);
+
+        // Run the tested method
+        $this->manager->buildUriContextCollection($collection->reveal());
+
+        // Expect manipulations on the contexts
+        foreach ($routes as $route) {
+            $context = $route['context'];
+
+            // If the route exists within the database and matches the same
+            // content, it is reused. Otherwize, a new one is expected.
+            if ($route['existsInDatabase'] and $route['withSameContent']) {
+                $expectedAutoRoute = $this->adapter->reveal()->findRouteForUri(
+                    $route['generatedUri'],
+                    $context->reveal()
+                );
+            } else {
+                $tag = $this->adapter->reveal()->generateAutoRouteTag($context->reveal());
+                $expectedAutoRoute = $this->adapter->reveal()->createAutoRoute(
+                    $context->reveal(),
+                    $route['subject'],
+                    $tag
+                );
+            }
+
+            $context->setAutoRoute($expectedAutoRoute)->shouldHaveBeenCalled();
+
+            // If the route specify a locale, the translated subject is put in
+            // the context
+            if (!is_null($route['locale'])) {
+                $translatedSubject = $this->adapter->reveal()->translateObject(
+                    $route['subject'],
+                    $route['locale']
+                );
+
+                $context->setTranslatedSubject($translatedSubject)->shouldHaveBeenCalled();
+            }
+
+            // Expect the URI
+            $context->setUri($route['expectedUri'])->shouldHaveBeenCalled();
+        }
+
+        // The defunct routes handler handles the defunct routes after the
+        // processing of the contexts collection.
+        // This should be done in a depending test. But PHPUnit does not
+        // allow a depending test to receive the result of a test which use
+        // a data provider.
+        $this->defunctRouteHandler->handleDefunctRoutes($collection->reveal())->shouldBeCalled();
+        $this->manager->handleDefunctRoutes();
     }
 
     /**
@@ -308,84 +383,5 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             ->will(function ($args) {
                 $this->getTranslatedSubject()->willReturn($args[0]);
             });
-    }
-
-    /**
-     * @testdox builds the collection with
-     * @dataProvider routesConfigurations
-     */
-    public function buildUriContextCollection($routes)
-    {
-        $collection = $this->prophesize(UriContextCollection::class);
-
-        // Configure the collection stub
-        $collection->getSubject()->willReturn(new \stdClass());
-
-        // Configure the stubs behavior regarding each route
-        $contexts = [];
-
-        foreach ($routes as $i => $route) {
-            $route['subject'] = $collection->reveal()->getSubject();
-
-            $context = $this->prophesize(UriContext::class);
-
-            $this->configureUriGenerator($context, $route);
-            $this->configureAdapter($context, $route);
-            $this->configureContext($context, $route);
-
-            $route['context'] = $context;
-            $routes[$i] = $route;
-            $contexts[] = $context->reveal();
-        }
-
-        $collection->getUriContexts()->willReturn($contexts);
-
-        // Run the tested method
-        $this->manager->buildUriContextCollection($collection->reveal());
-
-        // Expect manipulations on the contexts
-        foreach ($routes as $route) {
-            $context = $route['context'];
-
-            // If the route exists within the database and matches the same
-            // content, it is reused. Otherwize, a new one is expected.
-            if ($route['existsInDatabase'] and $route['withSameContent']) {
-                $expectedAutoRoute = $this->adapter->reveal()->findRouteForUri(
-                    $route['generatedUri'],
-                    $context->reveal()
-                );
-            } else {
-                $tag = $this->adapter->reveal()->generateAutoRouteTag($context->reveal());
-                $expectedAutoRoute = $this->adapter->reveal()->createAutoRoute(
-                    $context->reveal(),
-                    $route['subject'],
-                    $tag
-                );
-            }
-
-            $context->setAutoRoute($expectedAutoRoute)->shouldHaveBeenCalled();
-
-            // If the route specify a locale, the translated subject is put in
-            // the context
-            if (!is_null($route['locale'])) {
-                $translatedSubject = $this->adapter->reveal()->translateObject(
-                    $route['subject'],
-                    $route['locale']
-                );
-
-                $context->setTranslatedSubject($translatedSubject)->shouldHaveBeenCalled();
-            }
-
-            // Expect the URI
-            $context->setUri($route['expectedUri'])->shouldHaveBeenCalled();
-        }
-
-        // The defunct routes handler handles the defunct routes after the
-        // processing of the contexts collection.
-        // This should be done in a depending test. But PHPUnit does not
-        // allow a depending test to receive the result of a test which use
-        // a data provider.
-        $this->defunctRouteHandler->handleDefunctRoutes($collection->reveal())->shouldBeCalled();
-        $this->manager->handleDefunctRoutes();
     }
 }
