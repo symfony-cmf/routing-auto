@@ -52,6 +52,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      *  - generatedUri (string): the URI made by the URI generator for this route,
      *  - locale (string): the locale
      *  - existsInDatabase (boolean): is there an existing persisted route matching the same URI,
+     *  - withSameContent (boolean): is the existing route referring to the same content,
      *  - expectedUri (string): the URI expected to be set on the current route.
      *
      * If the generated URI and the expected one are different, it means that
@@ -298,15 +299,13 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      *
      * The URI generator stub:
      *  - generates the provided URI,
-     *  - if the expected URI is different from the generated one, resolves the conflict.
+     *  - resolves a conflict.
      */
     private function configureUriGenerator($context, $route)
     {
         $this->uriGenerator->generateUri($context)->willReturn($route['generatedUri']);
 
-        if ($route['expectedUri'] !== $route['generatedUri']) {
-            $this->uriGenerator->resolveConflict($context)->willReturn($route['expectedUri']);
-        }
+        $this->uriGenerator->resolveConflict($context)->willReturn($route['expectedUri']);
     }
 
     /**
@@ -322,35 +321,30 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     private function configureAdapter($context, $route)
     {
         $tag = 'tag';
+        $foundRoute = null;
+        $translatedSubject = null;
+
+        if ($route['existsInDatabase']) {
+            $foundRoute = $this->prophesize(AutoRouteInterface::class);
+        }
+
+        if (!is_null($route['locale'])) {
+            $translatedSubject = new \stdClass();
+        }
 
         $this->adapter->generateAutoRouteTag($context)->willReturn($tag);
 
         $this->adapter->createAutoRoute($context, $route['subject'], $tag)
             ->willReturn($this->prophesize(AutoRouteInterface::class));
 
+        $this->adapter->findRouteForUri($route['generatedUri'], $context)->willReturn($foundRoute);
+
         if ($route['existsInDatabase']) {
-            $existingAutoRoute = $this->prophesize(AutoRouteInterface::class);
-
-            $this->adapter->findRouteForUri(
-                $route['generatedUri'],
-                $context
-            )->willReturn($existingAutoRoute);
-
-            $this->adapter->compareAutoRouteContent(
-                $existingAutoRoute->reveal(),
-                $route['subject']
-            )->willReturn($route['withSameContent'] === true);
-        } else {
-            $this->adapter->findRouteForUri($route['generatedUri'], $context)->willReturn(null);
+            $this->adapter->compareAutoRouteContent($foundRoute->reveal(), $route['subject'])
+                ->willReturn($route['existsInDatabase'] and $route['withSameContent']);
         }
 
-        if (!is_null($route['locale'])) {
-            $translatedSubject = new \stdClass();
-
-            $this->adapter->translateObject($route['subject'], $route['locale'])->willReturn($translatedSubject);
-        } else {
-            $this->adapter->translateObject($route['subject'], $route['locale'])->willReturn($route['subject']);
-        }
+        $this->adapter->translateObject($route['subject'], $route['locale'])->willReturn($translatedSubject);
     }
 
     /**
