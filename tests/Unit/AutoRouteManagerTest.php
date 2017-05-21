@@ -12,6 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
@@ -219,7 +220,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideBuildUriContextCollection
      */
-    public function testBuildUriContextCollection($routes)
+    public function testBuildUriContextCollection(array $routes)
     {
         $collection = $this->prophesize(UriContextCollection::class);
 
@@ -269,7 +270,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      *  - generates the provided URI,
      *  - resolves a conflict.
      */
-    private function configureUriGenerator($context, $route)
+    private function configureUriGenerator(ObjectProphecy $context, array $route)
     {
         $this->uriGenerator->generateUri($context)->willReturn($route['generatedUri']);
 
@@ -286,7 +287,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      *  - tells if the existing route matches the same content,
      *  - if the route specify a locale, translates the content.
      */
-    private function configureAdapter($context, $route)
+    private function configureAdapter(ObjectProphecy $context, array $route)
     {
         $tag = 'tag';
         $foundRoute = null;
@@ -324,7 +325,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      *  - takes and gives a URI,
      *  - takes and gives an auto route.
      */
-    private function configureContext($context, $route)
+    private function configureContext(ObjectProphecy $context, array $route)
     {
         $context->getLocale()->willReturn($route['locale']);
         $context->getSubject()->willReturn($route['subject']);
@@ -356,7 +357,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      *  - a translated subject if it is localized,
      *  - the expected URI.
      */
-    private function expectOnContext($context, $route)
+    private function expectOnContext(ObjectProphecy $context, array $route)
     {
         if ($route['existsInDatabase'] and $route['withSameContent']) {
             $expectedAutoRoute = $this->adapter->reveal()->findRouteForUri(
