@@ -250,39 +250,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
         // Expect manipulations on the contexts
         foreach ($routes as $route) {
-            $context = $route['context'];
-
-            // If the route exists within the database and matches the same
-            // content, it is reused. Otherwize, a new one is expected.
-            if ($route['existsInDatabase'] and $route['withSameContent']) {
-                $expectedAutoRoute = $this->adapter->reveal()->findRouteForUri(
-                    $route['generatedUri'],
-                    $context->reveal()
-                );
-            } else {
-                $tag = $this->adapter->reveal()->generateAutoRouteTag($context->reveal());
-                $expectedAutoRoute = $this->adapter->reveal()->createAutoRoute(
-                    $context->reveal(),
-                    $route['subject'],
-                    $tag
-                );
-            }
-
-            $context->setAutoRoute($expectedAutoRoute)->shouldHaveBeenCalled();
-
-            // If the route specify a locale, the translated subject is put in
-            // the context
-            if (!is_null($route['locale'])) {
-                $translatedSubject = $this->adapter->reveal()->translateObject(
-                    $route['subject'],
-                    $route['locale']
-                );
-
-                $context->setTranslatedSubject($translatedSubject)->shouldHaveBeenCalled();
-            }
-
-            // Expect the URI
-            $context->setUri($route['expectedUri'])->shouldHaveBeenCalled();
+            $this->expectOnContext($route['context'], $route);
         }
 
         // The defunct routes handler handles the defunct routes after the
@@ -377,5 +345,43 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             ->will(function ($args) {
                 $this->getTranslatedSubject()->willReturn($args[0]);
             });
+    }
+
+    /**
+     * Expect the context status.
+     *
+     * The context should contain:
+     *  - an existing route if they match the same URI for the same content,
+     *  - a new route otherwize,
+     *  - a translated subject if it is localized,
+     *  - the expected URI.
+     */
+    private function expectOnContext($context, $route)
+    {
+        if ($route['existsInDatabase'] and $route['withSameContent']) {
+            $expectedAutoRoute = $this->adapter->reveal()->findRouteForUri(
+                $route['generatedUri'],
+                $context->reveal()
+            );
+        } else {
+            $tag = $this->adapter->reveal()->generateAutoRouteTag($context->reveal());
+            $expectedAutoRoute = $this->adapter->reveal()->createAutoRoute(
+                $context->reveal(),
+                $route['subject'],
+                $tag
+            );
+        }
+
+        if (!is_null($route['locale'])) {
+            $translatedSubject = $this->adapter->reveal()->translateObject(
+                $route['subject'],
+                $route['locale']
+            );
+
+            $context->setTranslatedSubject($translatedSubject)->shouldHaveBeenCalled();
+        }
+
+        $context->setAutoRoute($expectedAutoRoute)->shouldHaveBeenCalled();
+        $context->setUri($route['expectedUri'])->shouldHaveBeenCalled();
     }
 }
