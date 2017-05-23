@@ -12,7 +12,6 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Prophecy\Argument;
-use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
@@ -222,32 +221,31 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildUriContextCollection(array $routes)
     {
-        $collection = $this->prophesize(UriContextCollection::class);
-
-        // Configure the collection stub
-        $collection->getSubject()->willReturn(new \stdClass());
+        $collection = new UriContextCollection(new \stdClass());
 
         // Configure the stubs behavior regarding each route
-        $contexts = [];
-
         foreach ($routes as $i => $route) {
-            $route['subject'] = $collection->reveal()->getSubject();
+            $context = $collection->createUriContext(
+                $route['generatedUri'],
+                [],
+                [],
+                [],
+                $route['locale']
+            );
 
-            $context = $this->prophesize(UriContext::class);
+            $route['subject'] = $context->getSubject();
 
             $this->configureUriGenerator($context, $route);
             $this->configureAdapter($context, $route);
-            $this->configureContext($context, $route);
 
             $route['context'] = $context;
             $routes[$i] = $route;
-            $contexts[] = $context->reveal();
+
+            $collection->addUriContext($context);
         }
 
-        $collection->getUriContexts()->willReturn($contexts);
-
         // Run the tested method
-        $this->manager->buildUriContextCollection($collection->reveal());
+        $this->manager->buildUriContextCollection($collection);
 
         // Expect manipulations on the contexts
         foreach ($routes as $route) {
@@ -259,8 +257,21 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         // This should be done in a depending test. But PHPUnit does not
         // allow a depending test to receive the result of a test which use
         // a data provider.
-        $this->defunctRouteHandler->handleDefunctRoutes($collection->reveal())->shouldBeCalled();
+        $this->defunctRouteHandler->handleDefunctRoutes($collection)->shouldBeCalled();
         $this->manager->handleDefunctRoutes();
+    }
+
+    /**
+     * Custom implementation of the {@see \Prophecy\Argument::is()} token
+     * shortcut.
+     *
+     * Fixes {@link https://github.com/phpspec/prophecy/issues/335}.
+     */
+    private static function is($value)
+    {
+        return Argument::that(function ($argument) use ($value) {
+            return $value === $argument;
+        });
     }
 
     /**
@@ -270,11 +281,12 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      *  - generates the provided URI,
      *  - resolves a conflict.
      */
-    private function configureUriGenerator(ObjectProphecy $context, array $route)
+    private function configureUriGenerator(UriContext $context, array $route)
     {
-        $this->uriGenerator->generateUri($context)->willReturn($route['generatedUri']);
+        $this->uriGenerator->generateUri(self::is($context))
+            ->willReturn($route['generatedUri']);
 
-        $this->uriGenerator->resolveConflict($context)->willReturn($route['expectedUri']);
+        $this->uriGenerator->resolveConflict(self::is($context))->willReturn($route['expectedUri']);
     }
 
     /**
@@ -287,7 +299,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      *  - tells if the existing route matches the same content,
      *  - if the route specify a locale, translates the content.
      */
-    private function configureAdapter(ObjectProphecy $context, array $route)
+    private function configureAdapter(UriContext $context, array $route)
     {
         $tag = 'tag';
         $foundRoute = null;
@@ -301,14 +313,14 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             $translatedSubject = new \stdClass();
         }
 
-        $this->adapter->generateAutoRouteTag($context)->willReturn($tag);
+        $this->adapter->generateAutoRouteTag(self::is($context))->willReturn($tag);
 
-        $this->adapter->createAutoRoute($context, $route['subject'], $tag)
+        $this->adapter->createAutoRoute(self::is($context), $route['subject'], $tag)
             ->willReturn($this->prophesize(AutoRouteInterface::class));
 
-        $this->adapter->findRouteForUri($route['generatedUri'], $context)->willReturn($foundRoute);
+        $this->adapter->findRouteForUri($route['generatedUri'], self::is($context))->willReturn($foundRoute);
 
-        if ($route['existsInDatabase']) {
+        if (!is_null($foundRoute)) {
             $this->adapter->compareAutoRouteContent($foundRoute->reveal(), $route['subject'])
                 ->willReturn($route['existsInDatabase'] and $route['withSameContent']);
         }
@@ -317,57 +329,29 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Configure the context.
-     *
-     * The context stub:
-     *  - gives the locale,
-     *  - gives the subject,
-     *  - takes and gives a URI,
-     *  - takes and gives an auto route.
-     */
-    private function configureContext(ObjectProphecy $context, array $route)
-    {
-        $context->getLocale()->willReturn($route['locale']);
-        $context->getSubject()->willReturn($route['subject']);
-
-        $context->getUri()->willReturn(null);
-        $context->setUri(Argument::type('string'))->will(function ($args) {
-            $this->getUri()->willReturn($args[0]);
-        });
-
-        $context->getAutoRoute()->willReturn(null);
-        $context->setAutoRoute(Argument::type(AutoRouteInterface::class))
-            ->will(function ($args) {
-                $this->getAutoRoute()->willReturn($args[0]);
-            });
-
-        $context->getTranslatedSubject()->willReturn(null);
-        $context->setTranslatedSubject(Argument::type(\stdClass::class))
-            ->will(function ($args) {
-                $this->getTranslatedSubject()->willReturn($args[0]);
-            });
-    }
-
-    /**
      * Expect the context status.
+     *
+     * The status is checked on the properties which can be modified by a setter.
      *
      * The context should contain:
      *  - an existing route if they match the same URI for the same content,
      *  - a new route otherwize,
-     *  - a translated subject if it is localized,
+     *  - a translated subject (which is the non translated subject if the route isn't localized),
      *  - the expected URI.
      */
-    private function expectOnContext(ObjectProphecy $context, array $route)
+    private function expectOnContext(UriContext $context, array $route)
     {
+        $translatedSubject = $route['subject'];
+
         if ($route['existsInDatabase'] and $route['withSameContent']) {
             $expectedAutoRoute = $this->adapter->reveal()->findRouteForUri(
                 $route['generatedUri'],
-                $context->reveal()
+                $context
             );
         } else {
-            $tag = $this->adapter->reveal()->generateAutoRouteTag($context->reveal());
+            $tag = $this->adapter->reveal()->generateAutoRouteTag($context);
             $expectedAutoRoute = $this->adapter->reveal()->createAutoRoute(
-                $context->reveal(),
+                $context,
                 $route['subject'],
                 $tag
             );
@@ -378,11 +362,10 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 $route['subject'],
                 $route['locale']
             );
-
-            $context->setTranslatedSubject($translatedSubject)->shouldHaveBeenCalled();
         }
 
-        $context->setAutoRoute($expectedAutoRoute)->shouldHaveBeenCalled();
-        $context->setUri($route['expectedUri'])->shouldHaveBeenCalled();
+        $this->assertSame($translatedSubject, $context->getTranslatedSubject());
+        $this->assertSame($expectedAutoRoute, $context->getAutoRoute());
+        $this->assertSame($route['expectedUri'], $context->getUri());
     }
 }
