@@ -364,7 +364,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     private function expectOnContext(UriContext $context, array $route)
     {
         $translatedSubject = $route['subject'];
-        $translatedSubjectError = "The translated subject must be the subject.";
+        $translatedSubjectError = 'The translated subject must be the non translated one.';
 
         if ($route['existsInDatabase'] and $route['withSameContent']) {
             $expectedAutoRoute = $this->adapter->reveal()->findRouteForUri(
@@ -372,7 +372,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 $context
             );
 
-            $autoRouteError = "The existing autoroute has not been reused.";
+            $autoRouteError = 'The existing auto route has not been reused.';
         } else {
             $tag = $this->adapter->reveal()->generateAutoRouteTag($context);
             $expectedAutoRoute = $this->adapter->reveal()->createAutoRoute(
@@ -381,7 +381,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 $tag
             );
 
-            $autoRouteError = "A new autoroute has not been created.";
+            $autoRouteError = 'A new auto route has not been created.';
         }
 
         if (!is_null($route['locale'])) {
@@ -390,7 +390,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 $route['locale']
             );
 
-            $translatedSubjectError = "The subject has not been translated.";
+            $translatedSubjectError = 'The subject has not been translated.';
         }
 
         $this->assertSame(
@@ -406,7 +406,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(
             $route['expectedUri'],
             $context->getUri(),
-            "The context does not contains the expected URI"
+            'The context does not contain the expected URI.'
         );
     }
 }
