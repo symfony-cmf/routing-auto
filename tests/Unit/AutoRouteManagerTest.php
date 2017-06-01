@@ -336,7 +336,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $collection = new UriContextCollection(new \stdClass());
 
         // Configure the stubs behavior regarding each route
-        foreach ($routes as $i => $route) {
+        foreach ($routes as $index => $route) {
             $context = $collection->createUriContext(
                 $route['generatedUri'],
                 [],
@@ -351,7 +351,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             $this->configureAdapter($context, $route);
 
             $route['context'] = $context;
-            $routes[$i] = $route;
+            $routes[$index] = $route;
 
             $collection->addUriContext($context);
         }
@@ -360,8 +360,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $this->manager->buildUriContextCollection($collection);
 
         // Expect manipulations on the contexts
-        foreach ($routes as $route) {
-            $this->expectOnContext($route['context'], $route);
+        foreach ($routes as $index => $route) {
+            $this->expectOnContext($route['context'], $route, $index);
         }
 
         // The defunct routes handler handles the defunct routes after the
@@ -454,10 +454,10 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      *  - a translated subject (which is the non translated subject if the route isn't localized),
      *  - the expected URI.
      */
-    private function expectOnContext(UriContext $context, array $route)
+    private function expectOnContext(UriContext $context, array $route, $index)
     {
         $translatedSubject = $route['subject'];
-        $translatedSubjectError = 'The translated subject must be the non translated one.';
+        $translatedSubjectError = 'The translated subject must be the non translated one';
 
         if ($route['existsInDatabase'] and $route['withSameContent'] and $route['forSameLocale']) {
             $expectedAutoRoute = $this->adapter->reveal()->findRouteForUri(
@@ -465,7 +465,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 $context
             );
 
-            $autoRouteError = 'The existing auto route has not been reused.';
+            $autoRouteError = 'The existing auto route has not been reused';
         } else {
             $tag = $this->adapter->reveal()->generateAutoRouteTag($context);
             $expectedAutoRoute = $this->adapter->reveal()->createAutoRoute(
@@ -474,7 +474,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 $tag
             );
 
-            $autoRouteError = 'A new auto route has not been created.';
+            $autoRouteError = 'A new auto route has not been created';
         }
 
         if (!is_null($route['locale'])) {
@@ -483,23 +483,31 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 $route['locale']
             );
 
-            $translatedSubjectError = 'The subject has not been translated.';
+            $translatedSubjectError = 'The subject has not been translated';
+        } else {
+            $translatedSubjectError = 'The subject should not be translated';
+        }
+
+        if ($route['generatedUri'] === $route['expectedUri']) {
+            $uriError = 'The generated URI has not been kept';
+        } else {
+            $uriError = 'The URI conflict has not been resolved';
         }
 
         $this->assertSame(
             $translatedSubject,
             $context->getTranslatedSubject(),
-            $translatedSubjectError
+            sprintf('%s for the route #%d', $translatedSubjectError, $index)
         );
         $this->assertSame(
             $expectedAutoRoute,
             $context->getAutoRoute(),
-            $autoRouteError
+            sprintf('%s for the route #%d', $autoRouteError, $index)
         );
         $this->assertSame(
             $route['expectedUri'],
             $context->getUri(),
-            'The context does not contain the expected URI.'
+            sprintf('%s for the route #%d', $uriError, $index)
         );
     }
 }
