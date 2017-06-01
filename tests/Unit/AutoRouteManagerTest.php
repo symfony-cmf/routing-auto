@@ -68,6 +68,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar',
                     ],
                 ],
@@ -79,6 +80,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'fr',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar',
                     ],
                 ],
@@ -90,6 +92,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar',
                     ],
                     [
@@ -97,6 +100,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/bar/baz',
                     ],
                 ],
@@ -108,6 +112,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'en',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar',
                     ],
                     [
@@ -115,6 +120,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'fr',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/bar/baz',
                     ],
                 ],
@@ -126,6 +132,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => true,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar-resolved',
                     ],
                 ],
@@ -137,6 +144,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => true,
                         'withSameContent' => true,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar',
                     ],
                 ],
@@ -148,6 +156,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'fr',
                         'existsInDatabase' => true,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar-resolved',
                     ],
                 ],
@@ -159,6 +168,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'fr',
                         'existsInDatabase' => true,
                         'withSameContent' => true,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar',
                     ],
                 ],
@@ -170,6 +180,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar',
                     ],
                     [
@@ -177,6 +188,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar-resolved',
                     ],
                 ],
@@ -188,6 +200,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'en',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar',
                     ],
                     [
@@ -195,6 +208,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'fr',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar-resolved',
                     ],
                 ],
@@ -206,6 +220,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => true,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar-resolved',
                     ],
                     [
@@ -213,6 +228,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => null,
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar-also-resolved',
                     ],
                 ],
@@ -224,6 +240,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'de',
                         'existsInDatabase' => true,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar-resolved',
                     ],
                     [
@@ -231,6 +248,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                         'locale' => 'en',
                         'existsInDatabase' => false,
                         'withSameContent' => false,
+                        'forSameLocale' => false,
                         'expectedUri' => '/foo/bar-also-resolved',
                     ],
                 ],
@@ -344,7 +362,10 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
         if (!is_null($foundRoute)) {
             $this->adapter->compareAutoRouteContent($foundRoute->reveal(), $route['subject'])
-                ->willReturn($route['existsInDatabase'] and $route['withSameContent']);
+                ->willReturn($route['withSameContent']);
+
+            $this->adapter->compareAutoRouteLocale($foundRoute->reveal(), $route['locale'])
+                ->willReturn($route['forSameLocale']);
         }
 
         $this->adapter->translateObject($route['subject'], $route['locale'])->willReturn($translatedSubject);
