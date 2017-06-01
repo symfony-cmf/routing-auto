@@ -459,7 +459,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $translatedSubject = $route['subject'];
         $translatedSubjectError = 'The translated subject must be the non translated one.';
 
-        if ($route['existsInDatabase'] and $route['withSameContent']) {
+        if ($route['existsInDatabase'] and $route['withSameContent'] and $route['forSameLocale']) {
             $expectedAutoRoute = $this->adapter->reveal()->findRouteForUri(
                 $route['generatedUri'],
                 $context
