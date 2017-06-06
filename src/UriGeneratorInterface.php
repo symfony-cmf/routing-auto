@@ -21,22 +21,17 @@ interface UriGeneratorInterface
     /**
      * Generate a URL for the given document.
      *
-     * @param object $document
-     *
      * @return string
      */
     public function generateUri(UriContext $uriContext);
 
     /**
-     * The given URL already exists in the database, this method
-     * should delegate the task of resolving the conflict to
-     * the ConflictResolver configured in the mapping for the
+     * The given URL already exists in the database or the given contexts
+     * collection, this method should delegate the task of resolving the
+     * conflict to the ConflictResolver configured in the mapping for the
      * document.
-     *
-     * @param object $document
-     * @param string $uri
      *
      * @return string
      */
-    public function resolveConflict(UriContext $uriContext);
+    public function resolveConflict(UriContext $uriContext, UriContextCollection $uriContextCollection);
 }
