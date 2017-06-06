@@ -111,6 +111,24 @@ class UriContextCollection
     }
 
     /**
+     * Get an auto route by its URI.
+     *
+     * @param string $uri
+     *
+     * @return AutoRouteInterface|null
+     */
+    public function getAutoRouteByUri($uri)
+    {
+        foreach ($this->uriContexts as $uriContext) {
+            $autoRoute = $uriContext->getAutoRoute();
+
+            if (!is_null($autoRoute) and $uriContext->getUri() === $uri) {
+                return $autoRoute;
+            }
+        }
+    }
+
+    /**
      * Get an auto route by its tag (e.g. the locale).
      *
      * @param string $locale
