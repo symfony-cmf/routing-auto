@@ -87,12 +87,12 @@ class AutoRouteManager
             // generate the URI
             $uri = $this->uriGenerator->generateUri($uriContext);
             $uriContext->setUri($uri);
-            $existingRoute = $this->adapter->findRouteForUri($uri, $uriContext);
+            $existingRoute = $this->findExistingRoute($uriContext, $uriContextCollection);
 
             // handle existing route
             $autoRoute = null;
             if ($existingRoute) {
-                $autoRoute = $this->handleExistingRoute($existingRoute, $uriContext);
+                $autoRoute = $this->handleExistingRoute($existingRoute, $uriContext, $uriContextCollection);
             }
 
             // handle new route
@@ -124,25 +124,51 @@ class AutoRouteManager
     }
 
     /**
+     * Find an existing route which matches the URI of the given context.
+     *
+     * It is searched within the currently processed collection and the already
+     * persisted routes (using the adapter).
+     */
+    private function findExistingRoute(
+        UriContext $uriContext,
+        UriContextCollection $uriContextCollection
+    ) {
+        $uri = $uriContext->getUri();
+        $existingRoute = null;
+
+        // As the auto route is put in the context after the conflict has been
+        // resolved, we don't need to check if the found auto route is the one
+        // contained in the given context.
+        $existingRoute = $uriContextCollection->getAutoRouteByUri($uri);
+
+        if (is_null($existingRoute)) {
+            $existingRoute = $this->adapter->findRouteForUri($uri, $uriContext);
+        }
+
+        return $existingRoute;
+    }
+
+    /**
      * Handle the case where the generated path already exists.
      * Either if it does not reference the same content then we
      * have a conflict which needs to be resolved.
-     *
-     * @param Route      $route
-     * @param UriContext $uriContext
      */
-    private function handleExistingRoute($existingRoute, $uriContext)
-    {
+    private function handleExistingRoute(
+        AutoRouteInterface $existingRoute,
+        UriContext $uriContext,
+        UriContextCollection $uriContextCollection
+    ) {
         $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $uriContext->getSubject());
+        $isSameLocale = $this->adapter->compareAutoRouteLocale($existingRoute, $uriContext->getLocale());
 
-        if ($isSameContent) {
+        if ($isSameContent && $isSameLocale) {
             $autoRoute = $existingRoute;
             $autoRoute->setType(AutoRouteInterface::TYPE_PRIMARY);
 
             return $autoRoute;
         }
 
-        $uri = $this->uriGenerator->resolveConflict($uriContext);
+        $uri = $this->uriGenerator->resolveConflict($uriContext, $uriContextCollection);
         $uriContext->setUri($uri);
     }
 }
