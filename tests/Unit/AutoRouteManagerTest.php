@@ -412,7 +412,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             $route['locale']
         );
 
-        if (!is_null($route['locale'])) {
+        if (null !== $route['locale']) {
             $translatedSubject = $this->getTranslatedSubjectForLocale($route['locale']);
         }
 
@@ -506,7 +506,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
                 ->willReturn($route['forSameLocale']);
         }
 
-        if (!is_null($route['existingCollectionRoute'])) {
+        if (null !== $route['existingCollectionRoute']) {
             $otherRoute = $route['existingCollectionRoute'];
 
             if ($otherRoute['existsInDatabase']) {
@@ -544,7 +544,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         if ($route['existsInDatabase'] && $route['withSameContent'] && $route['forSameLocale']) {
             $expectedAutoRoute = $route['existingDatabaseAutoRoute'];
             $autoRouteError = 'The existing auto route from the database has not been reused';
-        } elseif (!is_null($existingCollectionRoute) && $existingCollectionRoute['locale'] === $route['locale']) {
+        } elseif (null !== $existingCollectionRoute && $existingCollectionRoute['locale'] === $route['locale']) {
             if ($existingCollectionRoute['existsInDatabase']
                 && $existingCollectionRoute['withSameContent']
                 && $existingCollectionRoute['forSameLocale']) {
@@ -558,7 +558,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             $autoRouteError = 'A new auto route has not been created';
         }
 
-        if (!is_null($route['locale'])) {
+        if (null !== $route['locale']) {
             $expectedTranslatedSubject = $route['translatedSubject'];
             $translatedSubjectError = 'The subject has not been translated';
         } else {

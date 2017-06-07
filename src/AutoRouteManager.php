@@ -141,7 +141,7 @@ class AutoRouteManager
         // contained in the given context.
         $existingRoute = $uriContextCollection->getAutoRouteByUri($uri);
 
-        if (is_null($existingRoute)) {
+        if (null === $existingRoute) {
             $existingRoute = $this->adapter->findRouteForUri($uri, $uriContext);
         }
 

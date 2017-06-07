@@ -122,7 +122,7 @@ class UriContextCollection
         foreach ($this->uriContexts as $uriContext) {
             $autoRoute = $uriContext->getAutoRoute();
 
-            if (!is_null($autoRoute) and $uriContext->getUri() === $uri) {
+            if (null !== $autoRoute and $uriContext->getUri() === $uri) {
                 return $autoRoute;
             }
         }
