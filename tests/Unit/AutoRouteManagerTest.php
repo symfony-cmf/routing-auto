@@ -437,7 +437,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
             'translatedSubject' => $translatedSubject,
             'createdAutoRoute' => $createdAutoRoute,
             'existingDatabaseAutoRoute' => $existingDatabaseAutoRoute,
-            'existingCollectionRoute' => $existingCollectionRoute
+            'existingCollectionRoute' => $existingCollectionRoute,
         ]);
     }
 
@@ -589,6 +589,10 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Give the auto route dummy which must be found within database using the
+     * given URI.
+     */
     private function getDatabaseAutoRouteForUri($uri)
     {
         if (isset($this->databaseAutoRoutes[$uri])) {
@@ -602,6 +606,9 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         return $autoRoute;
     }
 
+    /**
+     * Give the translated subject for the given locale.
+     */
     private function getTranslatedSubjectForLocale($locale)
     {
         if (isset($this->translatedSubjects[$locale])) {
