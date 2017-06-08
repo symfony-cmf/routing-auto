@@ -29,6 +29,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     private $collectionBuilder;
     private $manager;
     private $subject;
+    private $collection;
     private $translatedSubjects;
     private $databaseAutoRoutes;
 
@@ -47,6 +48,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->subject = new \stdClass();
+        $this->collection = new UriContextCollection($this->subject);
         $this->translatedSubjects = [];
         $this->databaseAutoRoutes = [];
     }
@@ -341,23 +343,21 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildUriContextCollection(array $routes)
     {
-        $collection = new UriContextCollection($this->subject);
-
         // Configure the stubs behavior regarding each route
         foreach ($routes as $index => $route) {
             $route = $this->populateRouteConfiguration($route, $routes);
 
-            $this->configureUriGenerator($route, $collection);
+            $this->configureUriGenerator($route);
             $this->configureAdapter($route);
 
             $routes[$index] = $route;
         }
 
         // Configure the stub behavior regarding the collection
-        $this->configureCollectionBuilder($collection, $routes);
+        $this->configureCollectionBuilder($routes);
 
         // Run the tested method
-        $this->manager->buildUriContextCollection($collection);
+        $this->manager->buildUriContextCollection($this->collection);
 
         // Expect manipulations on the contexts
         foreach ($routes as $index => $route) {
@@ -369,7 +369,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         // This should be done in a depending test. But PHPUnit does not
         // allow a depending test to receive the result of a test which use
         // a data provider.
-        $this->defunctRouteHandler->handleDefunctRoutes($collection)->shouldBeCalled();
+        $this->defunctRouteHandler->handleDefunctRoutes($this->collection)->shouldBeCalled();
         $this->manager->handleDefunctRoutes();
     }
 
@@ -404,7 +404,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $existingCollectionRoute = null;
 
         $context = new UriContext(
-            $this->subject,
+            $this->collection,
             $route['generatedUri'],
             [],
             [],
@@ -447,15 +447,17 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      * The collection builder stub add a context to the collection for each
      * route configuration.
      */
-    private function configureCollectionBuilder(UriContextCollection $collection, array $routes)
+    private function configureCollectionBuilder(array $routes)
     {
-        $this->collectionBuilder->build(self::is($collection))->will(function ($args) use ($routes) {
-            list($collection) = $args;
+        $this->collectionBuilder->build(self::is($this->collection))->will(
+            function ($args) use ($routes) {
+                list($collection) = $args;
 
-            foreach ($routes as $route) {
-                $collection->addUriContext($route['context']);
+                foreach ($routes as $route) {
+                    $collection->addUriContext($route['context']);
+                }
             }
-        });
+        );
 
         return $routes;
     }
@@ -467,12 +469,12 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      *  - generates the provided URI,
      *  - resolves a conflict.
      */
-    private function configureUriGenerator(array $route, UriContextCollection $collection)
+    private function configureUriGenerator(array $route)
     {
         $this->uriGenerator->generateUri(self::is($route['context']))
             ->willReturn($route['generatedUri']);
 
-        $this->uriGenerator->resolveConflict(self::is($route['context']), $collection)
+        $this->uriGenerator->resolveConflict(self::is($route['context']), $this->collection)
             ->willReturn($route['expectedUri']);
     }
 

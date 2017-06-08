@@ -11,29 +11,56 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
 class UriContextTest extends \PHPUnit_Framework_TestCase
 {
-    protected $uriContext;
+    private $subject;
+    private $collection;
+    private $autoRoute;
+    private $uriContext;
 
     public function setUp()
     {
         $this->subject = new \stdClass();
-        $this->autoRoute = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
+
+        $this->collection = $this->prophesize(UriContextCollection::class);
+        $this->collection->getSubject()->willReturn($this->subject);
+
+        $this->autoRoute = $this->prophesize(AutoRouteInterface::class)->reveal();
     }
 
     public function testGetSet()
     {
-        $uriContext = new UriContext($this->subject, '/uri/', ['default1' => 'value1'], ['token'], ['conflict'], 'fr');
+        $uri = '/foo/bar';
+        $uriSchema = '/uri';
+        $defaults = ['default1' => 'value1'];
+        $tokenProvidersConfiguration = ['token'];
+        $conflictResolverConfiguration = ['conflict'];
+        $locale ='fr';
+        $translatedSubject = new \stdClass();
 
-        // locales
-        $this->assertEquals('fr', $uriContext->getLocale());
+        $uriContext = new UriContext(
+            $this->collection->reveal(),
+            $uriSchema,
+            $defaults,
+            $tokenProvidersConfiguration,
+            $conflictResolverConfiguration,
+            $locale
+        );
 
-        /// uri
+        // collection
+        $this->assertSame($this->collection->reveal(), $uriContext->getCollection());
+
+        // locale
+        $this->assertEquals($locale, $uriContext->getLocale());
+
+        /// URI
         $this->assertEquals(null, $uriContext->getUri());
-        $uriContext->setUri('/foo/bar');
-        $this->assertEquals('/foo/bar', $uriContext->getUri());
+        $uriContext->setUri($uri);
+        $this->assertEquals($uri, $uriContext->getUri());
 
         // subject object
         $this->assertEquals($this->subject, $uriContext->getSubject());
@@ -44,20 +71,19 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
 
         // the translated subject should be initially set as the original subject
         $this->assertSame($this->subject, $uriContext->getTranslatedSubject());
-        $transSubject = new \stdClass();
-        $uriContext->setTranslatedSubject($transSubject);
-        $this->assertSame($transSubject, $uriContext->getTranslatedSubject());
+        $uriContext->setTranslatedSubject($translatedSubject);
+        $this->assertSame($translatedSubject, $uriContext->getTranslatedSubject());
 
-        // uri schema
-        $this->assertEquals('/uri/', $uriContext->getUriSchema());
+        // URI schema
+        $this->assertEquals($uriSchema, $uriContext->getUriSchema());
 
-        // token provider configs
-        $this->assertEquals(['token'], $uriContext->getTokenProviderConfigs());
+        // token providers configuration
+        $this->assertEquals($tokenProvidersConfiguration, $uriContext->getTokenProviderConfigs());
 
-        // conflict resolver configs
-        $this->assertEquals(['conflict'], $uriContext->getConflictResolverConfig());
+        // conflict resolver configuration
+        $this->assertEquals($conflictResolverConfiguration, $uriContext->getConflictResolverConfig());
 
         // defaults
-        $this->assertEquals(['default1' => 'value1'], $uriContext->getDefaults());
+        $this->assertEquals($defaults, $uriContext->getDefaults());
     }
 }

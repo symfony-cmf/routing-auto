@@ -13,16 +13,18 @@ namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
+/**
+ * Class which holds a collection of URI contexts related to the same subject.
+ */
 class UriContextCollection
 {
-    /**
-     * @var object
-     */
     protected $subject;
     protected $uriContexts = [];
 
     /**
-     * @param object $subject Subject for URL generation
+     * Construct the collection for the given subject.
+     *
+     * @param object $subject
      */
     public function __construct($subject)
     {
@@ -30,7 +32,7 @@ class UriContextCollection
     }
 
     /**
-     * Set the subject for URL generation.
+     * Set the subject this collection is related to.
      *
      * @param object $subject
      */
@@ -40,7 +42,7 @@ class UriContextCollection
     }
 
     /**
-     * Return the "subject" of this URL context, i.e. the object
+     * Return the "subject" of this URI context, i.e. the object
      * for which an auto route is required.
      *
      * @return object
@@ -51,9 +53,17 @@ class UriContextCollection
     }
 
     /**
-     * Create a URL context.
+     * Create a URI context.
      *
-     * @param string $locale Locale for given URL
+     * The context is created for this collection with the given URI schema,
+     * route defaults, token provider configuration, conflict resolver
+     * configuration and locale.
+     *
+     * @param string $uriSchema
+     * @param array $defaults
+     * @param array $tokenProviderConfigs
+     * @param array $conflictResolverConfigs
+     * @param string $locale
      *
      * @return UriContext
      */
@@ -65,7 +75,7 @@ class UriContextCollection
         $locale
     ) {
         $uriContext = new UriContext(
-            $this->getSubject(),
+            $this,
             $uriSchema,
             $defaults,
             $tokenProviderConfigs,
@@ -86,6 +96,11 @@ class UriContextCollection
         $this->uriContexts[] = $uriContext;
     }
 
+    /**
+     * Return the URI contexts contained in the stack.
+     *
+     * @return array
+     */
     public function getUriContexts()
     {
         return $this->uriContexts;
@@ -129,7 +144,7 @@ class UriContextCollection
     }
 
     /**
-     * Get an auto route by its tag (e.g. the locale).
+     * Get an auto route by its locale.
      *
      * @param string $locale
      *
