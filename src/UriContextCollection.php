@@ -60,9 +60,9 @@ class UriContextCollection
      * configuration and locale.
      *
      * @param string $uriSchema
-     * @param array $defaults
-     * @param array $tokenProviderConfigs
-     * @param array $conflictResolverConfigs
+     * @param array  $defaults
+     * @param array  $tokenProviderConfigs
+     * @param array  $conflictResolverConfigs
      * @param string $locale
      *
      * @return UriContext

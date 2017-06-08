@@ -39,7 +39,7 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
         $defaults = ['default1' => 'value1'];
         $tokenProvidersConfiguration = ['token'];
         $conflictResolverConfiguration = ['conflict'];
-        $locale ='fr';
+        $locale = 'fr';
         $translatedSubject = new \stdClass();
 
         $uriContext = new UriContext(

@@ -129,7 +129,8 @@ class AutoRouteManager
      * It is searched within the currently processed collection and the already
      * persisted routes (using the adapter).
      */
-    private function findExistingRoute(UriContext $uriContext) {
+    private function findExistingRoute(UriContext $uriContext)
+    {
         $uri = $uriContext->getUri();
         $existingRoute = null;
 
