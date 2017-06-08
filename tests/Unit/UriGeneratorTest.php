@@ -12,6 +12,8 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Prophecy\Argument;
+use Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Cmf\Component\RoutingAuto\UriGenerator;
 
 class UriGeneratorTest extends \PHPUnit_Framework_TestCase
@@ -19,6 +21,7 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
     protected $serviceRegistry;
     protected $tokenProviders = [];
     protected $uriContext;
+    private $uriGenerator;
 
     public function setUp()
     {
@@ -250,5 +253,29 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
         $res = $this->uriGenerator->generateUri($this->uriContext->reveal());
 
         $this->assertEquals($expectedUri, $res);
+    }
+
+    public function testResolveConflict()
+    {
+        $conflictResolverName = 'name';
+        $conflictResolverOptions = [];
+        $conflictResolver = $this->prophesize(ConflictResolverInterface::class);
+        $contextCollection = $this->prophesize(UriContextCollection::class)->reveal();
+
+        $this->uriContext->getConflictResolverConfig()->willReturn([
+            'name' => $conflictResolverName,
+            'options' => $conflictResolverOptions,
+        ]);
+
+        $this->serviceRegistry->getConflictResolver(
+            $conflictResolverName,
+            $conflictResolverOptions
+        )->willReturn($conflictResolver);
+
+        $context = $this->uriContext->reveal();
+
+        $this->uriGenerator->resolveConflict($context);
+
+        $conflictResolver->resolveConflict($context)->shouldHaveBeenCalled();
     }
 }
