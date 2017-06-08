@@ -100,14 +100,14 @@ class UriGenerator implements UriGeneratorInterface
     /**
      * {@inheritdoc}
      */
-    public function resolveConflict(UriContext $uriContext, UriContextCollection $uriContextCollection)
+    public function resolveConflict(UriContext $uriContext)
     {
         $conflictResolverConfig = $uriContext->getConflictResolverConfig();
         $conflictResolver = $this->serviceRegistry->getConflictResolver(
             $conflictResolverConfig['name'],
             $conflictResolverConfig['options']
         );
-        $uri = $conflictResolver->resolveConflict($uriContext, $uriContextCollection);
+        $uri = $conflictResolver->resolveConflict($uriContext);
 
         return $uri;
     }

@@ -87,12 +87,12 @@ class AutoRouteManager
             // generate the URI
             $uri = $this->uriGenerator->generateUri($uriContext);
             $uriContext->setUri($uri);
-            $existingRoute = $this->findExistingRoute($uriContext, $uriContextCollection);
+            $existingRoute = $this->findExistingRoute($uriContext);
 
             // handle existing route
             $autoRoute = null;
             if ($existingRoute) {
-                $autoRoute = $this->handleExistingRoute($existingRoute, $uriContext, $uriContextCollection);
+                $autoRoute = $this->handleExistingRoute($existingRoute, $uriContext);
             }
 
             // handle new route
@@ -129,17 +129,14 @@ class AutoRouteManager
      * It is searched within the currently processed collection and the already
      * persisted routes (using the adapter).
      */
-    private function findExistingRoute(
-        UriContext $uriContext,
-        UriContextCollection $uriContextCollection
-    ) {
+    private function findExistingRoute(UriContext $uriContext) {
         $uri = $uriContext->getUri();
         $existingRoute = null;
 
         // As the auto route is put in the context after the conflict has been
         // resolved, we don't need to check if the found auto route is the one
         // contained in the given context.
-        $existingRoute = $uriContextCollection->getAutoRouteByUri($uri);
+        $existingRoute = $uriContext->getCollection()->getAutoRouteByUri($uri);
 
         if (null === $existingRoute) {
             $existingRoute = $this->adapter->findRouteForUri($uri, $uriContext);
@@ -155,8 +152,7 @@ class AutoRouteManager
      */
     private function handleExistingRoute(
         AutoRouteInterface $existingRoute,
-        UriContext $uriContext,
-        UriContextCollection $uriContextCollection
+        UriContext $uriContext
     ) {
         $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $uriContext->getSubject());
         $isSameLocale = $this->adapter->compareAutoRouteLocale($existingRoute, $uriContext->getLocale());
@@ -168,7 +164,7 @@ class AutoRouteManager
             return $autoRoute;
         }
 
-        $uri = $this->uriGenerator->resolveConflict($uriContext, $uriContextCollection);
+        $uri = $this->uriGenerator->resolveConflict($uriContext);
         $uriContext->setUri($uri);
     }
 }

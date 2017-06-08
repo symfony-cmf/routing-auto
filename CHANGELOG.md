@@ -1,11 +1,6 @@
 Changelog
 =========
 
-2.0.0-RC2
----------
-
-* **2017-06-07**: [BC Break] `UriGeneratorInterface::resolveConflict` now needs the currently built `UriContextCollection` in order to find conflicting routes in it.
-
 2.0.0-RC1
 ---------
 

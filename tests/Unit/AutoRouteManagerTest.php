@@ -474,7 +474,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $this->uriGenerator->generateUri(self::is($route['context']))
             ->willReturn($route['generatedUri']);
 
-        $this->uriGenerator->resolveConflict(self::is($route['context']), $this->collection)
+        $this->uriGenerator->resolveConflict(self::is($route['context']))
             ->willReturn($route['expectedUri']);
     }
 

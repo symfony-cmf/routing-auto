@@ -33,5 +33,5 @@ interface UriGeneratorInterface
      *
      * @return string
      */
-    public function resolveConflict(UriContext $uriContext, UriContextCollection $uriContextCollection);
+    public function resolveConflict(UriContext $uriContext);
 }
