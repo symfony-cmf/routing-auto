@@ -69,7 +69,7 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
                 ],
                 'expectedUri' => '/foobar/bar-1',
             ],
-            'a conflict with three consecutive URI in the collection' => [
+            'a conflict with three consecutive URIs in the collection' => [
                 'uri' => '/foobar/bar',
                 'collection' => [
                     '/foobar/bar',
@@ -79,7 +79,7 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
                 'database' => [],
                 'expectedUri' => '/foobar/bar-3',
             ],
-            'a conflict with three consecutive URI in the database' => [
+            'a conflict with three consecutive URIs in the database' => [
                 'uri' => '/foobar/bar',
                 'collection' => [],
                 'database' => [
@@ -89,7 +89,7 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
                 ],
                 'expectedUri' => '/foobar/bar-3',
             ],
-            'a conflict with four consecutive URI in both the collection and the database' => [
+            'a conflict with four consecutive URIs in both the collection and the database' => [
                 'uri' => '/foobar/bar',
                 'collection' => [
                     '/foobar/bar',
@@ -112,7 +112,7 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
                 'database' => [],
                 'expectedUri' => '/foobar/bar-3',
             ],
-            'a conflict with three not consecutive URIs in then database' => [
+            'a conflict with three not consecutive URIs in the database' => [
                 'uri' => '/foobar/bar',
                 'collection' => [],
                 'database' => [
@@ -123,7 +123,7 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
                 ],
                 'expectedUri' => '/foobar/bar-3',
             ],
-            'a conflict with four not consecutive URI in both the collection and the database' => [
+            'a conflict with four not consecutive URIs in both the collection and the database' => [
                 'uri' => '/foobar/bar',
                 'collection' => [
                     '/foobar/bar',
