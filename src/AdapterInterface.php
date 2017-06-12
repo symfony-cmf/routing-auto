@@ -76,7 +76,7 @@ interface AdapterInterface
      * Compares the locale the route is matching and the given locale.
      *
      * @param AutoRouteInterface $autoRoute
-     * @param string             $locale
+     * @param string|null        $locale
      *
      * @return bool True when the locales are equal, false otherwize
      */
