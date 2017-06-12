@@ -132,7 +132,6 @@ class AutoRouteManager
     private function findExistingRoute(UriContext $uriContext)
     {
         $uri = $uriContext->getUri();
-        $existingRoute = null;
 
         // As the auto route is put in the context after the conflict has been
         // resolved, we don't need to check if the found auto route is the one

@@ -58,12 +58,8 @@ class AutoIncrementConflictResolver implements ConflictResolverInterface
      */
     protected function isUriConflicting($uri, UriContext $uriContext)
     {
-        if (null === $uriContext->getCollection()->getAutoRouteByUri($uri)
-            && null === $this->adapter->findRouteForUri($uri, $uriContext)) {
-            return false;
-        }
-
-        return true;
+        return null !== $uriContext->getCollection()->getAutoRouteByUri($uri)
+            || null !== $this->adapter->findRouteForUri($uri, $uriContext);
     }
 
     protected function incrementUri($uri)
