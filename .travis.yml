@@ -6,8 +6,6 @@ php:
 
 sudo: false
 
-env: SYMFONY_VERSION=3.2.*
-
 cache:
   directories:
     - $HOME/.composer/cache/files
@@ -15,18 +13,15 @@ cache:
 matrix:
   include:
     - php: 7.1
-      env: STABILITY=dev SYMFONY_VERSION=3.3.*
+      env: STABILITY=dev
     - php: 5.6
-      env: SYMFONY_VERSION=2.8.* COMPOSER_FLAGS="--prefer-lowest"
-    - php: 7.1
-      env: SYMFONY_VERSION=3.1.*
+      env: COMPOSER_FLAGS="--prefer-lowest"
   fast_finish: true
 
 before_install:
   - phpenv config-rm xdebug.ini || true
   - composer self-update
   - ${STABILITY:+ composer config 'minimum-stability' "$STABILITY"}
-  - if [ "$SYMFONY_VERSION" != "" ]; then composer require symfony/symfony:${SYMFONY_VERSION} --no-update; fi
 
 install: composer update --prefer-dist $COMPOSER_FLAGS
 
