@@ -1,6 +1,11 @@
 Changelog
 =========
 
+2.0.0-RC2
+---------
+
+* **2017-06-09**: [BC Break] Added the `AdapterInterface::compareAutoRouteLocale` method.
+
 2.0.0-RC1
 ---------
 

@@ -12,19 +12,26 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Prophecy\Argument;
+use Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface;
+use Symfony\Cmf\Component\RoutingAuto\ServiceRegistry;
+use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Cmf\Component\RoutingAuto\UriGenerator;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 {
-    protected $serviceRegistry;
-    protected $tokenProviders = [];
-    protected $uriContext;
+    private $serviceRegistry;
+    private $tokenProviders = [];
+    private $uriContext;
+    private $uriGenerator;
 
     public function setUp()
     {
-        $this->serviceRegistry = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\ServiceRegistry');
-        $this->tokenProvider = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface');
-        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
+        $this->serviceRegistry = $this->prophesize(ServiceRegistry::class);
+        $this->tokenProvider = $this->prophesize(TokenProviderInterface::class);
+        $this->uriContext = $this->prophesize(UriContext::class);
 
         $this->uriGenerator = new UriGenerator(
             $this->serviceRegistry->reveal()
@@ -235,20 +242,43 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 
             $providerName = $tokenProviderConfig['name'];
 
-            $this->tokenProviders[$providerName] = $this->prophesize(
-                'Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface'
-            );
+            $this->tokenProviders[$providerName] = $this->prophesize(TokenProviderInterface::class);
 
             $this->serviceRegistry->getTokenProvider($tokenProviderConfig['name'])
                 ->willReturn($this->tokenProviders[$providerName]);
 
             $this->tokenProviders[$providerName]->provideValue($this->uriContext, $tokenProviderConfig['options'])
                 ->willReturn($tokenProviderConfig['value']);
-            $this->tokenProviders[$providerName]->configureOptions(Argument::type('Symfony\Component\OptionsResolver\OptionsResolver'))->shouldBeCalled();
+            $this->tokenProviders[$providerName]->configureOptions(Argument::type(OptionsResolver::class))
+                ->shouldBeCalled();
         }
 
         $res = $this->uriGenerator->generateUri($this->uriContext->reveal());
 
         $this->assertEquals($expectedUri, $res);
+    }
+
+    public function testResolveConflict()
+    {
+        $conflictResolverName = 'name';
+        $conflictResolverOptions = [];
+        $conflictResolver = $this->prophesize(ConflictResolverInterface::class);
+        $contextCollection = $this->prophesize(UriContextCollection::class)->reveal();
+
+        $this->uriContext->getConflictResolverConfig()->willReturn([
+            'name' => $conflictResolverName,
+            'options' => $conflictResolverOptions,
+        ]);
+
+        $this->serviceRegistry->getConflictResolver(
+            $conflictResolverName,
+            $conflictResolverOptions
+        )->willReturn($conflictResolver);
+
+        $context = $this->uriContext->reveal();
+
+        $this->uriGenerator->resolveConflict($context);
+
+        $conflictResolver->resolveConflict($context)->shouldHaveBeenCalled();
     }
 }

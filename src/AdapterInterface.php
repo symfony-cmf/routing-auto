@@ -73,6 +73,16 @@ interface AdapterInterface
     public function compareAutoRouteContent(AutoRouteInterface $autoRoute, $contentObject);
 
     /**
+     * Compares the locale the route is matching and the given locale.
+     *
+     * @param AutoRouteInterface $autoRoute
+     * @param string|null        $locale
+     *
+     * @return bool True when the locales are equal, false otherwize
+     */
+    public function compareAutoRouteLocale(AutoRouteInterface $autoRoute, $locale);
+
+    /**
      * Attempt to find a route with the given URL.
      *
      * Note that the URI may not be the same as the URI in the URI context,

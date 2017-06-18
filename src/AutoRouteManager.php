@@ -87,7 +87,7 @@ class AutoRouteManager
             // generate the URI
             $uri = $this->uriGenerator->generateUri($uriContext);
             $uriContext->setUri($uri);
-            $existingRoute = $this->adapter->findRouteForUri($uri, $uriContext);
+            $existingRoute = $this->findExistingRoute($uriContext);
 
             // handle existing route
             $autoRoute = null;
@@ -124,18 +124,40 @@ class AutoRouteManager
     }
 
     /**
+     * Find an existing route which matches the URI of the given context.
+     *
+     * It is searched within the currently processed collection and the already
+     * persisted routes (using the adapter).
+     */
+    private function findExistingRoute(UriContext $uriContext)
+    {
+        $uri = $uriContext->getUri();
+
+        // As the auto route is put in the context after the conflict has been
+        // resolved, we don't need to check if the found auto route is the one
+        // contained in the given context.
+        $existingRoute = $uriContext->getCollection()->getAutoRouteByUri($uri);
+
+        if (null === $existingRoute) {
+            $existingRoute = $this->adapter->findRouteForUri($uri, $uriContext);
+        }
+
+        return $existingRoute;
+    }
+
+    /**
      * Handle the case where the generated path already exists.
      * Either if it does not reference the same content then we
      * have a conflict which needs to be resolved.
-     *
-     * @param Route      $route
-     * @param UriContext $uriContext
      */
-    private function handleExistingRoute($existingRoute, $uriContext)
-    {
+    private function handleExistingRoute(
+        AutoRouteInterface $existingRoute,
+        UriContext $uriContext
+    ) {
         $isSameContent = $this->adapter->compareAutoRouteContent($existingRoute, $uriContext->getSubject());
+        $isSameLocale = $this->adapter->compareAutoRouteLocale($existingRoute, $uriContext->getLocale());
 
-        if ($isSameContent) {
+        if ($isSameContent && $isSameLocale) {
             $autoRoute = $existingRoute;
             $autoRoute->setType(AutoRouteInterface::TYPE_PRIMARY);
 

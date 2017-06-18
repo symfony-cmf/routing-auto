@@ -113,6 +113,14 @@ class EventDispatchingAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
+    public function compareAutoRouteLocale(AutoRouteInterface $autoRoute, $locale)
+    {
+        return $this->adapter->compareAutoRouteLocale($autoRoute, $locale);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getReferringAutoRoutes($contentDocument)
     {
         return $this->adapter->getReferringAutoRoutes($contentDocument);

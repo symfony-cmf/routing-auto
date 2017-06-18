@@ -123,6 +123,23 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCompareAutoRouteLocale()
+    {
+        $locale = 'locale';
+
+        $this->realAdapter->compareAutoRouteLocale(
+            $this->autoRoute->reveal(),
+            $locale
+        )->willReturn(true);
+
+        $this->assertTrue(
+            $this->adapter->compareAutoRouteLocale(
+                $this->autoRoute->reveal(),
+                $locale
+            )
+        );
+    }
+
     public function testGetReferringAutoRoutes()
     {
         $referrers = [$this->autoRoute->reveal(), $this->autoRoute2->reveal()];

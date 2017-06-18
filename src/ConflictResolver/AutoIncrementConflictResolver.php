@@ -25,9 +25,11 @@ use Symfony\Cmf\Component\RoutingAuto\UriContext;
 class AutoIncrementConflictResolver implements ConflictResolverInterface
 {
     protected $adapter;
-    protected $inc;
+    protected $index;
 
     /**
+     * Construct the conflict resolver using the given adapter.
+     *
      * @param AdapterInterface $adapter
      */
     public function __construct(AdapterInterface $adapter)
@@ -40,20 +42,28 @@ class AutoIncrementConflictResolver implements ConflictResolverInterface
      */
     public function resolveConflict(UriContext $uriContext)
     {
-        $this->inc = 0;
+        $this->index = 0;
+        $candidateUri = $uri = $uriContext->getUri();
 
-        $uri = $uriContext->getUri();
-        $candidateUri = $this->incrementUri($uri);
-
-        while ($route = $this->adapter->findRouteForUri($candidateUri, $uriContext)) {
+        while ($this->isUriConflicting($candidateUri, $uriContext)) {
             $candidateUri = $this->incrementUri($uri);
         }
 
         return $candidateUri;
     }
 
+    /**
+     * Tell if the given URI for the given context is conflicting with another
+     * route.
+     */
+    protected function isUriConflicting($uri, UriContext $uriContext)
+    {
+        return null !== $uriContext->getCollection()->getAutoRouteByUri($uri)
+            || null !== $this->adapter->findRouteForUri($uri, $uriContext);
+    }
+
     protected function incrementUri($uri)
     {
-        return sprintf('%s-%s', $uri, ++$this->inc);
+        return sprintf('%s-%s', $uri, ++$this->index);
     }
 }
