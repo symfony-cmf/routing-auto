@@ -26,6 +26,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  */
 class EventDispatchingAdapter implements AdapterInterface
 {
+    /**
+     * @var AdapterInterface
+     */
+    private $adapter;
+
+    /**
+     * @var EventDispatcherInterface
+     */
     private $dispatcher;
 
     public function __construct(AdapterInterface $adapter, EventDispatcherInterface $eventDispatcher)
@@ -78,9 +86,9 @@ class EventDispatchingAdapter implements AdapterInterface
     /**
      * {@inheritdoc}
      */
-    public function createAutoRoute(UriContext $uriContext, $contentDocument, $autoRouteTag)
+    public function createAutoRoute(UriContext $uriContext, $autoRouteTag)
     {
-        $autoRoute = $this->adapter->createAutoRoute($uriContext, $contentDocument, $autoRouteTag);
+        $autoRoute = $this->adapter->createAutoRoute($uriContext, $autoRouteTag);
         $this->dispatcher->dispatch(RoutingAutoEvents::POST_CREATE, new AutoRouteCreateEvent($autoRoute, $uriContext));
 
         return $autoRoute;

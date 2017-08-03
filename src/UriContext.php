@@ -11,6 +11,8 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto;
 
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+
 /**
  * Class which holds all the necessary information to make an auto route.
  *

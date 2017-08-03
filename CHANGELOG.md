@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.0.0-RC3
+---------
+
+* **2017-08-03**: [BC Break] Removed second argument $contentDocument from `AdapterInterface::createAutoRoute`.
+                  If you call this method manually or implemented the interface, you need to adjust your code.
+
 2.0.0-RC2
 ---------
 

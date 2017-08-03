@@ -12,6 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\AutoRouteManager;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
@@ -23,10 +24,29 @@ use Symfony\Cmf\Component\RoutingAuto\UriGeneratorInterface;
 
 class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var AdapterInterface|ObjectProphecy
+     */
     private $adapter;
+
+    /**
+     * @var UriGeneratorInterface|ObjectProphecy
+     */
     private $uriGenerator;
+
+    /**
+     * @var DefunctRouteHandlerInterface|ObjectProphecy
+     */
     private $defunctRouteHandler;
+
+    /**
+     * @var UriContextCollectionBuilder|ObjectProphecy
+     */
     private $collectionBuilder;
+
+    /**
+     * @var AutoRouteManager|ObjectProphecy
+     */
     private $manager;
     private $subject;
     private $collection;
@@ -494,7 +514,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $this->adapter->generateAutoRouteTag(self::is($route['context']))
             ->willReturn($route['locale']);
 
-        $this->adapter->createAutoRoute(self::is($route['context']), $route['subject'], $route['locale'])
+        $this->adapter->createAutoRoute(self::is($route['context']), $route['locale'])
             ->willReturn($route['createdAutoRoute']);
 
         $this->adapter->findRouteForUri($route['generatedUri'], self::is($route['context']))

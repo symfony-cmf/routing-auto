@@ -11,15 +11,56 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Adapter;
 
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\Adapter\EventDispatchingAdapter;
+use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteCreateEvent;
 use Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteMigrateEvent;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 use Symfony\Cmf\Component\RoutingAuto\RoutingAutoEvents;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var AdapterInterface|ObjectProphecy
+     */
+    private $realAdapter;
+
+    /**
+     * @var EventDispatcher
+     */
+    private $dispatcher;
+
+    /**
+     * @var EventDispatchingAdapter
+     */
+    private $adapter;
+
+    /**
+     * @var EventDispatchingAdapterSubscriber
+     */
+    private $subscriber;
+
+    /**
+     * @var UriContext|ObjectProphecy
+     */
+    private $uriContext;
+
+    /**
+     * @var AutoRouteInterface|ObjectProphecy
+     */
+    private $autoRoute;
+
+    /**
+     * @var AutoRouteInterface|ObjectProphecy
+     */
+    private $autoRoute2;
+
+    private $content;
+
     public function setUp()
     {
         $this->realAdapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
@@ -39,8 +80,8 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateAutoRoute()
     {
-        $this->realAdapter->createAutoRoute($this->uriContext->reveal(), null, 'fr')->willReturn($this->autoRoute->reveal());
-        $this->adapter->createAutoRoute($this->uriContext->reveal(), null, 'fr');
+        $this->realAdapter->createAutoRoute($this->uriContext->reveal(), 'fr')->willReturn($this->autoRoute->reveal());
+        $this->adapter->createAutoRoute($this->uriContext->reveal(), 'fr');
         $this->assertNotNull($this->subscriber->createEvent);
         $this->assertInstanceOf('Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteCreateEvent', $this->subscriber->createEvent);
         $this->assertSame($this->autoRoute->reveal(), $this->subscriber->createEvent->getAutoRoute());
