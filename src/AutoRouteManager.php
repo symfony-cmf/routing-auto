@@ -12,7 +12,6 @@
 namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * This class is concerned with the automatic creation of route objects.
@@ -46,12 +45,6 @@ class AutoRouteManager
      */
     protected $collectionBuilder;
 
-    /**
-     * @param AdapterInterface             $adapter             Database adapter
-     * @param UriGeneratorInterface        $uriGenerator        Routing auto URL generator
-     * @param DefunctRouteHandlerInterface $defunctRouteHandler Handler for defunct routes
-     * @param EventDispatcher              $eventDispatcher     Dispatcher for events
-     */
     public function __construct(
         AdapterInterface $adapter,
         UriGeneratorInterface $uriGenerator,
@@ -73,6 +66,7 @@ class AutoRouteManager
     {
         $this->collectionBuilder->build($uriContextCollection);
 
+        /** @var UriContext $uriContext */
         foreach ($uriContextCollection->getUriContexts() as $uriContext) {
             $subject = $uriContextCollection->getSubject();
 
@@ -99,12 +93,7 @@ class AutoRouteManager
             if (null === $autoRoute) {
                 $autoRouteTag = $this->adapter->generateAutoRouteTag($uriContext);
 
-                // TODO: The second argument below is now **pointless**, as the
-                // UriContext contains both the original and translated subject
-                // objects.
-                //
-                // See: https://github.com/symfony-cmf/RoutingAuto/issues/73
-                $autoRoute = $this->adapter->createAutoRoute($uriContext, $subject, $autoRouteTag);
+                $autoRoute = $this->adapter->createAutoRoute($uriContext, $autoRouteTag);
             }
 
             $uriContext->setAutoRoute($autoRoute);

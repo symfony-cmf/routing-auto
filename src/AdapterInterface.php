@@ -11,6 +11,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto;
 
+use Symfony\Cmf\Component\Routing\RouteObjectInterface;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 
 /**
@@ -40,16 +41,14 @@ interface AdapterInterface
     public function translateObject($object, $locale);
 
     /**
-     * Create a new auto route at the given path
-     * with the given document as the content.
+     * Create a new auto route from the given context.
      *
      * @param UriContext $uriContext
-     * @param object     $document
      * @param string     $tag
      *
      * @return AutoRouteInterface new route document
      */
-    public function createAutoRoute(UriContext $uriContext, $document, $tag);
+    public function createAutoRoute(UriContext $uriContext, $tag);
 
     /**
      * Return the canonical name for the given class, this is
@@ -92,7 +91,7 @@ interface AdapterInterface
      * @param string     $uri        The URI to find
      * @param UriContext $uriContext The current URI context
      *
-     * @return null|Symfony\Cmf\Component\Routing\RouteObjectInterface
+     * @return RouteObjectInterface|null
      */
     public function findRouteForUri($uri, UriContext $uriContext);
 
