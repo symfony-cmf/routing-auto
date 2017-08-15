@@ -19,6 +19,10 @@ use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 class UriContextCollection
 {
     protected $subject;
+
+    /**
+     * @var UriContext[]
+     */
     protected $uriContexts = [];
 
     /**
@@ -157,7 +161,7 @@ class UriContextCollection
         foreach ($this->uriContexts as $uriContext) {
             $autoRoute = $uriContext->getAutoRoute();
 
-            if (null !== $autoRoute && $locale === $uriContext->getLocale()) {
+            if (null !== $autoRoute && $locale === $autoRoute->getLocale()) {
                 return $autoRoute;
             }
         }
