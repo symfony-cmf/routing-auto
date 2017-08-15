@@ -447,6 +447,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
             if ($otherRoute['expectedUri'] === $route['generatedUri']) {
                 $existingCollectionRoute = $otherRoute;
+
                 break;
             }
         }
