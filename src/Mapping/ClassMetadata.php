@@ -181,6 +181,7 @@ class ClassMetadata extends MergeableClassMetadata
         foreach ($metadata->getAutoRouteDefinitions() as $definitionName => $definition) {
             if (isset($this->definitions[$definitionName])) {
                 $this->definitions[$definitionName]->merge($definition);
+
                 continue;
             }
 

@@ -109,20 +109,25 @@ class YmlFileLoader extends FileLoader
                     foreach ($this->getAutoRouteDefinitions($value) as $definitionName => $definition) {
                         $classMetadata->setAutoRouteDefinition($definitionName, $definition);
                     }
+
                     break;
                 case 'conflict_resolver':
                     $classMetadata->setConflictResolver($this->parseServiceConfig($mappingNode['conflict_resolver'], $className, $path));
+
                     break;
                 case 'defunct_route_handler':
                     $classMetadata->setDefunctRouteHandler($this->parseServiceConfig($mappingNode['defunct_route_handler'], $className, $path));
+
                     break;
                 case 'extend':
                     $classMetadata->setExtendedClass($mappingNode['extend']);
+
                     break;
                 case 'token_providers':
                     foreach ($mappingNode['token_providers'] as $tokenName => $provider) {
                         $classMetadata->addTokenProvider($tokenName, $this->parseServiceConfig($provider, $className, $path));
                     }
+
                     break;
                 default:
                     throw new \InvalidArgumentException(sprintf(
