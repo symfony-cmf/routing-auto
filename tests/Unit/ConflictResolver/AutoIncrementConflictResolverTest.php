@@ -12,6 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\ConflictResolver;
 
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolver\AutoIncrementConflictResolver;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
@@ -20,18 +21,33 @@ use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
 class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var AdapterInterface|ObjectProphecy
+     */
     private $adapter;
+
+    /**
+     * @var UriContext|ObjectProphecy
+     */
     private $uriContext;
-    private $collection;
+
+    /**
+     * @var UriContextCollection|ObjectProphecy
+     */
+    private $contextCollection;
+
+    /**
+     * @var AutoIncrementConflictResolver
+     */
     private $conflictResolver;
 
     public function setUp()
     {
         $this->adapter = $this->prophesize(AdapterInterface::class);
         $this->uriContext = $this->prophesize(UriContext::class);
-        $this->collection = $this->prophesize(UriContextCollection::class);
+        $this->contextCollection = $this->prophesize(UriContextCollection::class);
 
-        $this->uriContext->getCollection()->willReturn($this->collection);
+        $this->uriContext->getCollection()->willReturn($this->contextCollection);
 
         $this->conflictResolver = new AutoIncrementConflictResolver($this->adapter->reveal());
     }
@@ -165,11 +181,11 @@ class AutoIncrementConflictResolverTest extends \PHPUnit_Framework_TestCase
      */
     private function configureCollection(array $uris)
     {
-        $this->collection->getAutoRouteByUri(Argument::type('string'))
+        $this->contextCollection->getAutoRouteByUri(Argument::type('string'))
             ->willReturn(null);
 
         foreach ($uris as $uri) {
-            $this->collection->getAutoRouteByUri($uri)
+            $this->contextCollection->getAutoRouteByUri($uri)
                 ->willReturn($this->prophesize(AutoRouteInterface::class)->reveal());
         }
     }

@@ -12,6 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Prophecy\Argument;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface;
 use Symfony\Cmf\Component\RoutingAuto\ServiceRegistry;
 use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
@@ -22,15 +23,29 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class UriGeneratorTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ServiceRegistry|ObjectProphecy
+     */
     private $serviceRegistry;
+
+    /**
+     * @var TokenProviderInterface[]
+     */
     private $tokenProviders = [];
+
+    /**
+     * @var UriContext|ObjectProphecy
+     */
     private $uriContext;
+
+    /**
+     * @var UriGenerator
+     */
     private $uriGenerator;
 
     public function setUp()
     {
         $this->serviceRegistry = $this->prophesize(ServiceRegistry::class);
-        $this->tokenProvider = $this->prophesize(TokenProviderInterface::class);
         $this->uriContext = $this->prophesize(UriContext::class);
 
         $this->uriGenerator = new UriGenerator(
@@ -271,8 +286,7 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $this->serviceRegistry->getConflictResolver(
-            $conflictResolverName,
-            $conflictResolverOptions
+            $conflictResolverName
         )->willReturn($conflictResolver);
 
         $context = $this->uriContext->reveal();

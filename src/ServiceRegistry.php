@@ -13,9 +13,20 @@ namespace Symfony\Cmf\Component\RoutingAuto;
 
 class ServiceRegistry
 {
-    protected $tokenProviders = [];
-    protected $conflictResolvers = [];
-    protected $defunctRouteHandlers = [];
+    /**
+     * @var TokenProviderInterface[]
+     */
+    private $tokenProviders = [];
+
+    /**
+     * @var ConflictResolverInterface[]
+     */
+    private $conflictResolvers = [];
+
+    /**
+     * @var DefunctRouteHandlerInterface[]
+     */
+    private $defunctRouteHandlers = [];
 
     /**
      * Return the named token provider.
@@ -60,7 +71,7 @@ class ServiceRegistry
      *
      * @throws \InvalidArgumentException if the named token provider does not exist
      *
-     * @return ConflictResolverInterface
+     * @return DefunctRouteHandlerInterface
      */
     public function getDefunctRouteHandler($name)
     {

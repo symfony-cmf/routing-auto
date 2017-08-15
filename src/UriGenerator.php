@@ -20,12 +20,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class UriGenerator implements UriGeneratorInterface
 {
-    protected $serviceRegistry;
-
     /**
-     * @param MetadataFactory   the metadata factory
-     * @param ServiceRegistry  the auto route service registry
+     * @var ServiceRegistry The auto route service registry
      */
+    private $serviceRegistry;
+
     public function __construct(
         ServiceRegistry $serviceRegistry
     ) {
@@ -62,7 +61,7 @@ class UriGenerator implements UriGeneratorInterface
 
             $tokenValue = $tokenProvider->provideValue($uriContext, $tokenProviderOptions);
 
-            $isEmpty = empty($tokenValue) || $tokenValue == '/';
+            $isEmpty = empty($tokenValue) || '/' === $tokenValue;
 
             if ($isEmpty && false === $tokenProviderOptions['allow_empty']) {
                 throw new \InvalidArgumentException(sprintf(
@@ -87,7 +86,7 @@ class UriGenerator implements UriGeneratorInterface
 
         $uri = strtr($uriSchema, $tokens);
 
-        if (substr($uri, 0, 1) !== '/') {
+        if ($uri[0] !== '/') {
             throw new \InvalidArgumentException(sprintf(
                 'Generated non-absolute URI "%s" for object "%s"',
                 $uri, get_class($uriContext->getSubject())
@@ -104,12 +103,10 @@ class UriGenerator implements UriGeneratorInterface
     {
         $conflictResolverConfig = $uriContext->getConflictResolverConfig();
         $conflictResolver = $this->serviceRegistry->getConflictResolver(
-            $conflictResolverConfig['name'],
-            $conflictResolverConfig['options']
+            $conflictResolverConfig['name']
         );
-        $uri = $conflictResolver->resolveConflict($uriContext);
 
-        return $uri;
+        return $conflictResolver->resolveConflict($uriContext);
     }
 
     /**

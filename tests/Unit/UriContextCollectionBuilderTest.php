@@ -11,11 +11,41 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
+use Metadata\MetadataFactoryInterface;
+use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollectionBuilder;
 
 class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var MetadataFactoryInterface|ObjectProphecy
+     */
+    private $metadataFactory;
+
+    /**
+     * @var AdapterInterface|ObjectProphecy
+     */
+    private $adapter;
+
+    /**
+     * @var object
+     */
+    private $subject;
+
+    /**
+     * @var UriContextCollection
+     */
+    private $contextCollection;
+
+    /**
+     * @var ClassMetadata
+     */
+    private $metadata;
+
     public function setUp()
     {
         $this->metadataFactory = $this->prophesize('Metadata\MetadataFactoryInterface');
@@ -27,7 +57,7 @@ class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->subject = new \stdClass();
-        $this->collection = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContextCollection');
+        $this->contextCollection = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContextCollection');
         $this->metadata = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
     }
 
@@ -57,7 +87,7 @@ class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
             ]),
         ];
 
-        $this->collection->getSubject()->willReturn($this->subject);
+        $this->contextCollection->getSubject()->willReturn($this->subject);
         $this->adapter->getRealClassName('stdClass')->willReturn('STDCLASS');
         $this->metadataFactory->getMetadataForClass('STDCLASS')->willReturn($this->metadata->reveal());
         $this->adapter->getLocales($this->subject)->willReturn($locales);
@@ -70,17 +100,17 @@ class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
             $uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
 
             foreach ($definitions as $definition) {
-                $this->collection->createUriContext(
+                $this->contextCollection->createUriContext(
                     $definition->getUriSchema(),
                     $definition->getDefaults(),
                     $metadata['token_provider_configs'],
                     $metadata['conflict_resolver_config'],
                     $locale
                 )->willReturn($uriContext->reveal());
-                $this->collection->addUriContext($uriContext->reveal())->shouldBeCalled();
+                $this->contextCollection->addUriContext($uriContext->reveal())->shouldBeCalled();
             }
         }
 
-        $this->builder->build($this->collection->reveal());
+        $this->builder->build($this->contextCollection->reveal());
     }
 }

@@ -17,8 +17,15 @@ use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
 class UriContextCollectionTest extends \PHPUnit_Framework_TestCase
 {
-    private $contextCollection;
+    /**
+     * @var object
+     */
     private $subject;
+
+    /**
+     * @var UriContextCollection
+     */
+    private $contextCollection;
 
     public function setUp()
     {

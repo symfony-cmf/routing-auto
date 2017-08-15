@@ -18,12 +18,12 @@ use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
  */
 class UriContextCollection
 {
-    protected $subject;
+    private $subject;
 
     /**
      * @var UriContext[]
      */
-    protected $uriContexts = [];
+    private $uriContexts = [];
 
     /**
      * Construct the collection for the given subject.

@@ -11,13 +11,33 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
+use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Cmf\Api\Slugifier\SlugifierInterface;
+use Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Article;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentMethodProvider;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ContentMethodProviderTest extends \PHPUnit_Framework_TestCase
 {
-    protected $slugifier;
-    protected $article;
-    protected $uriContext;
+    /**
+     * @var SlugifierInterface|ObjectProphecy
+     */
+    private $slugifier;
+
+    /**
+     * @var Article|ObjectProphecy
+     */
+    private $article;
+
+    /**
+     * @var UriContext|ObjectProphecy
+     */
+    private $uriContext;
+
+    /**
+     * @var ContentMethodProvider
+     */
+    private $provider;
 
     public function setUp()
     {

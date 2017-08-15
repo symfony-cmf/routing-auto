@@ -12,6 +12,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto;
 
 use Metadata\MetadataFactoryInterface;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\MetadataFactory;
 
 /**
  * Class responsible for creating all the implied UriContext objects for
@@ -22,14 +23,14 @@ use Metadata\MetadataFactoryInterface;
 class UriContextCollectionBuilder
 {
     /**
-     * @var MetadataFactoryInterface
+     * @var MetadataFactory
      */
-    protected $metadataFactory;
+    private $metadataFactory;
 
     /**
      * @var AdapterInterface
      */
-    protected $adapter;
+    private $adapter;
 
     public function __construct(MetadataFactoryInterface $metadataFactory, AdapterInterface $adapter)
     {

@@ -11,15 +11,56 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\DefunctRouteHandler;
 
+use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler\DelegatingDefunctRouteHandler;
+use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\MetadataFactory;
+use Symfony\Cmf\Component\RoutingAuto\ServiceRegistry;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
 class DelegatingDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    protected $metadataFactory;
-    protected $adapter;
-    protected $serviceRegistry;
-    protected $uriContextCollection;
-    protected $metadata;
+    /**
+     * @var MetadataFactory|ObjectProphecy
+     */
+    private $metadataFactory;
+
+    /**
+     * @var AdapterInterface|ObjectProphecy
+     */
+    private $adapter;
+
+    /**
+     * @var ServiceRegistry|ObjectProphecy
+     */
+    private $serviceRegistry;
+
+    /**
+     * @var UriContextCollection|ObjectProphecy
+     */
+    private $uriContextCollection;
+
+    /**
+     * @var ClassMetadata|ObjectProphecy
+     */
+    private $metadata;
+
+    /**
+     * @var DefunctRouteHandlerInterface|ObjectProphecy
+     */
+    private $delegatedHandler;
+
+    /**
+     * @var object
+     */
+    private $subject;
+
+    /**
+     * @var DelegatingDefunctRouteHandler
+     */
+    private $delegatingDefunctRouteHandler;
 
     public function setUp()
     {
@@ -35,8 +76,7 @@ class DelegatingDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
         $this->delegatingDefunctRouteHandler = new DelegatingDefunctRouteHandler(
             $this->metadataFactory->reveal(),
             $this->adapter->reveal(),
-            $this->serviceRegistry->reveal(),
-            $this->uriContextCollection->reveal()
+            $this->serviceRegistry->reveal()
         );
     }
 

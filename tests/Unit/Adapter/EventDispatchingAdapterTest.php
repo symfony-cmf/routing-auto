@@ -59,6 +59,9 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
      */
     private $autoRoute2;
 
+    /**
+     * @var object
+     */
     private $content;
 
     public function setUp()

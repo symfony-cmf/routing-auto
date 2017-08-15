@@ -11,13 +11,32 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
+use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface;
+use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
 use Symfony\Cmf\Component\RoutingAuto\ServiceRegistry;
+use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
 
 class ServiceRegistryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ServiceRegistry
+     */
     private $serviceRegistry;
+
+    /**
+     * @var TokenProviderInterface|ObjectProphecy
+     */
     private $tokenProvider;
+
+    /**
+     * @var ConflictResolverInterface|ObjectProphecy
+     */
     private $conflictResolver;
+
+    /**
+     * @var DefunctRouteHandlerInterface|ObjectProphecy
+     */
     private $defunctRouteHandler;
 
     public function setUp()

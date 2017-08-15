@@ -25,14 +25,23 @@ use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
  */
 class DelegatingDefunctRouteHandler implements DefunctRouteHandlerInterface
 {
-    protected $serviceRegistry;
-    protected $adapter;
+    /**
+     * Used to find the old route action.
+     *
+     * @var ServiceRegistry
+     */
+    private $serviceRegistry;
 
     /**
-     * @param ServiceRegistry auto routing service registry (for getting old route action)
-     * @param AdapterInterface auto routing backend adapter
-     * @param MetadataFactory  auto routing metadata factory
+     * @var AdapterInterface
      */
+    private $adapter;
+
+    /**
+     * @var MetadataFactory
+     */
+    private $metadataFactory;
+
     public function __construct(
         MetadataFactory $metadataFactory,
         AdapterInterface $adapter,

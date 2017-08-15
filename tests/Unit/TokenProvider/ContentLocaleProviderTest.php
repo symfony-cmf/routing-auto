@@ -11,11 +11,21 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentLocaleProvider;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ContentLocaleProviderTest extends \PHPUnit_Framework_TestCase
 {
-    protected $uriContext;
+    /**
+     * @var UriContext|ObjectProphecy
+     */
+    private $uriContext;
+
+    /**
+     * @var ContentLocaleProvider
+     */
+    private $provider;
 
     public function setUp()
     {

@@ -11,12 +11,21 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Mapping\Loader;
 
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\Loader\YmlFileLoader;
+use Symfony\Component\Config\FileLocatorInterface;
 
 class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 {
-    protected $locator;
-    protected $loader;
+    /**
+     * @var FileLocatorInterface|ObjectProphecy
+     */
+    private $locator;
+
+    /**
+     * @var YmlFileLoader
+     */
+    private $loader;
 
     public function setUp()
     {

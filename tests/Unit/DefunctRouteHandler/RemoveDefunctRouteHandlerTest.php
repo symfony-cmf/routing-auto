@@ -11,12 +11,53 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\DefunctRouteHandler;
 
+use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler\RemoveDefunctRouteHandler;
+use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
+use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
 class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    protected $adapter;
-    protected $uriContextCollection;
+    /**
+     * @var AdapterInterface|ObjectProphecy
+     */
+    private $adapter;
+
+    /**
+     * @var UriContextCollection|ObjectProphecy
+     */
+    private $uriContextCollection;
+
+    /**
+     * @var AutoRouteInterface|ObjectProphecy
+     */
+    private $route1;
+
+    /**
+     * @var AutoRouteInterface|ObjectProphecy
+     */
+    private $route2;
+
+    /**
+     * @var AutoRouteInterface|ObjectProphecy
+     */
+    private $route3;
+
+    /**
+     * @var AutoRouteInterface|ObjectProphecy
+     */
+    private $route4;
+
+    /**
+     * @var object
+     */
+    private $subject;
+
+    /**
+     * @var RemoveDefunctRouteHandler
+     */
+    private $handler;
 
     public function setUp()
     {

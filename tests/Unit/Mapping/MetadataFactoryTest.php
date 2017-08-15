@@ -11,13 +11,17 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Mapping;
 
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\MetadataFactory;
 
 class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 {
-    protected $factory;
+    /**
+     * @var MetadataFactory
+     */
+    private $factory;
 
     public function setUp()
     {
@@ -26,6 +30,7 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testStoreAndGetClassMetadata()
     {
+        /** @var ClassMetadata|ObjectProphecy $stdClassMetadata */
         $stdClassMetadata = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
         $stdClassMetadata->getClassName()->willReturn('stdClass');
         $stdClassMetadata->getExtendedClass()->willReturn(null);

@@ -20,7 +20,7 @@ class LeaveRedirectDefunctRouteHandler implements DefunctRouteHandlerInterface
     /**
      * @var AdapterInterface
      */
-    protected $adapter;
+    private $adapter;
 
     public function __construct(AdapterInterface $adapter)
     {

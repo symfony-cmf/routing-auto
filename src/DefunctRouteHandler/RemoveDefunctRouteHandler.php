@@ -20,7 +20,7 @@ class RemoveDefunctRouteHandler implements DefunctRouteHandlerInterface
     /**
      * @var AdapterInterface
      */
-    protected $adapter;
+    private $adapter;
 
     /**
      * @param AdapterInterface

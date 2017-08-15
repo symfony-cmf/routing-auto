@@ -11,11 +11,21 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\ConflictResolver;
 
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolver\ThrowExceptionConflictResolver;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ThrowExceptionConflictHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    protected $adapter;
+    /**
+     * @var ThrowExceptionConflictResolver
+     */
+    private $conflictResolver;
+
+    /**
+     * @var UriContext|ObjectProphecy
+     */
+    private $uriContext;
 
     public function setUp()
     {

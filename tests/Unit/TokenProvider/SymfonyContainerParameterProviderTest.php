@@ -11,13 +11,28 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\SymfonyContainerParameterProvider;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SymfonyContainerParameterProviderTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var UriContext|ObjectProphecy
+     */
     private $uriContext;
+
+    /**
+     * @var ContainerInterface|ObjectProphecy
+     */
     private $container;
+
+    /**
+     * @var SymfonyContainerParameterProvider
+     */
+    private $provider;
 
     public function setUp()
     {
