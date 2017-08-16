@@ -11,21 +11,40 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
+use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface;
+use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface;
 use Symfony\Cmf\Component\RoutingAuto\ServiceRegistry;
+use Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface;
 
 class ServiceRegistryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var ServiceRegistry
+     */
     private $serviceRegistry;
+
+    /**
+     * @var TokenProviderInterface|ObjectProphecy
+     */
     private $tokenProvider;
+
+    /**
+     * @var ConflictResolverInterface|ObjectProphecy
+     */
     private $conflictResolver;
+
+    /**
+     * @var DefunctRouteHandlerInterface|ObjectProphecy
+     */
     private $defunctRouteHandler;
 
     public function setUp()
     {
         $this->serviceRegistry = new ServiceRegistry();
-        $this->tokenProvider = $this->createMock('Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface');
-        $this->conflictResolver = $this->createMock('Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface');
-        $this->defunctRouteHandler = $this->createMock('Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface');
+        $this->tokenProvider = $this->createMock(TokenProviderInterface::class);
+        $this->conflictResolver = $this->createMock(ConflictResolverInterface::class);
+        $this->defunctRouteHandler = $this->createMock(DefunctRouteHandlerInterface::class);
     }
 
     public function testRegistration()

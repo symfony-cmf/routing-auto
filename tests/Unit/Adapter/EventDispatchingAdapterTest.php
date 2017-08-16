@@ -59,11 +59,14 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
      */
     private $autoRoute2;
 
+    /**
+     * @var object
+     */
     private $content;
 
     public function setUp()
     {
-        $this->realAdapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
+        $this->realAdapter = $this->prophesize(AdapterInterface::class);
         $this->dispatcher = new EventDispatcher();
         $this->adapter = new EventDispatchingAdapter(
             $this->realAdapter->reveal(),
@@ -72,9 +75,9 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
 
         $this->subscriber = new EventDispatchingAdapterSubscriber();
         $this->dispatcher->addSubscriber($this->subscriber);
-        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
-        $this->autoRoute = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
-        $this->autoRoute2 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
+        $this->uriContext = $this->prophesize(UriContext::class);
+        $this->autoRoute = $this->prophesize(AutoRouteInterface::class);
+        $this->autoRoute2 = $this->prophesize(AutoRouteInterface::class);
         $this->content = new \stdClass();
     }
 
@@ -83,7 +86,7 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
         $this->realAdapter->createAutoRoute($this->uriContext->reveal(), 'fr')->willReturn($this->autoRoute->reveal());
         $this->adapter->createAutoRoute($this->uriContext->reveal(), 'fr');
         $this->assertNotNull($this->subscriber->createEvent);
-        $this->assertInstanceOf('Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteCreateEvent', $this->subscriber->createEvent);
+        $this->assertInstanceOf(AutoRouteCreateEvent::class, $this->subscriber->createEvent);
         $this->assertSame($this->autoRoute->reveal(), $this->subscriber->createEvent->getAutoRoute());
         $this->assertSame($this->uriContext->reveal(), $this->subscriber->createEvent->getUriContext());
     }
@@ -95,7 +98,7 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
             $this->autoRoute2->reveal()
         );
         $this->assertNotNull($this->subscriber->migrateEvent);
-        $this->assertInstanceOf('Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteMigrateEvent', $this->subscriber->migrateEvent);
+        $this->assertInstanceOf(AutoRouteMigrateEvent::class, $this->subscriber->migrateEvent);
         $this->assertSame($this->autoRoute->reveal(), $this->subscriber->migrateEvent->getSrcAutoRoute());
         $this->assertSame($this->autoRoute2->reveal(), $this->subscriber->migrateEvent->getDestAutoRoute());
     }

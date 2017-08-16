@@ -11,17 +11,32 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
+use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Article;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\ContentDateTimeProvider;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
 class ContentDateTimeProviderTest extends \PHPUnit_Framework_TestCase
 {
-    protected $article;
-    protected $uriContext;
+    /**
+     * @var Article|ObjectProphecy
+     */
+    private $article;
+
+    /**
+     * @var UriContext|ObjectProphecy
+     */
+    private $uriContext;
+
+    /**
+     * @var ContentDateTimeProvider
+     */
+    private $provider;
 
     public function setUp()
     {
-        $this->article = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Article');
-        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
+        $this->article = $this->prophesize(Article::class);
+        $this->uriContext = $this->prophesize(UriContext::class);
         $this->provider = new ContentDateTimeProvider();
     }
 

@@ -11,23 +11,34 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
 class UriContextTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var object
+     */
     private $subject;
-    private $collection;
+
+    /**
+     * @var UriContextCollection|ObjectProphecy
+     */
+    private $contextCollection;
+
+    /**
+     * @var AutoRouteInterface|ObjectProphecy
+     */
     private $autoRoute;
-    private $uriContext;
 
     public function setUp()
     {
         $this->subject = new \stdClass();
 
-        $this->collection = $this->prophesize(UriContextCollection::class);
-        $this->collection->getSubject()->willReturn($this->subject);
+        $this->contextCollection = $this->prophesize(UriContextCollection::class);
+        $this->contextCollection->getSubject()->willReturn($this->subject);
 
         $this->autoRoute = $this->prophesize(AutoRouteInterface::class)->reveal();
     }
@@ -43,7 +54,7 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
         $translatedSubject = new \stdClass();
 
         $uriContext = new UriContext(
-            $this->collection->reveal(),
+            $this->contextCollection->reveal(),
             $uriSchema,
             $defaults,
             $tokenProvidersConfiguration,
@@ -52,7 +63,7 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
         );
 
         // collection
-        $this->assertSame($this->collection->reveal(), $uriContext->getCollection());
+        $this->assertSame($this->contextCollection->reveal(), $uriContext->getCollection());
 
         // locale
         $this->assertEquals($locale, $uriContext->getLocale());

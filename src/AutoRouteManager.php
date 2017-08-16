@@ -23,17 +23,17 @@ class AutoRouteManager
     /**
      * @var AdapterInterface
      */
-    protected $adapter;
+    private $adapter;
 
     /**
      * @var UriGeneratorInterface
      */
-    protected $uriGenerator;
+    private $uriGenerator;
 
     /**
      * @var DefunctRouteHandlerInterface
      */
-    protected $defunctRouteHandler;
+    private $defunctRouteHandler;
 
     /**
      * @var UriContextCollection[]
@@ -43,7 +43,7 @@ class AutoRouteManager
     /**
      * @var UriContextCollectionBuilder
      */
-    protected $collectionBuilder;
+    private $collectionBuilder;
 
     public function __construct(
         AdapterInterface $adapter,

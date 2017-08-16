@@ -26,16 +26,54 @@ use Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface;
  */
 class UriContext
 {
-    protected $collection;
-    protected $translatedSubject;
-    protected $locale;
-    protected $uri;
-    protected $autoRoute;
-    protected $uriSchema;
-    protected $tokenProviderConfigs;
-    protected $conflictResolverConfig;
-    protected $subjectMetadata;
-    protected $defaults;
+    /**
+     * @var UriContextCollection
+     */
+    private $collection;
+
+    /**
+     * @var string
+     */
+    private $uriSchema;
+
+    /**
+     * @var array
+     */
+    private $defaults;
+
+    /**
+     * @var array
+     */
+    private $tokenProviderConfigs;
+
+    /**
+     * @var array
+     */
+    private $conflictResolverConfig;
+
+    /**
+     * The locale of the translatedSubject.
+     *
+     * If null, the subject is not translated.
+     *
+     * @var string
+     */
+    private $locale;
+
+    /**
+     * @var object
+     */
+    private $translatedSubject;
+
+    /**
+     * @var string
+     */
+    private $uri;
+
+    /**
+     * @var AutoRouteInterface
+     */
+    private $autoRoute;
 
     /**
      * Construct the context.

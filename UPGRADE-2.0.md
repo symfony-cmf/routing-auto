@@ -38,3 +38,11 @@
 
  * The `subjectObject` and `translatedSubjectObject` with their related methods
    are renamed to `subject` and `translatedSubject`.
+
+## Customization
+
+A lot of previously protected fields and some methods where moved to private, 
+as they are not meant to represent part of the contract. If you have a valid 
+use case to extend one of the classes, please explain in a github issue and
+we will see whether that property should be made protected or whether ther is a
+cleaner sulution.

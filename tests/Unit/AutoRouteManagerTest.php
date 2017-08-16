@@ -42,15 +42,31 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var UriContextCollectionBuilder|ObjectProphecy
      */
-    private $collectionBuilder;
+    private $contextCollectionBuilder;
 
     /**
-     * @var AutoRouteManager|ObjectProphecy
+     * @var AutoRouteManager
      */
     private $manager;
+
+    /**
+     * @var object
+     */
     private $subject;
-    private $collection;
+
+    /**
+     * @var UriContextCollection
+     */
+    private $contextCollection;
+
+    /**
+     * @var object[]
+     */
     private $translatedSubjects;
+
+    /**
+     * @var AutoRouteInterface[]|ObjectProphecy[]
+     */
     private $databaseAutoRoutes;
 
     public function setUp()
@@ -58,17 +74,17 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $this->adapter = $this->prophesize(AdapterInterface::class);
         $this->uriGenerator = $this->prophesize(UriGeneratorInterface::class);
         $this->defunctRouteHandler = $this->prophesize(DefunctRouteHandlerInterface::class);
-        $this->collectionBuilder = $this->prophesize(UriContextCollectionBuilder::class);
+        $this->contextCollectionBuilder = $this->prophesize(UriContextCollectionBuilder::class);
 
         $this->manager = new AutoRouteManager(
             $this->adapter->reveal(),
             $this->uriGenerator->reveal(),
             $this->defunctRouteHandler->reveal(),
-            $this->collectionBuilder->reveal()
+            $this->contextCollectionBuilder->reveal()
         );
 
         $this->subject = new \stdClass();
-        $this->collection = new UriContextCollection($this->subject);
+        $this->contextCollection = new UriContextCollection($this->subject);
         $this->translatedSubjects = [];
         $this->databaseAutoRoutes = [];
     }
@@ -377,7 +393,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $this->configureCollectionBuilder($routes);
 
         // Run the tested method
-        $this->manager->buildUriContextCollection($this->collection);
+        $this->manager->buildUriContextCollection($this->contextCollection);
 
         // Expect manipulations on the contexts
         foreach ($routes as $index => $route) {
@@ -389,7 +405,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         // This should be done in a depending test. But PHPUnit does not
         // allow a depending test to receive the result of a test which use
         // a data provider.
-        $this->defunctRouteHandler->handleDefunctRoutes($this->collection)->shouldBeCalled();
+        $this->defunctRouteHandler->handleDefunctRoutes($this->contextCollection)->shouldBeCalled();
         $this->manager->handleDefunctRoutes();
     }
 
@@ -424,7 +440,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
         $existingCollectionRoute = null;
 
         $context = new UriContext(
-            $this->collection,
+            $this->contextCollection,
             $route['generatedUri'],
             [],
             [],
@@ -470,7 +486,7 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
      */
     private function configureCollectionBuilder(array $routes)
     {
-        $this->collectionBuilder->build(self::is($this->collection))->will(
+        $this->contextCollectionBuilder->build(self::is($this->contextCollection))->will(
             function ($args) use ($routes) {
                 list($collection) = $args;
 
@@ -615,6 +631,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * Give the auto route dummy which must be found within database using the
      * given URI.
+     *
+     * @return AutoRouteInterface|ObjectProphecy
      */
     private function getDatabaseAutoRouteForUri($uri)
     {
@@ -631,6 +649,8 @@ class AutoRouteManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Give the translated subject for the given locale.
+     *
+     * @return object
      */
     private function getTranslatedSubjectForLocale($locale)
     {
