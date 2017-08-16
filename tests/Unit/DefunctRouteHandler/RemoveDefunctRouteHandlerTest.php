@@ -61,12 +61,12 @@ class RemoveDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
-        $this->uriContextCollection = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContextCollection');
-        $this->route1 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
-        $this->route2 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
-        $this->route3 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
-        $this->route4 = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Model\AutoRouteInterface');
+        $this->adapter = $this->prophesize(AdapterInterface::class);
+        $this->uriContextCollection = $this->prophesize(UriContextCollection::class);
+        $this->route1 = $this->prophesize(AutoRouteInterface::class);
+        $this->route2 = $this->prophesize(AutoRouteInterface::class);
+        $this->route3 = $this->prophesize(AutoRouteInterface::class);
+        $this->route4 = $this->prophesize(AutoRouteInterface::class);
 
         $this->subject = new \stdClass();
 

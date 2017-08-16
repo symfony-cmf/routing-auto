@@ -42,9 +42,9 @@ class ServiceRegistryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->serviceRegistry = new ServiceRegistry();
-        $this->tokenProvider = $this->createMock('Symfony\Cmf\Component\RoutingAuto\TokenProviderInterface');
-        $this->conflictResolver = $this->createMock('Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface');
-        $this->defunctRouteHandler = $this->createMock('Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface');
+        $this->tokenProvider = $this->createMock(TokenProviderInterface::class);
+        $this->conflictResolver = $this->createMock(ConflictResolverInterface::class);
+        $this->defunctRouteHandler = $this->createMock(DefunctRouteHandlerInterface::class);
     }
 
     public function testRegistration()

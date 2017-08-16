@@ -12,7 +12,9 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Mapping\Loader;
 
 use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\Loader\XmlFileLoader;
+use Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass;
 use Symfony\Component\Config\FileLocatorInterface;
 
 class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
@@ -29,7 +31,7 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->locator = $this->prophesize('Symfony\Component\Config\FileLocatorInterface');
+        $this->locator = $this->prophesize(FileLocatorInterface::class);
         $this->loader = new XmlFileLoader($this->locator->reveal());
     }
 
@@ -96,7 +98,7 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->loader->load($file);
 
-        $this->assertContainsOnlyInstancesOf('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata', $result);
+        $this->assertContainsOnlyInstancesOf(ClassMetadata::class, $result);
         $check($result);
     }
 
@@ -135,7 +137,7 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $test->assertEquals('stdClass', $metadatas[0]->getClassName());
                 $test->assertEquals('/forum/{category}/{post_name}', $metadatas[0]->getAutoRouteDefinition('_default')->getUriSchema());
 
-                $test->assertEquals('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass', $metadatas[1]->getClassName());
+                $test->assertEquals(ParentClass::class, $metadatas[1]->getClassName());
                 $test->assertEquals('/forum/{category}', $metadatas[1]->getAutoRouteDefinition('_default')->getUriSchema());
                 $test->assertEquals('stdClass', $metadatas[1]->getExtendedClass());
             }],

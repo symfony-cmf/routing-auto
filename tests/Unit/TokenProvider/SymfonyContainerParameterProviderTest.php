@@ -15,6 +15,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\SymfonyContainerParameterProvider;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class SymfonyContainerParameterProviderTest extends \PHPUnit_Framework_TestCase
@@ -36,8 +37,8 @@ class SymfonyContainerParameterProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
-        $this->container = $this->prophesize('Symfony\Component\DependencyInjection\ContainerInterface');
+        $this->uriContext = $this->prophesize(UriContext::class);
+        $this->container = $this->prophesize(ContainerInterface::class);
         $this->provider = new SymfonyContainerParameterProvider($this->container->reveal());
     }
 
@@ -46,7 +47,7 @@ class SymfonyContainerParameterProviderTest extends \PHPUnit_Framework_TestCase
         return [
             [['parameter' => 'foobar'], null],
             [['foobar' => 'barfoo'], 'InvalidArgumentException'], // This is deliberately generic to preserve BC from SF 2.5 > 2.6
-            [[], 'Symfony\Component\OptionsResolver\Exception\MissingOptionsException'],
+            [[], MissingOptionsException::class],
         ];
     }
 

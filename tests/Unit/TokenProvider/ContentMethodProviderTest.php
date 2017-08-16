@@ -41,9 +41,9 @@ class ContentMethodProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->slugifier = $this->prophesize('Symfony\Cmf\Api\Slugifier\SlugifierInterface');
-        $this->article = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Article');
-        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
+        $this->slugifier = $this->prophesize(SlugifierInterface::class);
+        $this->article = $this->prophesize(Article::class);
+        $this->uriContext = $this->prophesize(UriContext::class);
         $this->provider = new ContentMethodProvider($this->slugifier->reveal());
     }
 

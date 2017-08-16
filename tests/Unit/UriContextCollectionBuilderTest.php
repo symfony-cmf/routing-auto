@@ -16,6 +16,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
+use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollectionBuilder;
 
@@ -48,8 +49,8 @@ class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->metadataFactory = $this->prophesize('Metadata\MetadataFactoryInterface');
-        $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
+        $this->metadataFactory = $this->prophesize(MetadataFactoryInterface::class);
+        $this->adapter = $this->prophesize(AdapterInterface::class);
 
         $this->builder = new UriContextCollectionBuilder(
             $this->metadataFactory->reveal(),
@@ -57,8 +58,8 @@ class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->subject = new \stdClass();
-        $this->contextCollection = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContextCollection');
-        $this->metadata = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
+        $this->contextCollection = $this->prophesize(UriContextCollection::class);
+        $this->metadata = $this->prophesize(ClassMetadata::class);
     }
 
     /**
@@ -97,7 +98,7 @@ class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
             $this->metadata->getTokenProviders()->willReturn($metadata['token_provider_configs']);
             $this->metadata->getConflictResolver()->wilLReturn($metadata['conflict_resolver_config']);
 
-            $uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
+            $uriContext = $this->prophesize(UriContext::class);
 
             foreach ($definitions as $definition) {
                 $this->contextCollection->createUriContext(

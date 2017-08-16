@@ -29,7 +29,7 @@ class ContentLocaleProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->uriContext = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContext');
+        $this->uriContext = $this->prophesize(UriContext::class);
         $this->provider = new ContentLocaleProvider();
     }
 

@@ -64,12 +64,12 @@ class DelegatingDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->metadataFactory = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\MetadataFactory');
-        $this->adapter = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\AdapterInterface');
-        $this->serviceRegistry = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\ServiceRegistry');
-        $this->uriContextCollection = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\UriContextCollection');
-        $this->metadata = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata');
-        $this->delegatedHandler = $this->prophesize('Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandlerInterface');
+        $this->metadataFactory = $this->prophesize(MetadataFactory::class);
+        $this->adapter = $this->prophesize(AdapterInterface::class);
+        $this->serviceRegistry = $this->prophesize(ServiceRegistry::class);
+        $this->uriContextCollection = $this->prophesize(UriContextCollection::class);
+        $this->metadata = $this->prophesize(ClassMetadata::class);
+        $this->delegatedHandler = $this->prophesize(DefunctRouteHandlerInterface::class);
 
         $this->subject = new \stdClass();
 
