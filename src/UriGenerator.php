@@ -73,7 +73,7 @@ class UriGenerator implements UriGeneratorInterface
             $tokenString = '{'.$name.'}';
 
             if ($isEmpty && true === $tokenProviderOptions['allow_empty']) {
-                $isLast = count($tokenNames) == $index + 1;
+                $isLast = count($tokenNames) === $index + 1;
                 $tokens[$tokenString.'/'] = (string) $tokenValue;
 
                 if ($isLast) {
