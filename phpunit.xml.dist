@@ -8,12 +8,8 @@
     >
 
     <testsuites>
-        <testsuite name="RoutingAuto Component Test Suite">
+        <testsuite name="unit tests">
             <directory>./tests</directory>
-        </testsuite>
-
-        <testsuite name="RoutingAutoBundle Test Suite">
-            <directory>./vendor/symfony-cmf/routing-auto-bundle/Symfony/Cmf/Bundle/RoutingAutoBundle/Tests/Functional</directory>
         </testsuite>
     </testsuites>
 
