@@ -1,44 +1,49 @@
 {
-    "name": "symfony-cmf/routing-auto",
-    "description": "Component for automatically creating and managing routes for persisted objects",
-    "homepage": "http://cmf.symfony.com",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Symfony CMF Community",
-            "homepage": "https://github.com/symfony-cmf/symfony-cmf/contributors"
-        }
-    ],
-    "require": {
-        "php": "^5.6|^7.0",
-        "symfony-cmf/slugifier-api": "^1.0|^2.0",
-        "symfony-cmf/routing": "^1.2|^2.0",
-        "symfony/options-resolver": "^2.8|^3.0",
-        "symfony/config": "^2.8|^3.0",
-        "jms/metadata": "^1.5"
-    },
-    "require-dev": {
-        "symfony/yaml": "^2.8|^3.0",
-        "symfony/dependency-injection": "^2.8|^3.0",
-        "symfony/event-dispatcher": "^2.8|^3.0",
-        "symfony/phpunit-bridge": "^3.3",
-      "symfony-cmf/testing": "^2.1@dev"
-   },
-    "suggest": {
-        "symfony/yaml": "To be able to load Yaml configuration files (^2.1|3.*)",
-        "symfony-cmf/routing-auto-bundle": "To integrate this lirbary with Symfony and the CMF",
-        "symfony/event-dispatcher": "To use the EventDispatchingAdapter, allowing to edit the AutoRoute documents (^2.2|3.*)"
-    },
-    "autoload": {
-        "psr-4": { "Symfony\\Cmf\\Component\\RoutingAuto\\": "src/" }
-    },
-    "autoload-dev": {
-        "psr-4": { "Symfony\\Cmf\\Component\\RoutingAuto\\Tests\\": "tests/" }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.1-dev"
-        }
-    },
+  "name": "symfony-cmf/routing-auto",
+  "description": "Component for automatically creating and managing routes for persisted objects",
+  "homepage": "http://cmf.symfony.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Symfony CMF Community",
+      "homepage": "https://github.com/symfony-cmf/symfony-cmf/contributors"
+    }
+  ],
+  "require": {
+    "php": "^5.6|^7.0",
+    "symfony-cmf/slugifier-api": "^1.0|^2.0",
+    "symfony-cmf/routing": "^1.2|^2.0",
+    "symfony/options-resolver": "^2.8|^3.0",
+    "symfony/config": "^2.8|^3.0",
+    "jms/metadata": "^1.5"
+  },
+  "require-dev": {
+    "symfony/yaml": "^2.8|^3.0",
+    "symfony/dependency-injection": "^2.8|^3.0",
+    "symfony/event-dispatcher": "^2.8|^3.0",
+    "symfony/phpunit-bridge": "^3.3",
+    "symfony-cmf/testing": "^2.1@dev"
+  },
+  "suggest": {
+    "symfony/yaml": "To be able to load Yaml configuration files (^2.1|3.*)",
+    "symfony-cmf/routing-auto-bundle": "To integrate this lirbary with Symfony and the CMF",
+    "symfony/event-dispatcher": "To use the EventDispatchingAdapter, allowing to edit the AutoRoute documents (^2.2|3.*)"
+  },
+  "autoload": {
+    "psr-4": {
+      "Symfony\\Cmf\\Component\\RoutingAuto\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Symfony\\Cmf\\Component\\RoutingAuto\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "2.1-dev"
+    }
+  },
+  "minimum-stability": "dev",
   "prefer-stable": true
 }
