@@ -86,7 +86,7 @@ class UriGenerator implements UriGeneratorInterface
 
         $uri = strtr($uriSchema, $tokens);
 
-        if ($uri[0] !== '/') {
+        if ('/' !== $uri[0]) {
             throw new \InvalidArgumentException(sprintf(
                 'Generated non-absolute URI "%s" for object "%s"',
                 $uri, get_class($uriContext->getSubject())
