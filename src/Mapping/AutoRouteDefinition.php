@@ -59,7 +59,7 @@ class AutoRouteDefinition
      *
      * @param AutoRouteDefinition $definition
      */
-    public function merge(AutoRouteDefinition $definition)
+    public function merge(self $definition)
     {
         $this->uriSchema = str_replace('{parent}', $this->uriSchema, $definition->getUriSchema());
 
