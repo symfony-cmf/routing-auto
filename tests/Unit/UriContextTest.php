@@ -69,7 +69,7 @@ class UriContextTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($locale, $uriContext->getLocale());
 
         /// URI
-        $this->assertEquals(null, $uriContext->getUri());
+        $this->assertNull($uriContext->getUri());
         $uriContext->setUri($uri);
         $this->assertEquals($uri, $uriContext->getUri());
 
