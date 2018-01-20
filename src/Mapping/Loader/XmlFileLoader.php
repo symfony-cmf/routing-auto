@@ -24,6 +24,7 @@ use Symfony\Component\Config\Util\XmlUtils;
 class XmlFileLoader extends FileLoader
 {
     const NAMESPACE_URI = 'http://cmf.symfony.com/schema/routing_auto';
+
     const SCHEMA_FILE = '/schema/auto-routing/auto-routing-1.0.xsd';
 
     /**

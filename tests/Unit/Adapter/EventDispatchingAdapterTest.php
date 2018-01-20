@@ -207,6 +207,7 @@ class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
 class EventDispatchingAdapterSubscriber implements EventSubscriberInterface
 {
     public $createEvent;
+
     public $migrateEvent;
 
     public static function getSubscribedEvents()
