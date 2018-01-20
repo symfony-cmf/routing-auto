@@ -209,7 +209,13 @@ class XmlFileLoader extends FileLoader
      */
     public function supports($resource, $type = null)
     {
-        return is_string($resource) && 'xml' === pathinfo($resource, PATHINFO_EXTENSION) && (!$type || 'xml' === $type);
+        if (!is_string($resource)) {
+            return false;
+        }
+
+        $extension = pathinfo($resource, PATHINFO_EXTENSION);
+
+        return 'xml' === $extension && (null === $type || 'xml' === $type);
     }
 
     protected function getParser()
