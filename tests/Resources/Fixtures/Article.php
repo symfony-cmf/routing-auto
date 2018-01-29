@@ -14,9 +14,13 @@ namespace Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures;
 class Article
 {
     public $path;
+
     public $routes;
+
     public $title;
+
     public $locale;
+
     public $date;
 
     public function getTitle()

@@ -53,9 +53,28 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             ['foo.yml'],
+            ['foo.yaml'],
+
             ['foo.xml', null, false],
+            ['foo.xml', 'yaml', false],
+
             ['foo.yml', 'yaml'],
+            ['foo.yaml', 'yaml'],
+
             ['foo.yml', 'xml', false],
+            ['foo.yaml', 'xml', false],
+
+            ['foo.bar', null, false],
+            ['foo.bar', 'yaml', false],
+            ['foo.bar', 'xml', false],
+
+            ['foo', null, false],
+            ['foo', 'yaml', false],
+            ['foo', 'xml', false],
+
+            ['foo.yml', 'bar', false],
+            ['foo.xml', 'bar', false],
+            ['foo.bar', 'bar', false],
         ];
     }
 
