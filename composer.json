@@ -11,8 +11,8 @@
     ],
     "require": {
         "php": "^7.1",
-        "symfony-cmf/slugifier-api": "^1.0|^2.0",
-        "symfony-cmf/routing": "^1.2|^2.0",
+        "symfony-cmf/slugifier-api": "^1.0 || ^2.0",
+        "symfony-cmf/routing": "^1.2 || ^2.0",
         "symfony/options-resolver": "^2.8 || ^3.3 || ^4.0",
         "symfony/config": "^2.8 || ^3.3 || ^4.0",
         "jms/metadata": "^1.5"
@@ -22,12 +22,12 @@
         "symfony/dependency-injection": "^2.8 || ^3.3 || ^4.0",
         "symfony/event-dispatcher": "^2.8 || ^3.3 || ^4.0",
         "symfony/phpunit-bridge": "^3.3 || ^4.0",
-        "symfony-cmf/testing": "^2.1@dev"
+        "symfony-cmf/testing": "^2.1"
     },
     "suggest": {
-        "symfony/yaml": "To be able to load Yaml configuration files (^2.1|3.*)",
-        "symfony-cmf/routing-auto-bundle": "To integrate this lirbary with Symfony and the CMF",
-        "symfony/event-dispatcher": "To use the EventDispatchingAdapter, allowing to edit the AutoRoute documents (^2.2|3.*)"
+        "symfony/yaml": "To be able to load Yaml configuration files (^2.8 || ^3.3 || ^4.0)",
+        "symfony-cmf/routing-auto-bundle": "To integrate this libary with Symfony and the CMF",
+        "symfony/event-dispatcher": "To use the EventDispatchingAdapter, allowing to edit the AutoRoute documents (^2.8 || ^3.3 || ^4.0)"
     },
     "autoload": {
         "psr-4": {
