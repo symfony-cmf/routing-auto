@@ -22,7 +22,7 @@
         "symfony/dependency-injection": "^2.8 || ^3.3 || ^4.0",
         "symfony/event-dispatcher": "^2.8 || ^3.3 || ^4.0",
         "symfony/phpunit-bridge": "^3.3 || ^4.0",
-        "symfony-cmf/testing": "^2.1"
+        "symfony-cmf/testing": "^2.1.8"
     },
     "suggest": {
         "symfony/yaml": "To be able to load Yaml configuration files (^2.8 || ^3.3 || ^4.0)",
