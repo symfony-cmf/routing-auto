@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,6 +14,7 @@
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
 use Metadata\MetadataFactoryInterface;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
@@ -20,7 +23,7 @@ use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollectionBuilder;
 
-class UriContextCollectionBuilderTest extends \PHPUnit_Framework_TestCase
+class UriContextCollectionBuilderTest extends TestCase
 {
     /**
      * @var MetadataFactoryInterface|ObjectProphecy

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,13 +13,14 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Mapping\Loader;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\Loader\YmlFileLoader;
 use Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass;
 use Symfony\Component\Config\FileLocatorInterface;
 
-class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
+class YmlFileLoaderTest extends TestCase
 {
     /**
      * @var FileLocatorInterface|ObjectProphecy
@@ -94,9 +97,10 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
     public function testFailsOnInvalidConfigFiles($file, $expectedMessage)
     {
         if ($expectedMessage) {
-            $this->setExpectedException('InvalidArgumentException', $expectedMessage);
+            $this->expectException('InvalidArgumentException');
+            $this->expectExceptionMessage($expectedMessage);
         } else {
-            $this->setExpectedException('InvalidArgumentException');
+            $this->expectException('InvalidArgumentException');
         }
         $this->locator->locate($file)->willReturn($this->getFixturesPath($file));
 

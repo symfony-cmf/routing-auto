@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,6 +13,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\TokenProvider;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\TokenProvider\SymfonyContainerParameterProvider;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
@@ -18,7 +21,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class SymfonyContainerParameterProviderTest extends \PHPUnit_Framework_TestCase
+class SymfonyContainerParameterProviderTest extends TestCase
 {
     /**
      * @var UriContext|ObjectProphecy
@@ -57,7 +60,7 @@ class SymfonyContainerParameterProviderTest extends \PHPUnit_Framework_TestCase
     public function testParameterValue($options, $expectedException)
     {
         if (null !== $expectedException) {
-            $this->setExpectedException($expectedException);
+            $this->expectException($expectedException);
         }
 
         $this->container->getParameter('foobar')->willReturn('barfoo');

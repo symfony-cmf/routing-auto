@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,6 +13,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Adapter;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\Adapter\EventDispatchingAdapter;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
@@ -22,7 +25,7 @@ use Symfony\Cmf\Component\RoutingAuto\UriContext;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class EventDispatchingAdapterTest extends \PHPUnit_Framework_TestCase
+class EventDispatchingAdapterTest extends TestCase
 {
     /**
      * @var AdapterInterface|ObjectProphecy

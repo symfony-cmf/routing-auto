@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,6 +13,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\DefunctRouteHandler;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\AdapterInterface;
 use Symfony\Cmf\Component\RoutingAuto\DefunctRouteHandler\DelegatingDefunctRouteHandler;
@@ -20,7 +23,7 @@ use Symfony\Cmf\Component\RoutingAuto\Mapping\MetadataFactory;
 use Symfony\Cmf\Component\RoutingAuto\ServiceRegistry;
 use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 
-class DelegatingDefunctRouteHandlerTest extends \PHPUnit_Framework_TestCase
+class DelegatingDefunctRouteHandlerTest extends TestCase
 {
     /**
      * @var MetadataFactory|ObjectProphecy

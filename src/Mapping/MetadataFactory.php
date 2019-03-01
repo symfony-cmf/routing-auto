@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -33,7 +35,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
     protected $resolvedMetadatas = [];
 
     /**
-     * @var null|CacheInterface
+     * @var CacheInterface|null
      */
     protected $cache;
 
@@ -83,6 +85,11 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
         return $this->resolvedMetadatas[$class];
     }
 
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->metadatas);
+    }
+
     /**
      * Resolves the metadata of parent classes of the given class.
      *
@@ -107,7 +114,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
             throw new Exception\CircularReferenceException(sprintf($e->getMessage(), $class), $e->getCode(), $e->getPrevious());
         }
 
-        if (0 === count($metadatas)) {
+        if (0 === \count($metadatas)) {
             throw new Exception\ClassNotMappedException($class);
         }
 
@@ -127,7 +134,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
     {
         $metadatas = [];
 
-        if (in_array($classFqn, $addedClasses)) {
+        if (\in_array($classFqn, $addedClasses, true)) {
             throw new Exception\CircularReferenceException('Circular reference detected for "%s", make sure you don\'t mix PHP extends and mapping extends.');
         }
 
@@ -145,10 +152,5 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
         }
 
         return $metadatas;
-    }
-
-    public function getIterator()
-    {
-        return new \ArrayIterator($this->metadatas);
     }
 }

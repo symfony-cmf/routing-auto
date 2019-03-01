@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,11 +19,11 @@ class RoutingAutoEvents
      * Dispatched after the adapter has created a new auto route
      * The event class is Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteCreateEvent.
      */
-    const POST_CREATE = 'cmf_routing_auto.auto_route.post_create';
+    public const POST_CREATE = 'cmf_routing_auto.auto_route.post_create';
 
     /**
      * Dispatched after the adapter has migrated children from an old route to a new one
      * The event class is Symfony\Cmf\Component\RoutingAuto\Event\AutoRouteMigrateEvent.
      */
-    const POST_MIGRATE = 'cmf_routing_auto.auto_route.post_migrate';
+    public const POST_MIGRATE = 'cmf_routing_auto.auto_route.post_migrate';
 }

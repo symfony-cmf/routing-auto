@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,11 +13,12 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\ConflictResolver;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolver\ThrowExceptionConflictResolver;
 use Symfony\Cmf\Component\RoutingAuto\UriContext;
 
-class ThrowExceptionConflictHandlerTest extends \PHPUnit_Framework_TestCase
+class ThrowExceptionConflictHandlerTest extends TestCase
 {
     /**
      * @var ThrowExceptionConflictResolver
@@ -33,12 +36,11 @@ class ThrowExceptionConflictHandlerTest extends \PHPUnit_Framework_TestCase
         $this->uriContext = $this->prophesize(UriContext::class);
     }
 
-    /**
-     * @expectedException \Symfony\Cmf\Component\RoutingAuto\ConflictResolver\Exception\ExistingUriException
-     * @expectedExceptionMessage There already exists an auto route for URL "/foobar"
-     */
     public function testResolveConflict()
     {
+        $this->expectException(\Symfony\Cmf\Component\RoutingAuto\ConflictResolver\Exception\ExistingUriException::class);
+        $this->expectExceptionMessage('There already exists an auto route for URL "/foobar"');
+
         $this->uriContext->getUri()->willReturn('/foobar');
         $this->conflictResolver->resolveConflict($this->uriContext->reveal());
     }

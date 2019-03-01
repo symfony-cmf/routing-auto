@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,6 +13,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit\Mapping;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\AutoRouteDefinition;
 use Symfony\Cmf\Component\RoutingAuto\Mapping\ClassMetadata;
@@ -20,7 +23,7 @@ use Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\GrandParentClass;
 use Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\Parent1Class;
 use Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass;
 
-class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
+class MetadataFactoryTest extends TestCase
 {
     /**
      * @var MetadataFactory
@@ -165,12 +168,11 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('{title}', $resolvedMetadata->getAutoRouteDefinition('one')->getUriSchema());
     }
 
-    /**
-     * @expectedException \Symfony\Cmf\Component\RoutingAuto\Mapping\Exception\CircularReferenceException
-     * @expectedExceptionMessage "Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ParentClass"
-     */
     public function testFailsWithCircularReference()
     {
+        $this->expectException(\Symfony\Cmf\Component\RoutingAuto\Mapping\Exception\CircularReferenceException::class);
+        $this->expectExceptionMessage('"Symfony\\Cmf\\Component\\RoutingAuto\\Tests\\Resources\\Fixtures\\ParentClass"');
+
         $parentMetadata = new ClassMetadata(ParentClass::class);
         $parentMetadata->setAutoRouteDefinition('one', new AutoRouteDefinition('{title}'));
         $parentMetadata->setExtendedClass(Parent1Class::class);
@@ -185,12 +187,11 @@ class MetadataFactoryTest extends \PHPUnit_Framework_TestCase
         $this->factory->getMetadataForClass(ParentClass::class);
     }
 
-    /**
-     * @expectedException \Symfony\Cmf\Component\RoutingAuto\Mapping\Exception\CircularReferenceException
-     * @expectedExceptionMessage "Symfony\Cmf\Component\RoutingAuto\Tests\Resources\Fixtures\ChildClass"
-     */
     public function testsFailsWithPhpCircularReference()
     {
+        $this->expectException(\Symfony\Cmf\Component\RoutingAuto\Mapping\Exception\CircularReferenceException::class);
+        $this->expectExceptionMessage('"Symfony\\Cmf\\Component\\RoutingAuto\\Tests\\Resources\\Fixtures\\ChildClass"');
+
         $childMetadata = new ClassMetadata(ChildClass::class);
         $childMetadata->setAutoRouteDefinition('one', new AutoRouteDefinition('{title}'));
 

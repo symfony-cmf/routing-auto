@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -22,16 +24,6 @@ use Metadata\MergeableInterface;
 class ClassMetadata extends MergeableClassMetadata
 {
     /**
-     * @var array
-     */
-    private $tokenProviders = [];
-
-    /**
-     * @var array
-     */
-    private $conflictResolver = ['name' => 'throw_exception', 'options' => []];
-
-    /**
      * Defunct route handler, default to remove.
      *
      * @var array
@@ -47,6 +39,15 @@ class ClassMetadata extends MergeableClassMetadata
      * @var AutoRouteDefinition[]
      */
     protected $definitions = [];
+    /**
+     * @var array
+     */
+    private $tokenProviders = [];
+
+    /**
+     * @var array
+     */
+    private $conflictResolver = ['name' => 'throw_exception', 'options' => []];
 
     /**
      * Add a new auto route definition for this class.

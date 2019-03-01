@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,6 +13,7 @@
 
 namespace Symfony\Cmf\Component\RoutingAuto\Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Cmf\Component\RoutingAuto\ConflictResolverInterface;
@@ -21,7 +24,7 @@ use Symfony\Cmf\Component\RoutingAuto\UriContextCollection;
 use Symfony\Cmf\Component\RoutingAuto\UriGenerator;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class UriGeneratorTest extends \PHPUnit_Framework_TestCase
+class UriGeneratorTest extends TestCase
 {
     /**
      * @var ServiceRegistry|ObjectProphecy
@@ -238,7 +241,8 @@ class UriGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         if ($expectedException) {
             list($exceptionType, $exceptionMessage) = $expectedException;
-            $this->setExpectedException($exceptionType, $exceptionMessage);
+            $this->expectException($exceptionType);
+            $this->expectExceptionMessage($exceptionMessage);
         }
 
         $document = new \stdClass();

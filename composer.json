@@ -1,5 +1,7 @@
 {
     "name": "symfony-cmf/routing-auto",
+
+    "type": "library",
     "description": "Component for automatically creating and managing routes for persisted objects",
     "homepage": "http://cmf.symfony.com",
     "license": "MIT",
@@ -13,15 +15,15 @@
         "php": "^7.1",
         "symfony-cmf/slugifier-api": "^1.0 || ^2.0",
         "symfony-cmf/routing": "^1.2 || ^2.0",
-        "symfony/options-resolver": "^2.8 || ^3.3 || ^4.0",
-        "symfony/config": "^2.8 || ^3.3 || ^4.0",
+        "symfony/options-resolver": "^3.4 || ^4.0",
+        "symfony/config": "^3.4 || ^4.0",
         "jms/metadata": "^1.5"
     },
     "require-dev": {
-        "symfony/yaml": "^2.8 || ^3.3 || ^4.0",
-        "symfony/dependency-injection": "^2.8 || ^3.3 || ^4.0",
-        "symfony/event-dispatcher": "^2.8 || ^3.3 || ^4.0",
-        "symfony/phpunit-bridge": "^3.3 || ^4.0",
+        "symfony/yaml": "^3.4 || ^4.0",
+        "symfony/dependency-injection": "^3.4 || ^4.0",
+        "symfony/event-dispatcher": "^3.4 || ^4.0",
+        "symfony/phpunit-bridge": "^4.2.2",
         "symfony-cmf/testing": "^2.1.8"
     },
     "suggest": {

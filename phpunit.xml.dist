@@ -2,19 +2,30 @@
 
 <!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
 <phpunit
-    colors="true"
-    bootstrap="vendor/autoload.php"
-    beStrictAboutTestsThatDoNotTestAnything="true"
-    >
+	colors="true"
+	bootstrap="vendor/symfony-cmf/testing/bootstrap/bootstrap.php"
+>
 
-    <testsuites>
-        <testsuite name="unit tests">
-            <directory>./tests</directory>
+	<testsuites>
+
+		
+		<testsuite name="unit tests">
+            <directory>./tests/Unit</directory>
         </testsuite>
-    </testsuites>
+                        
+	</testsuites>
 
-    <php>
-        <server name="KERNEL_DIR" value="vendor/symfony-cmf/routing-auto-bundle/Tests/Resources/app" />
-    </php>
+	<filter>
+		<whitelist addUncoveredFilesFromWhitelist="true">
+			<directory>src/</directory>
+			<exclude>
+				<directory>Resources/</directory>
+			</exclude>
+		</whitelist>
+	</filter>
 
+	<php>
+
+        
+	</php>
 </phpunit>
