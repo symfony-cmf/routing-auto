@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -23,9 +25,9 @@ use Symfony\Component\Config\Util\XmlUtils;
  */
 class XmlFileLoader extends FileLoader
 {
-    const NAMESPACE_URI = 'http://cmf.symfony.com/schema/routing_auto';
+    public const NAMESPACE_URI = 'http://cmf.symfony.com/schema/routing_auto';
 
-    const SCHEMA_FILE = '/schema/auto-routing/auto-routing-1.0.xsd';
+    public const SCHEMA_FILE = '/schema/auto-routing/auto-routing-1.0.xsd';
 
     /**
      * Loads an XML File.
@@ -33,9 +35,9 @@ class XmlFileLoader extends FileLoader
      * @param string      $path An XML file path
      * @param string|null $type
      *
-     * @return MappingData[]
-     *
      * @throws \InvalidArgumentException When the $file cannot be parsed
+     *
+     * @return MappingData[]
      */
     public function load($file, $type = null)
     {
@@ -62,6 +64,20 @@ class XmlFileLoader extends FileLoader
         }
 
         return $metadatas;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supports($resource, $type = null)
+    {
+        if (!\is_string($resource)) {
+            return false;
+        }
+
+        $extension = pathinfo($resource, PATHINFO_EXTENSION);
+
+        return 'xml' === $extension && (null === $type || 'xml' === $type);
     }
 
     /**
@@ -116,7 +132,7 @@ class XmlFileLoader extends FileLoader
         $tokenProviders = $mappingNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'token-provider');
         // token providers can be omitted if the schema is constructed of
         // global token providers only
-        if (0 !== count($tokenProviders)) {
+        if (0 !== \count($tokenProviders)) {
             foreach ($tokenProviders as $tokenNode) {
                 $this->parseTokenProviderNode($tokenNode, $classMetadata, $path);
             }
@@ -203,20 +219,6 @@ class XmlFileLoader extends FileLoader
         }
 
         return $options;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supports($resource, $type = null)
-    {
-        if (!is_string($resource)) {
-            return false;
-        }
-
-        $extension = pathinfo($resource, PATHINFO_EXTENSION);
-
-        return 'xml' === $extension && (null === $type || 'xml' === $type);
     }
 
     protected function getParser()

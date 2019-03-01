@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,18 +29,6 @@ class ContentMethodProvider extends BaseContentMethodProvider
     /**
      * {@inheritdoc}
      */
-    protected function normalizeValue($value, UriContext $uriContext, $options)
-    {
-        if ($options['slugify']) {
-            $value = $this->slugifier->slugify($value);
-        }
-
-        return $value;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function configureOptions(OptionsResolver $optionsResolver)
     {
         parent::configureOptions($optionsResolver);
@@ -46,5 +36,17 @@ class ContentMethodProvider extends BaseContentMethodProvider
         $optionsResolver->setDefault('slugify', true);
 
         $optionsResolver->setAllowedTypes('slugify', 'bool');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function normalizeValue($value, UriContext $uriContext, $options)
+    {
+        if ($options['slugify']) {
+            $value = $this->slugifier->slugify($value);
+        }
+
+        return $value;
     }
 }

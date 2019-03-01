@@ -1,5 +1,7 @@
 {
     "name": "symfony-cmf/routing-auto",
+
+    "type": "library",
     "description": "Component for automatically creating and managing routes for persisted objects",
     "homepage": "http://cmf.symfony.com",
     "license": "MIT",

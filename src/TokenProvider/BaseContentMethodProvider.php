@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -29,23 +31,23 @@ abstract class BaseContentMethodProvider implements TokenProviderInterface
         return $this->normalizeValue($object->$method(), $uriContext, $options);
     }
 
-    protected function checkMethodExists($object, $method)
-    {
-        if (!method_exists($object, $method)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Method "%s" does not exist on object "%s"',
-                $method,
-                get_class($object)
-            ));
-        }
-    }
-
     /**
      * {@inheritdoc}
      */
     public function configureOptions(OptionsResolver $optionsResolver)
     {
         $optionsResolver->setRequired('method');
+    }
+
+    protected function checkMethodExists($object, $method)
+    {
+        if (!method_exists($object, $method)) {
+            throw new \InvalidArgumentException(sprintf(
+                'Method "%s" does not exist on object "%s"',
+                $method,
+                \get_class($object)
+            ));
+        }
     }
 
     /**

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Symfony CMF package.
  *
- * (c) 2011-2017 Symfony CMF
+ * (c) Symfony CMF
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -24,14 +26,14 @@ interface AutoRouteInterface extends RouteObjectInterface
     /**
      * Primary auto route represents the content directly.
      */
-    const TYPE_PRIMARY = 'cmf_routing_auto.primary';
+    public const TYPE_PRIMARY = 'cmf_routing_auto.primary';
 
     /**
      * Redirect auto route should be used to redirect to
      * a different route (i.e. it should be used to represent
      * old URIs which should redirect to new URIs).
      */
-    const TYPE_REDIRECT = 'cmf_routing_auto.redirect';
+    public const TYPE_REDIRECT = 'cmf_routing_auto.redirect';
 
     /**
      * Set a locale related to this auto route.
