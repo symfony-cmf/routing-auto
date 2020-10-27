@@ -214,7 +214,7 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $test->assertArrayHasKey('slug', $providers);
                 $test->assertEquals($serviceConfig('property', ['property' => 'title', 'slugify' => true]), $providers['slug']);
             }],
-            ['valid6.yml', function ($metadatas) use ($test, $serviceConfig) {
+            ['valid6.yml', function ($metadatas) use ($test) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());
@@ -223,7 +223,7 @@ class YmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $test->assertArrayHasKey('category', $providers);
                 $test->assertEquals('foo', $providers['category']['name']);
             }],
-            ['valid7.yml', function ($metadatas) use ($test, $serviceConfig) {
+            ['valid7.yml', function ($metadatas) use ($test) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());

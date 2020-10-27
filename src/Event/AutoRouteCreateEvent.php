@@ -30,10 +30,6 @@ class AutoRouteCreateEvent extends Event
      */
     private $autoRoute;
 
-    /**
-     * @param AutoRouteInterface $autoRoute
-     * @param UriContext         $uriContext
-     */
     public function __construct(AutoRouteInterface $autoRoute, UriContext $uriContext)
     {
         $this->uriContext = $uriContext;

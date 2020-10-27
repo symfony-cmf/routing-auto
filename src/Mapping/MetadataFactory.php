@@ -33,7 +33,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
     protected $resolvedMetadatas = [];
 
     /**
-     * @var null|CacheInterface
+     * @var CacheInterface|null
      */
     protected $cache;
 
@@ -107,7 +107,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
             throw new Exception\CircularReferenceException(sprintf($e->getMessage(), $class), $e->getCode(), $e->getPrevious());
         }
 
-        if (0 === count($metadatas)) {
+        if (0 === \count($metadatas)) {
             throw new Exception\ClassNotMappedException($class);
         }
 
@@ -127,7 +127,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
     {
         $metadatas = [];
 
-        if (in_array($classFqn, $addedClasses)) {
+        if (\in_array($classFqn, $addedClasses)) {
             throw new Exception\CircularReferenceException('Circular reference detected for "%s", make sure you don\'t mix PHP extends and mapping extends.');
         }
 

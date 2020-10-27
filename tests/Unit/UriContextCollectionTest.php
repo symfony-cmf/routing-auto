@@ -138,7 +138,7 @@ class UriContextCollectionTest extends \PHPUnit_Framework_TestCase
             $data[$description] = [
                 $contexts,
                 $targetedAutoRoute,
-                in_array($matchingContext, $contexts, true),
+                \in_array($matchingContext, $contexts, true),
             ];
         }
 
@@ -266,7 +266,7 @@ class UriContextCollectionTest extends \PHPUnit_Framework_TestCase
             $data[$description] = [
                 $contexts,
                 $targetedUri,
-                in_array($matchingContext, $contexts, true) ? $targetedAutoRoute : null,
+                \in_array($matchingContext, $contexts, true) ? $targetedAutoRoute : null,
             ];
         }
 
@@ -389,7 +389,7 @@ class UriContextCollectionTest extends \PHPUnit_Framework_TestCase
             $data[$description] = [
                 $contexts,
                 $targetedLocale,
-                in_array($matchingContext, $contexts, true) ? $targetedAutoRoute : null,
+                \in_array($matchingContext, $contexts, true) ? $targetedAutoRoute : null,
             ];
         }
 

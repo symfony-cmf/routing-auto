@@ -73,7 +73,7 @@ class UriGenerator implements UriGeneratorInterface
             $tokenString = '{'.$name.'}';
 
             if ($isEmpty && true === $tokenProviderOptions['allow_empty']) {
-                $isLast = count($tokenNames) === $index + 1;
+                $isLast = \count($tokenNames) === $index + 1;
                 $tokens[$tokenString.'/'] = (string) $tokenValue;
 
                 if ($isLast) {
@@ -89,7 +89,7 @@ class UriGenerator implements UriGeneratorInterface
         if ('/' !== $uri[0]) {
             throw new \InvalidArgumentException(sprintf(
                 'Generated non-absolute URI "%s" for object "%s"',
-                $uri, get_class($uriContext->getSubject())
+                $uri, \get_class($uriContext->getSubject())
             ));
         }
 

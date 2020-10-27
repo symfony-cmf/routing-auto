@@ -64,9 +64,6 @@ class UriContextCollection
      * configuration and locale.
      *
      * @param string $uriSchema
-     * @param array  $defaults
-     * @param array  $tokenProviderConfigs
-     * @param array  $conflictResolverConfigs
      * @param string $locale
      *
      * @return UriContext
@@ -92,8 +89,6 @@ class UriContextCollection
 
     /**
      * Push a URL context onto the stack.
-     *
-     * @param UriContext $uriContext
      */
     public function addUriContext(UriContext $uriContext)
     {
@@ -113,8 +108,6 @@ class UriContextCollection
     /**
      * Check if any of the UriContexts in the stack contain
      * the given auto route.
-     *
-     * @param AutoRouteInterface $autoRoute
      *
      * @return bool
      */

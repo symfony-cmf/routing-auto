@@ -59,8 +59,6 @@ class AutoRouteManager
 
     /**
      * Build the URI context classes into the given UriContextCollection.
-     *
-     * @param UriContextCollection $uriContextCollection
      */
     public function buildUriContextCollection(UriContextCollection $uriContextCollection)
     {

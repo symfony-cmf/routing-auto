@@ -65,8 +65,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * @param \DOMElement $mappingNode
-     * @param string      $path
+     * @param string $path
      *
      * @return ClassMetadata
      */
@@ -116,7 +115,7 @@ class XmlFileLoader extends FileLoader
         $tokenProviders = $mappingNode->getElementsByTagNameNS(self::NAMESPACE_URI, 'token-provider');
         // token providers can be omitted if the schema is constructed of
         // global token providers only
-        if (0 !== count($tokenProviders)) {
+        if (0 !== \count($tokenProviders)) {
             foreach ($tokenProviders as $tokenNode) {
                 $this->parseTokenProviderNode($tokenNode, $classMetadata, $path);
             }
@@ -126,9 +125,7 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * @param \DOMElement   $tokenNode
-     * @param ClassMetadata $classMetadata
-     * @param string        $path
+     * @param string $path
      */
     protected function parseTokenProviderNode(\DOMElement $tokenNode, ClassMetadata $classMetadata, $path)
     {
@@ -140,9 +137,8 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * @param \DOMElement   $tokenNode
-     * @param ClassMetadata $classMetadata
-     * @param string        $path
+     * @param \DOMElement $tokenNode
+     * @param string      $path
      */
     protected function parseDefinitionNode(\DOMElement $uriSchemaNode, ClassMetadata $classMetadata, $path)
     {
@@ -153,9 +149,8 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * @param \DOMElement   $tokenNode
-     * @param ClassMetadata $classMetadata
-     * @param string        $path
+     * @param \DOMElement $tokenNode
+     * @param string      $path
      */
     protected function parseDefaultNode(\DOMNodeList $defaultNodes, ClassMetadata $classMetadata, $path)
     {
@@ -170,9 +165,8 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * @param \DOMElement   $tokenNode
-     * @param ClassMetadata $classMetadata
-     * @param string        $path
+     * @param \DOMElement $tokenNode
+     * @param string      $path
      */
     protected function parseConflictResolverNode(\DOMElement $node, ClassMetadata $classMetadata, $path)
     {
@@ -183,9 +177,8 @@ class XmlFileLoader extends FileLoader
     }
 
     /**
-     * @param \DOMElement   $tokenNode
-     * @param ClassMetadata $classMetadata
-     * @param string        $path
+     * @param \DOMElement $tokenNode
+     * @param string      $path
      */
     protected function parseDefunctRouteHandlerNode(\DOMElement $node, ClassMetadata $classMetadata, $path)
     {
@@ -210,7 +203,7 @@ class XmlFileLoader extends FileLoader
      */
     public function supports($resource, $type = null)
     {
-        if (!is_string($resource)) {
+        if (!\is_string($resource)) {
             return false;
         }
 

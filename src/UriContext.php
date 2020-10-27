@@ -78,12 +78,8 @@ class UriContext
     /**
      * Construct the context.
      *
-     * @param UriContextCollection $collection
-     * @param string               $uriSchema
-     * @param array                $defaults
-     * @param array                $tokenProviderConfigs
-     * @param array                $conflictResolverConfig
-     * @param string               $locale
+     * @param string $uriSchema
+     * @param string $locale
      */
     public function __construct(
         UriContextCollection $collection,
