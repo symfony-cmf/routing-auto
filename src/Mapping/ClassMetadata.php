@@ -174,7 +174,7 @@ class ClassMetadata extends MergeableClassMetadata
      *
      * @param ClassMetadata $metadata
      */
-    public function merge(MergeableInterface $metadata)
+    public function merge(MergeableInterface $metadata): void
     {
         parent::merge($metadata);
 
