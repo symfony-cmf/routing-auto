@@ -30,10 +30,6 @@ class MetadataFactoryBuilder
      */
     protected $loader;
 
-    /**
-     * @param LoaderInterface $loader
-     * @param array           $resources
-     */
     public function __construct(LoaderInterface $loader, array $resources)
     {
         $this->loader = $loader;

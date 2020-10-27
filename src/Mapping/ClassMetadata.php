@@ -51,8 +51,7 @@ class ClassMetadata extends MergeableClassMetadata
     /**
      * Add a new auto route definition for this class.
      *
-     * @param string              $name
-     * @param AutoRouteDefinition $definition
+     * @param string $name
      */
     public function setAutoRouteDefinition($name, AutoRouteDefinition $definition)
     {
@@ -63,7 +62,6 @@ class ClassMetadata extends MergeableClassMetadata
      * Add a token provider configfuration.
      *
      * @param string $tokenName
-     * @param array  $provider
      * @param bool   $override
      */
     public function addTokenProvider($tokenName, array $provider = [], $override = false)

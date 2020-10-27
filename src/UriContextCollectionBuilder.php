@@ -46,7 +46,7 @@ class UriContextCollectionBuilder
     public function build(UriContextCollection $uriContextCollection)
     {
         $subject = $uriContextCollection->getSubject();
-        $realClassName = $this->adapter->getRealClassName(get_class($subject));
+        $realClassName = $this->adapter->getRealClassName(\get_class($subject));
         $metadata = $this->metadataFactory->getMetadataForClass($realClassName);
 
         // TODO: This is where we will call $metadata->getUriSchemas() which will return an

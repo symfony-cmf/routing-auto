@@ -22,7 +22,7 @@ use Symfony\Component\Yaml\Parser as YamlParser;
 class YmlFileLoader extends FileLoader
 {
     /**
-     * @var null|YamlParser
+     * @var YamlParser|null
      */
     private $parser;
 
@@ -55,7 +55,7 @@ class YmlFileLoader extends FileLoader
             return [];
         }
 
-        if (!is_array($config)) {
+        if (!\is_array($config)) {
             throw new \InvalidArgumentException(sprintf('The file "%s" must contain a YAML array.', $path));
         }
 
@@ -151,10 +151,10 @@ class YmlFileLoader extends FileLoader
         $name = '';
         $options = [];
 
-        if (is_string($service)) {
+        if (\is_string($service)) {
             // provider: method
             $name = $service;
-        } elseif (1 === count($service) && isset($service[0])) {
+        } elseif (1 === \count($service) && isset($service[0])) {
             // provider: [method]
             $name = $service[0];
         } elseif (isset($service['name'])) {
@@ -165,7 +165,7 @@ class YmlFileLoader extends FileLoader
 
             // provider: { name: method }
             $name = $service['name'];
-        } elseif (2 === count($service) && isset($service[0]) && isset($service[1])) {
+        } elseif (2 === \count($service) && isset($service[0]) && isset($service[1])) {
             // provider: [method, { slugify: true }]
             $name = $service[0];
             $options = $service[1];
@@ -181,7 +181,7 @@ class YmlFileLoader extends FileLoader
      */
     public function supports($resource, $type = null)
     {
-        if (!is_string($resource)) {
+        if (!\is_string($resource)) {
             return false;
         }
 
@@ -201,10 +201,10 @@ class YmlFileLoader extends FileLoader
 
     protected function getAutoRouteDefinitions($definitionsNode)
     {
-        if (!is_array($definitionsNode)) {
+        if (!\is_array($definitionsNode)) {
             throw new \InvalidArgumentException(sprintf(
                 'Expected array or scalar definitionNode, got "%s"',
-                is_object($definitionsNode) ? get_class($definitionsNode) : gettype($definitionsNode)
+                \is_object($definitionsNode) ? \get_class($definitionsNode) : \gettype($definitionsNode)
             ));
         }
 
