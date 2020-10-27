@@ -35,7 +35,7 @@ abstract class BaseContentMethodProvider implements TokenProviderInterface
             throw new \InvalidArgumentException(sprintf(
                 'Method "%s" does not exist on object "%s"',
                 $method,
-                get_class($object)
+                \get_class($object)
             ));
         }
     }
@@ -53,9 +53,8 @@ abstract class BaseContentMethodProvider implements TokenProviderInterface
      *
      * It can also throw exceptions when the value is not in a correct format.
      *
-     * @param string     $value
-     * @param UriContext $uriContext
-     * @param array      $options
+     * @param string $value
+     * @param array  $options
      *
      * @return string The normalized value
      */

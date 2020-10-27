@@ -43,8 +43,7 @@ interface AdapterInterface
     /**
      * Create a new auto route from the given context.
      *
-     * @param UriContext $uriContext
-     * @param string     $tag
+     * @param string $tag
      *
      * @return AutoRouteInterface new route document
      */
@@ -64,8 +63,7 @@ interface AdapterInterface
      * Compares the content associated with the auto route and the
      * given content object.
      *
-     * @param AutoRouteInterface $autoRoute
-     * @param object             $contentObject
+     * @param object $contentObject
      *
      * @return bool True when the contents are equal, false otherwise
      */
@@ -74,8 +72,7 @@ interface AdapterInterface
     /**
      * Compares the locale the route is matching and the given locale.
      *
-     * @param AutoRouteInterface $autoRoute
-     * @param string|null        $locale
+     * @param string|null $locale
      *
      * @return bool True when the locales are equal, false otherwize
      */
@@ -99,8 +96,6 @@ interface AdapterInterface
      * Generate a tag which can be used to identify this route from
      * other routes as required.
      *
-     * @param UriContext $uriContext
-     *
      * @return string
      */
     public function generateAutoRouteTag(UriContext $uriContext);
@@ -122,16 +117,11 @@ interface AdapterInterface
      *    /my-new-blog
      *    /my-new-blog/posts/post1
      *    /my-new-blog/posts/post2
-     *
-     * @param AutoRouteInterface $srcAutoRoute
-     * @param AutoRouteInterface $destAutoRoute
      */
     public function migrateAutoRouteChildren(AutoRouteInterface $srcAutoRoute, AutoRouteInterface $destAutoRoute);
 
     /**
      * Remove the given auto route.
-     *
-     * @param AutoRouteInterface $autoRoute
      */
     public function removeAutoRoute(AutoRouteInterface $autoRoute);
 
@@ -154,9 +144,6 @@ interface AdapterInterface
      *
      * The new redirect route should redirect the request to the URL determined by
      * the $newRoute.
-     *
-     * @param AutoRouteInterface $referringAutoRoute
-     * @param AutoRouteInterface $newRoute
      */
     public function createRedirectRoute(AutoRouteInterface $referringAutoRoute, AutoRouteInterface $newRoute);
 }

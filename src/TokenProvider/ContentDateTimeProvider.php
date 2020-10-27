@@ -23,7 +23,7 @@ class ContentDateTimeProvider extends BaseContentMethodProvider
     {
         if (!$date instanceof \DateTime) {
             throw new \RuntimeException(sprintf('Method %s:%s must return an instance of DateTime.',
-                get_class($uriContext->getSubject()),
+                \get_class($uriContext->getSubject()),
                 $options['method']
             ));
         }

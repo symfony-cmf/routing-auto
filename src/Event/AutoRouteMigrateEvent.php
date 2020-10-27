@@ -30,10 +30,6 @@ class AutoRouteMigrateEvent extends Event
      */
     private $destAutoRoute;
 
-    /**
-     * @param AutoRouteInterface $srcAutoRoute
-     * @param AutoRouteInterface $destAutoRoute
-     */
     public function __construct(AutoRouteInterface $srcAutoRoute, AutoRouteInterface $destAutoRoute)
     {
         $this->srcAutoRoute = $srcAutoRoute;

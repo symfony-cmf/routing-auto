@@ -178,7 +178,7 @@ class XmlFileLoaderTest extends \PHPUnit_Framework_TestCase
                 $test->assertArrayHasKey('slug', $providers);
                 $test->assertEquals($serviceConfig('property', ['property' => 'title', 'slugify' => true]), $providers['slug']);
             }],
-            ['valid7.xml', function ($metadatas) use ($test, $serviceConfig) {
+            ['valid7.xml', function ($metadatas) use ($test) {
                 $test->assertCount(1, $metadatas);
                 $metadata = $metadatas[0];
                 $test->assertEquals('stdClass', $metadata->getClassName());

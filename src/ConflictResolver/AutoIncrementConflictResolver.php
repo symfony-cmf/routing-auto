@@ -38,8 +38,6 @@ class AutoIncrementConflictResolver implements ConflictResolverInterface
 
     /**
      * Construct the conflict resolver using the given adapter.
-     *
-     * @param AdapterInterface $adapter
      */
     public function __construct(AdapterInterface $adapter)
     {

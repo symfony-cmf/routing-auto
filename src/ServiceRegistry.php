@@ -88,8 +88,7 @@ class ServiceRegistry
     /**
      * Register the given token provider under the given name.
      *
-     * @param string                 $name
-     * @param TokenProviderInterface $provider
+     * @param string $name
      */
     public function registerTokenProvider($name, TokenProviderInterface $provider)
     {
@@ -99,8 +98,7 @@ class ServiceRegistry
     /**
      * Register the given conflict resolver  under the given name.
      *
-     * @param string                    $name
-     * @param ConflictResolverInterface $conflictResolver
+     * @param string $name
      */
     public function registerConflictResolver($name, ConflictResolverInterface $conflictResolver)
     {
@@ -110,8 +108,7 @@ class ServiceRegistry
     /**
      * Register the given defunct route handler under the given name.
      *
-     * @param string                       $name
-     * @param DefunctRouteHandlerInterface $defunctRouteHandler
+     * @param string $name
      */
     public function registerDefunctRouteHandler($name, DefunctRouteHandlerInterface $defunctRouteHandler)
     {
