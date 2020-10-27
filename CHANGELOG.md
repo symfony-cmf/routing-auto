@@ -1,6 +1,16 @@
 Changelog
 =========
 
+2.1.2
+-----
+
+* Revert allowing jms/metadata 2.x
+
+2.1.1 (broken)
+--------------
+
+* Allow installing with jms/metadata 2.x (broken because we extend jms classes that had BC breaks)
+
 2.1.0
 -----
 
