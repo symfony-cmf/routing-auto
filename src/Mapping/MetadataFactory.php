@@ -74,7 +74,7 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
      *
      * @return ClassMetadata
      */
-    public function getMetadataForClass($class)
+    public function getMetadataForClass(string $class)
     {
         if (!isset($this->resolvedMetadatas[$class])) {
             $this->resolveMetadata($class);
