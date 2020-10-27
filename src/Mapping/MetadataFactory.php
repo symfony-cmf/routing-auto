@@ -70,8 +70,6 @@ class MetadataFactory implements \IteratorAggregate, MetadataFactoryInterface
     /**
      * Tries to find the metadata for the given class.
      *
-     * @param string $class
-     *
      * @return ClassMetadata
      */
     public function getMetadataForClass(string $class)
