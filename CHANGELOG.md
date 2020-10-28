@@ -1,6 +1,12 @@
 Changelog
 =========
 
+2.2.0
+-----
+
+* Switch to jms/metadata 2.1, drop 1.x
+* Drop support for PHP 7.1
+
 2.1.2
 -----
 
